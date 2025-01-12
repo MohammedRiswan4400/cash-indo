@@ -5,7 +5,7 @@ class AppThemes {
   static final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     primaryColor: Colors.blue,
-    scaffoldBackgroundColor: Colors.white,
+    scaffoldBackgroundColor: const Color.fromARGB(255, 246, 246, 246),
     textTheme: const TextTheme(bodyMedium: TextStyle(color: Colors.black)),
   );
 

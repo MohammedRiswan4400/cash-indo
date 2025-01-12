@@ -1,4 +1,5 @@
 import 'package:cash_indo/core/color/app_color.dart';
+import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:flutter/material.dart';
 
 ValueNotifier<int> indexChangeNotifier = ValueNotifier(0);
@@ -40,25 +41,25 @@ class ScreenNavigations extends StatelessWidget {
                   icon: indexChangeNotifier.value == 0
                       ? const Icon(Icons.account_balance)
                       : const Icon(Icons.account_balance_outlined),
-                  label: "Home",
+                  label: AppConstantStrings.home,
                 ),
                 BottomNavigationBarItem(
                   icon: indexChangeNotifier.value == 1
                       ? const Icon(Icons.account_balance_wallet_rounded)
                       : const Icon(Icons.account_balance_wallet_outlined),
-                  label: "Expenses",
+                  label: AppConstantStrings.expenses,
                 ),
                 BottomNavigationBarItem(
                   icon: indexChangeNotifier.value == 2
                       ? const Icon(Icons.note_add)
                       : const Icon(Icons.note_add_outlined),
-                  label: "My Sheet",
+                  label: AppConstantStrings.mySheet,
                 ),
                 BottomNavigationBarItem(
                   icon: indexChangeNotifier.value == 3
                       ? const Icon(Icons.settings)
                       : const Icon(Icons.settings_outlined),
-                  label: "Settings",
+                  label: AppConstantStrings.settings,
                 ),
               ],
             ),

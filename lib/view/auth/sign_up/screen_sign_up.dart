@@ -1,6 +1,6 @@
 import 'package:cash_indo/controller/theme/theme_controller.dart';
 import 'package:cash_indo/core/constant/app_const.dart';
-import 'package:cash_indo/core/constant/app_texts_const.dart';
+import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
 import 'package:cash_indo/core/routes/app_routes.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
@@ -9,9 +9,11 @@ import 'package:cash_indo/widget/form_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+final ThemeController themeController = Get.find<ThemeController>();
+
 class ScreenSignUp extends StatelessWidget {
   ScreenSignUp({super.key});
-  final ThemeController themeController = Get.find<ThemeController>();
+
   final ValueNotifier<bool> _isTermsAndConditionsChecked = ValueNotifier(false);
   final ValueNotifier<bool> _isPrivacyPolicyChecked = ValueNotifier(false);
 
@@ -26,15 +28,15 @@ class ScreenSignUp extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Spacer(),
-              AppTextWidget(text: AppTextsConst.getStart, size: 30),
+              AppTextWidget(text: AppConstantStrings.getStart, size: 30),
               AppTextWidget(
-                text: AppTextsConst.signUpSubTitle,
+                text: AppConstantStrings.signUpSubTitle,
                 size: 18,
                 weight: FontWeight.w700,
               ),
               0.verticalSpace,
               AppTextWidget(
-                  text: AppTextsConst.emailText,
+                  text: AppConstantStrings.emailText,
                   size: 16,
                   weight: FontWeight.w700),
               EmailTextFormField(
@@ -42,21 +44,21 @@ class ScreenSignUp extends StatelessWidget {
                 controller: TextEditingController(),
               ),
               AppTextWidget(
-                  text: AppTextsConst.password,
+                  text: AppConstantStrings.password,
                   size: 16,
                   weight: FontWeight.w700),
               PasswordField(
                   action: TextInputAction.done,
                   passwoedController: TextEditingController(),
-                  hintText: AppTextsConst.passwordHint),
+                  hintText: AppConstantStrings.passwordHint),
               AppTextWidget(
-                  text: AppTextsConst.confirmPassword,
+                  text: AppConstantStrings.confirmPassword,
                   size: 16,
                   weight: FontWeight.w700),
               PasswordField(
                   action: TextInputAction.done,
                   passwoedController: TextEditingController(),
-                  hintText: AppTextsConst.confirmPasswordHint),
+                  hintText: AppConstantStrings.confirmPasswordHint),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -79,7 +81,7 @@ class ScreenSignUp extends StatelessWidget {
                           },
                         ),
                         AppTextWidget(
-                            text: AppTextsConst.iAgree,
+                            text: AppConstantStrings.iAgree,
                             size: 15,
                             weight: FontWeight.w500,
                             color: Colors.grey),
@@ -112,13 +114,13 @@ class ScreenSignUp extends StatelessWidget {
                           },
                         ),
                         AppTextWidget(
-                            text: AppTextsConst.iAgree,
+                            text: AppConstantStrings.iAgree,
                             size: 15,
                             weight: FontWeight.w500,
                             color: Colors.grey),
                         GestureDetector(
                           child: AppTextWidget(
-                            text: AppTextsConst.privacyPolicy,
+                            text: AppConstantStrings.privacyPolicy,
                             size: 16,
                             isUnderLine: true,
                             weight: FontWeight.w600,
@@ -144,8 +146,8 @@ class ScreenSignUp extends StatelessWidget {
                               }
                             : null,
                         child: isButtonEnabled
-                            ? AppButton(title: AppTextsConst.signUp)
-                            : AppButtonDim(title: AppTextsConst.signUp),
+                            ? AppButton(title: AppConstantStrings.signUp)
+                            : AppButtonDim(title: AppConstantStrings.signUp),
                       );
                     },
                   );
@@ -164,7 +166,7 @@ class ScreenSignUp extends StatelessWidget {
               20.verticalSpace,
               Center(
                 child: AppTextWidget(
-                  text: AppTextsConst.alreadyHaveAnAccount,
+                  text: AppConstantStrings.alreadyHaveAnAccount,
                   size: 12,
                   weight: FontWeight.w600,
                 ),
@@ -175,7 +177,7 @@ class ScreenSignUp extends StatelessWidget {
                     AppRoutes.gotoScreenSignIn();
                   },
                   child: AppTextWidget(
-                      text: AppTextsConst.signIn,
+                      text: AppConstantStrings.signIn,
                       size: 16,
                       weight: FontWeight.w600),
                 ),
