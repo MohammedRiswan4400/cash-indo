@@ -1,13 +1,21 @@
 import 'package:cash_indo/controller/theme/theme_controller.dart';
 import 'package:cash_indo/core/theme/theme_helper.dart';
 import 'package:cash_indo/view/splash/screen_splash.dart';
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 void main() async {
   await GetStorage.init();
-  runApp(MyApp());
+
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => MyApp(), // Wrap your app
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -23,10 +31,6 @@ class MyApp extends StatelessWidget {
         darkTheme: AppThemes.darkTheme,
         themeMode:
             themeController.isDarkMode.value ? ThemeMode.dark : ThemeMode.light,
-        // theme: ThemeData(
-        //   useMaterial3: true,
-        //   scaffoldBackgroundColor: AppColor.kBackgroundColor,
-        // ),
         home: ScreenSplash(),
       );
     });

@@ -1,5 +1,5 @@
 import 'package:cash_indo/view/dashboard/bottom_navigation/screen_navigation.dart';
-import 'package:cash_indo/view/dashboard/expenses%20/screen_expenses.dart';
+import 'package:cash_indo/view/dashboard/expense_tracker/screen_expense_tracker.dart';
 import 'package:cash_indo/view/dashboard/home/screen_home.dart';
 import 'package:cash_indo/view/dashboard/settings/screen_settings.dart';
 import 'package:cash_indo/view/dashboard/sheet/screen_balance_sheet.dart';
@@ -16,7 +16,7 @@ class ScreenBottonNavigation extends StatelessWidget {
     // storage.read(isDummyUser) == true
     //     ? const DummyUserScreen()
     //     : const ScreenBookings(),
-    const ScreenExpenses(),
+    ScreenExpenseTracker(),
     const ScreenBalanceSheet(),
     const ScreenSettings()
   ];

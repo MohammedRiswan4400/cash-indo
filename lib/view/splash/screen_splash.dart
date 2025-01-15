@@ -1,3 +1,4 @@
+import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/routes/app_routes.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
@@ -10,6 +11,7 @@ class ScreenSplash extends StatelessWidget {
   Widget build(BuildContext context) {
     AppRoutes.goFromSplashScreen();
     return Scaffold(
+      backgroundColor: AppColor.kBackgroundColor,
       body: Padding(
         padding: const EdgeInsets.all(50.0),
         child: Column(
@@ -17,7 +19,11 @@ class ScreenSplash extends StatelessWidget {
           children: [
             SizedBox(),
             Image.asset('assets/icon/ic_app_icon.png'),
-            AppTextWidget(text: AppConstantStrings.splashText, size: 12)
+            AppTextWidget(
+              text: AppConstantStrings.splashText,
+              size: 12,
+              color: AppColor.kTextColor,
+            )
           ],
         ),
       ),

@@ -7,6 +7,8 @@ class AppConstantStrings {
   static String rupees = '₹';
   static String constantAmount = '98,908.00';
   static String obscureTexts = '******';
+  static String today = 'Today';
+  static String addComment = 'Add comment...';
 
   //App Titles ----------------------------------------
 
@@ -70,4 +72,71 @@ class AppConstantStrings {
   static String gotoSavings = 'Go to Savings';
   static String obscureSavingFor = '########\n####################';
   static String seeAll = 'See all';
+
+  // Expanse Tab ----------------------------------------
+
+  static String allExpensesTitle = 'Where Your Money Goes';
+
+  // Income Tab ----------------------------------------
+
+  static String incomeTracker = 'Income Tracker';
+
+  // All Const List<String> ----------------------------------------
+
+  static List<String> allMonths = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+  static List<String> allWeeks = [
+    'Mon',
+    'Tue',
+    'Wed',
+    'Thu',
+    'Fri',
+    'Sat',
+    'Sun'
+  ];
+
+  static List<Map<String, String>> paymentMedthods = [
+    {'assets/icon/ic_cash.png': 'Cash'},
+    {'assets/icon/ic_upi.png': 'UPI'},
+    {'assets/icon/ic_card.png': 'Debit Card'},
+    {'assets/icon/ic_card.png': 'Credit Card'},
+    {'assets/icon/ic_cheque.png': 'Cheque'},
+    // {'assets/icon/ic_emi.png': 'EMI'},
+  ];
+
+  static List<String> paymentCategory = [
+    'Food',
+    'Shopping',
+    'Bill Payments',
+    'Fuel',
+    'EMI',
+  ];
+
+  static List<String> incomePlans = [
+    'Salary',
+    'Business',
+    'Trade',
+    'Freelancing',
+    'Investments',
+  ];
+
+  static List<Map<String, String>> currencies = [
+    {"icon": "₹", "name": "Rupee"},
+    {"icon": "\$", "name": "Dollar"},
+    {"icon": "€", "name": "Euro"},
+    {"icon": "£", "name": "Pound"},
+    {"icon": "¥", "name": "Yen"},
+  ];
 }

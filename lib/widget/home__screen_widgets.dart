@@ -192,6 +192,17 @@ class ChartWidget extends StatelessWidget {
                 ),
               ),
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: AppConstantStrings.allWeeks.map((day) {
+                return AppTextWidget(
+                  text: day,
+                  size: 11,
+                  weight: FontWeight.w600,
+                  color: AppColor.kInvertedTextColor,
+                );
+              }).toList(),
+            ),
           ],
         ),
       ),
@@ -277,7 +288,6 @@ class SavingsWidget extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    // 10.verticalSpace,
                     SizedBox(
                       width: 100,
                       height: 100,
@@ -289,7 +299,7 @@ class SavingsWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    10.verticalSpace,
+                    5.verticalSpace,
                     AppTextWidget(
                       text: AppConstantStrings.savingsCompletedText,
                       size: 13,
@@ -522,36 +532,39 @@ class CreditWidget extends StatelessWidget {
 // SecondWidget sub widgets ----------------------------------------
 
 List<BarChartGroupData> chartGroupes() {
-  return List.generate(listDataModel.length, (index) {
-    final active = double.parse(listDataModel[index].value!);
-    final absent = active - index * 5;
-    return BarChartGroupData(x: index, barRods: [
-      BarChartRodData(
-        toY: absent,
-        color: Colors.redAccent,
-        //  const Color.fromARGB(255, 164, 85, 85),
-        width: 5,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(2),
-          topRight: Radius.circular(2),
-        ),
-      ),
-      BarChartRodData(
-        toY: active,
-        color: Colors.green,
-        // const Color.fromARGB(255, 125, 164, 112),
-        width: 20,
-        backDrawRodData: BackgroundBarChartRodData(
-          toY: active + 20,
+  return List.generate(
+    listDataModel.length,
+    (index) {
+      final active = double.parse(listDataModel[index].value!);
+      final absent = active - index * 5;
+      return BarChartGroupData(x: index, barRods: [
+        BarChartRodData(
+          toY: absent,
           color: Colors.redAccent,
+          //  const Color.fromARGB(255, 164, 85, 85),
+          width: 5,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(2),
+            topRight: Radius.circular(2),
+          ),
         ),
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(5),
-          topRight: Radius.circular(5),
+        BarChartRodData(
+          toY: active,
+          color: Colors.green,
+          // const Color.fromARGB(255, 125, 164, 112),
+          width: 20,
+          backDrawRodData: BackgroundBarChartRodData(
+            toY: active + 20,
+            color: Colors.redAccent,
+          ),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(5),
+            topRight: Radius.circular(5),
+          ),
         ),
-      ),
-    ]);
-  });
+      ]);
+    },
+  );
 }
 
 final List<DataModel> listDataModel = [

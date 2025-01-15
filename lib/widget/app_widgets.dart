@@ -28,13 +28,14 @@ class ButtonWithIcon extends StatelessWidget {
           children: [
             AppTextWidget(
               text: text,
-              size: 16,
+              size: 15,
               color: AppColor.kInvertedTextColor,
             ),
+            Spacer(),
             Icon(
               Icons.arrow_forward_ios_rounded,
               color: AppColor.kInvertedTextColor,
-              size: 20,
+              size: 16,
             )
           ],
         ),

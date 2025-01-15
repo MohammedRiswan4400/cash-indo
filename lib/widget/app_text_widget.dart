@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cash_indo/controller/theme/theme_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -43,6 +44,38 @@ import 'package:google_fonts/google_fonts.dart';
 //     );
 //   }
 // }
+
+// ignore: must_be_immutable
+class AppTextAutoSize extends StatelessWidget {
+  AppTextAutoSize({
+    super.key,
+    required this.text,
+    this.color,
+    this.size,
+    this.maxLine,
+  });
+
+  final String text;
+  Color? color;
+  double? size;
+  int? maxLine;
+
+  @override
+  Widget build(BuildContext context) {
+    final themeController = Get.find<ThemeController>();
+    final isDarkMode = themeController.isDarkMode.value;
+    final themeTextColor = isDarkMode ? color : Colors.black;
+    final themeFontSize = size ?? 20.0;
+    return AutoSizeText(
+      text,
+      maxLines: maxLine ?? 100,
+      style: TextStyle(
+        color: color ?? themeTextColor,
+        fontSize: themeFontSize,
+      ),
+    );
+  }
+}
 
 // ignore: must_be_immutable
 class AppTextWidget extends StatelessWidget {

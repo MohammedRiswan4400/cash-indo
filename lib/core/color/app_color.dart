@@ -13,4 +13,15 @@ class AppColor {
   static const kDimGreyColot = Color.fromARGB(173, 93, 93, 93);
   static const kshadowColor = Color.fromARGB(115, 75, 75, 75);
   static const kHomeCreditContainerColor = Color.fromARGB(180, 47, 47, 47);
+  static const kMonthDropDownColor = Color.fromARGB(255, 40, 84, 97);
+  static const todayColor = Color.fromARGB(44, 28, 28, 28);
+  static const kExpanseByDateRangeContainerColor =
+      Color.fromARGB(255, 94, 88, 133);
+  static const kPaymentSelectingContainerColor =
+      Color.fromARGB(255, 207, 240, 202);
+  static const kPaymentCategoryContainerWidget =
+      Color.fromARGB(255, 176, 208, 225);
+
+  static const kIncomeTypeSelectingContainerColor =
+      Color.fromARGB(255, 255, 136, 175);
 }
