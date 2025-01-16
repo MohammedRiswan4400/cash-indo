@@ -20,11 +20,11 @@ class ExpanseTab extends StatelessWidget {
             child: Column(
               spacing: 10,
               children: [
-                0.verticalSpace,
+                0.verticalSpace(context),
                 ExpanseByDateRange(),
-                0.verticalSpace,
+                0.verticalSpace(context),
                 ExpanseChartWidget(),
-                0.verticalSpace,
+                0.verticalSpace(context),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -74,7 +74,7 @@ class ExpanseTab extends StatelessWidget {
                   color: const Color.fromARGB(255, 161, 197, 244),
                   trail: '12 %',
                 ),
-                20.verticalSpace,
+                20.verticalSpace(context),
               ],
             ),
           ),

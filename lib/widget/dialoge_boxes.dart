@@ -27,7 +27,7 @@ class CurrencySelectingDialog extends StatelessWidget {
           size: 22,
           weight: FontWeight.w700,
         ),
-        10.verticalSpace,
+        10.verticalSpace(context),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(

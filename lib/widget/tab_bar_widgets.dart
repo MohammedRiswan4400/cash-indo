@@ -1,19 +1,22 @@
 import 'package:cash_indo/core/color/app_color.dart';
+import 'package:cash_indo/view/auth/sign_up/screen_sign_up.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:flutter/material.dart';
 
 class TabsWidget extends StatelessWidget {
-  const TabsWidget({
+  TabsWidget({
     super.key,
     required this.firstTab,
     required this.secondTab,
+    this.width,
   });
+  double? width;
   final String firstTab;
   final String secondTab;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 190,
+      width: width ?? 190,
       child: Container(
         width: 300,
         decoration: BoxDecoration(
@@ -34,8 +37,13 @@ class TabsWidget extends StatelessWidget {
             ),
             labelStyle: const TextStyle(
               fontWeight: FontWeight.bold,
+              // color: AppColor.kTextColor,
             ),
-            labelColor: AppColor.kTextColor,
+            labelColor:
+                // themeController.isDarkMode.value
+                //     ? AppColor.kTextColor
+                //     :
+                AppColor.kTextColor,
             unselectedLabelColor: AppColor.kBackgroundColor,
             tabs: [
               Tab(

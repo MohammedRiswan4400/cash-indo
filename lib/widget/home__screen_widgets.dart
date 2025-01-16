@@ -299,7 +299,7 @@ class SavingsWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    5.verticalSpace,
+                    5.verticalSpace(context),
                     AppTextWidget(
                       text: AppConstantStrings.savingsCompletedText,
                       size: 13,

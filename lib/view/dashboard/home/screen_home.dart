@@ -20,18 +20,18 @@ class ScreenHome extends StatelessWidget {
             children: [
               AppTextWidget(text: AppConstantStrings.appName),
               AppTextWidget(text: AppConstantStrings.subName, size: 12),
-              10.verticalSpace,
+              10.verticalSpace(context),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     spacing: 10,
                     children: [
-                      1.verticalSpace,
+                      1.verticalSpace(context),
                       CashCardWidget(),
-                      1.verticalSpace,
+                      1.verticalSpace(context),
                       ChartWidget(),
-                      1.verticalSpace,
+                      1.verticalSpace(context),
                       TodayFinaceRowWidget(),
                       AppTextWidget(
                         text: AppConstantStrings.savingsTitle,
@@ -40,9 +40,9 @@ class ScreenHome extends StatelessWidget {
                         maxLine: 2,
                       ),
                       SavingsWidget(),
-                      1.verticalSpace,
+                      1.verticalSpace(context),
                       CreditWidget(),
-                      20.verticalSpace,
+                      20.verticalSpace(context),
                     ],
                   ),
                 ),

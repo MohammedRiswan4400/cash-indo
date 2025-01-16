@@ -44,11 +44,11 @@ class IncomeTab extends StatelessWidget {
                     ),
                   ],
                 ),
-                10.verticalSpace,
+                10.verticalSpace(context),
                 AppTextWidget(
                   text: AppConstantStrings.incomeTracker,
                 ),
-                5.verticalSpace,
+                5.verticalSpace(context),
                 IncomeProgressBarWidget(
                   title: 'Job',
                   amount: '12,909.00',
@@ -61,7 +61,7 @@ class IncomeTab extends StatelessWidget {
                   title: 'Buisness',
                   amount: '12,909.00',
                 ),
-                10.verticalSpace,
+                10.verticalSpace(context),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -77,7 +77,7 @@ class IncomeTab extends StatelessWidget {
                     )
                   ],
                 ),
-                5.verticalSpace,
+                5.verticalSpace(context),
                 ListView.builder(
                     physics: BouncingScrollPhysics(),
                     shrinkWrap: true,
@@ -102,7 +102,7 @@ class IncomeTab extends StatelessWidget {
                         ],
                       );
                     }),
-                10.verticalSpace,
+                10.verticalSpace(context),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -118,7 +118,7 @@ class IncomeTab extends StatelessWidget {
                     )
                   ],
                 ),
-                5.verticalSpace,
+                5.verticalSpace(context),
                 ListView.builder(
                     physics: BouncingScrollPhysics(),
                     shrinkWrap: true,
@@ -143,16 +143,6 @@ class IncomeTab extends StatelessWidget {
                         ],
                       );
                     }),
-                ElevatedButton(
-                  onPressed: themeController.toggleTheme,
-                  child: Obx(() {
-                    return Text(
-                      themeController.isDarkMode.value
-                          ? "Switch to Light Mode"
-                          : "Switch to Dark Mode",
-                    );
-                  }),
-                ),
               ],
             ),
           ),

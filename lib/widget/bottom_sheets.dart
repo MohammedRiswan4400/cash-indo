@@ -38,7 +38,7 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
                 color: AppColor.kSecondaryTextColor,
               ),
             ),
-            10.verticalSpace,
+            10.verticalSpace(context),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -52,7 +52,7 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
                     ],
             ),
 
-            10.verticalSpace,
+            10.verticalSpace(context),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -119,7 +119,7 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
                 ),
               ),
             ),
-            5.verticalSpace,
+            5.verticalSpace(context),
             SizedBox(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -222,7 +222,7 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
                 ],
               ),
             ),
-            // 5.verticalSpace,
+            // 5 .verticalSpace(context),
           ],
         ),
       ),

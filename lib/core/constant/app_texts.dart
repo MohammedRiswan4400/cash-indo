@@ -13,7 +13,9 @@ class AppConstantStrings {
   //App Titles ----------------------------------------
 
   static String credit = 'Credit';
+  static String debt = 'Debt';
   static String expanseTracker = 'Expanse Tracker';
+  static String balanceSheet = 'Balance Sheet';
 
   //Splash Screen ----------------------------------------
 
@@ -80,6 +82,14 @@ class AppConstantStrings {
   // Income Tab ----------------------------------------
 
   static String incomeTracker = 'Income Tracker';
+
+  // Settings Screen ----------------------------------------
+
+  static String darkMode = 'Dark mode';
+  static String tAndC = 'Terms & Conditons';
+  static String changePassword = 'Change Password';
+  static String logOut = 'Log out';
+  static String deleteAccount = 'Delete Account';
 
   // All Const List<String> ----------------------------------------
 
