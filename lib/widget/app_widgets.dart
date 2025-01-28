@@ -43,3 +43,43 @@ class ButtonWithIcon extends StatelessWidget {
     );
   }
 }
+
+class ButtonWithoutIcon extends StatelessWidget {
+  const ButtonWithoutIcon({
+    super.key,
+    required this.text,
+    required this.size,
+  });
+  final String text;
+  final double size;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // width: MediaQuery.sizeOf(context).width / 2.5,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
+        color: AppColor.kContainerColor,
+        border: Border.all(width: 0.5),
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(1, 5),
+            blurRadius: 10,
+            spreadRadius: 0,
+            color: AppColor.kshadowColor,
+          )
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        child: AppTextWidget(
+          text: text,
+          size: size,
+          color: AppColor.kInvertedTextColor,
+        ),
+      ),
+    );
+  }
+}
+
+
+// 

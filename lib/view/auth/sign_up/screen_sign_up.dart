@@ -15,6 +15,7 @@ class ScreenSignUp extends StatelessWidget {
   ScreenSignUp({super.key});
 
   final ValueNotifier<bool> _isTermsAndConditionsChecked = ValueNotifier(false);
+
   final ValueNotifier<bool> _isPrivacyPolicyChecked = ValueNotifier(false);
 
   @override
@@ -37,6 +38,27 @@ class ScreenSignUp extends StatelessWidget {
                   align: TextAlign.left,
                 ),
                 0.verticalSpace(context),
+                AppTextWidget(
+                    text: AppConstantStrings.fullName,
+                    size: 16,
+                    weight: FontWeight.w700),
+                CustomeTextFormField(
+                  hintText: AppConstantStrings.enterFullName,
+                  type: TextInputType.name,
+                  action: TextInputAction.next,
+                  controller: TextEditingController(),
+                ),
+                AppTextWidget(
+                    text: AppConstantStrings.phone,
+                    size: 16,
+                    weight: FontWeight.w700),
+                CustomeTextFormField(
+                  hintText: AppConstantStrings.enterPhoneNumber,
+                  type: TextInputType.phone,
+                  action: TextInputAction.next,
+                  controller: TextEditingController(),
+                ),
+
                 AppTextWidget(
                     text: AppConstantStrings.emailText,
                     size: 16,

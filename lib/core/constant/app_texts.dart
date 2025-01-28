@@ -9,6 +9,9 @@ class AppConstantStrings {
   static String obscureTexts = '******';
   static String today = 'Today';
   static String addComment = 'Add comment...';
+  static String plus = '+';
+  static String minaze = '-';
+  static String selectCurrency = 'Select Currency';
 
   //App Titles ----------------------------------------
 
@@ -34,9 +37,14 @@ class AppConstantStrings {
   static String getStart = 'Get Started!';
   static String signUpSubTitle = 'Take control of your money today.';
   static String emailText = 'Email';
+  static String fullName = 'Full name';
+  static String phone = 'Phone';
+  static String gender = 'Gender';
   static String password = 'Password';
   static String confirmPassword = 'Confirm Password';
   static String passwordHint = 'Enter password';
+  static String enterFullName = 'Enter your full name';
+  static String enterPhoneNumber = 'Enter your Phone number';
   static String confirmPasswordHint = 'Enter confirm password';
   static String iAgree = 'I agree with the';
   static String tAndc = 'T&C';
@@ -91,6 +99,10 @@ class AppConstantStrings {
   static String logOut = 'Log out';
   static String deleteAccount = 'Delete Account';
 
+  // Saving Screen Screen ----------------------------------------
+
+  static String boostSavings = 'Boost Savings';
+
   // All Const List<String> ----------------------------------------
 
   static List<String> allMonths = [
@@ -123,14 +135,13 @@ class AppConstantStrings {
     {'assets/icon/ic_card.png': 'Debit Card'},
     {'assets/icon/ic_card.png': 'Credit Card'},
     {'assets/icon/ic_cheque.png': 'Cheque'},
-    // {'assets/icon/ic_emi.png': 'EMI'},
   ];
 
   static List<String> paymentCategory = [
     'Food',
+    'Travel',
     'Shopping',
     'Bill Payments',
-    'Fuel',
     'EMI',
   ];
 

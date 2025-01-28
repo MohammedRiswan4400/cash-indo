@@ -24,4 +24,6 @@ class AppColor {
 
   static const kIncomeTypeSelectingContainerColor =
       Color.fromARGB(255, 255, 136, 175);
+  static const kAddingButtonColor = Color.fromARGB(255, 102, 202, 136);
+  static const kRemovingButtonColor = Color.fromARGB(255, 234, 95, 95);
 }

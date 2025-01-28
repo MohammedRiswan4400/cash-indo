@@ -21,12 +21,13 @@ class CurrencySelectingDialog extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppTextWidget(
-          text: 'Select Currency',
-          color: AppColor.kTextColor,
-          size: 22,
-          weight: FontWeight.w700,
-        ),
+        Image.asset('assets/images/money_list.png'),
+        // AppTextWidget(
+        //   text: ,
+        //   color: AppColor.kTextColor,
+        //   size: 22,
+        //   weight: FontWeight.w700,
+        // ),
         10.verticalSpace(context),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),

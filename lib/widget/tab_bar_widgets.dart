@@ -1,8 +1,8 @@
 import 'package:cash_indo/core/color/app_color.dart';
-import 'package:cash_indo/view/auth/sign_up/screen_sign_up.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class TabsWidget extends StatelessWidget {
   TabsWidget({
     super.key,
@@ -20,8 +20,9 @@ class TabsWidget extends StatelessWidget {
       child: Container(
         width: 300,
         decoration: BoxDecoration(
+          border: Border.all(color: AppColor.kContainerColor),
           borderRadius: BorderRadius.circular(100),
-          color: AppColor.kContainerColor,
+          color: const Color.fromARGB(135, 255, 255, 255),
         ),
         child: Padding(
           padding: const EdgeInsets.all(4.0),
@@ -32,19 +33,12 @@ class TabsWidget extends StatelessWidget {
             dividerHeight: 0,
             physics: const BouncingScrollPhysics(),
             indicator: BoxDecoration(
-              color: AppColor.kBackgroundColor,
+              color: AppColor.kContainerColor,
               borderRadius: BorderRadius.circular(100),
             ),
             labelStyle: const TextStyle(
               fontWeight: FontWeight.bold,
-              // color: AppColor.kTextColor,
             ),
-            labelColor:
-                // themeController.isDarkMode.value
-                //     ? AppColor.kTextColor
-                //     :
-                AppColor.kTextColor,
-            unselectedLabelColor: AppColor.kBackgroundColor,
             tabs: [
               Tab(
                 iconMargin: EdgeInsets.zero,
@@ -53,6 +47,7 @@ class TabsWidget extends StatelessWidget {
                   child: AppTextWidget(
                     text: firstTab,
                     size: 14,
+                    color: AppColor.kBackgroundColor,
                     weight: FontWeight.bold,
                   ),
                 ),
@@ -63,6 +58,7 @@ class TabsWidget extends StatelessWidget {
                   child: AppTextWidget(
                     text: secondTab,
                     size: 14,
+                    color: AppColor.kBackgroundColor,
                     weight: FontWeight.bold,
                   ),
                 ),

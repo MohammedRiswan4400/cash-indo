@@ -7,15 +7,44 @@ import 'package:cash_indo/widget/drop_down_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+// ignore: must_be_immutable
 class MoneyKeyboardBottomSheet extends StatelessWidget {
   MoneyKeyboardBottomSheet({
     super.key,
     required this.isExpanseSheet,
     required this.title,
+    this.isTrnsactionScreen,
+    this.isAmountRemoving,
   });
   final bool isExpanseSheet;
   final String title;
   final RxString selectedCurrency = RxString(AppConstantStrings.rupees);
+  bool? isTrnsactionScreen;
+  bool? isAmountRemoving;
+  final TextEditingController moneyTextController = TextEditingController();
+
+  void _onNumberTap(String number) {
+    if (number == '.' && moneyTextController.text.contains('.')) {
+      return;
+    }
+    moneyTextController.text += number;
+    moneyTextController.selection = TextSelection.fromPosition(
+      TextPosition(offset: moneyTextController.text.length),
+    );
+  }
+
+  void _onBackspaceTap() {
+    if (moneyTextController.text.isNotEmpty) {
+      moneyTextController.text = moneyTextController.text.substring(
+        0,
+        moneyTextController.text.length - 1,
+      );
+      moneyTextController.selection = TextSelection.fromPosition(
+        TextPosition(offset: moneyTextController.text.length),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -40,17 +69,19 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
             ),
             10.verticalSpace(context),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: isExpanseSheet
-                  ? [
-                      PaymentOptionsDropDownWidget(),
-                      PaymentCategoryDropDownWidget(),
-                    ]
-                  : [
-                      IncomeCategoryDropDownWidget(),
-                    ],
-            ),
+            isTrnsactionScreen == true
+                ? SizedBox.shrink()
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: isExpanseSheet
+                        ? [
+                            PaymentOptionsDropDownWidget(),
+                            PaymentCategoryDropDownWidget(),
+                          ]
+                        : [
+                            IncomeCategoryDropDownWidget(),
+                          ],
+                  ),
 
             10.verticalSpace(context),
             Row(
@@ -76,8 +107,9 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                SizedBox(width: 75),
                 Obx(
                   () => Padding(
                     padding: const EdgeInsets.all(3.0),
@@ -89,18 +121,35 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
                     ),
                   ),
                 ),
-                AppTextWidget(
-                  text: AppConstantStrings.constantAmount,
-                  size: 30,
-                  weight: FontWeight.w600,
-                  color: AppColor.kInvertedTextColor,
+                SizedBox(
+                  width: 200,
+                  child: TextFormField(
+                    keyboardType: TextInputType.none,
+                    decoration: InputDecoration(
+                      hintText: '000.00',
+                      hintStyle: TextStyle(
+                        color: AppColor.kArrowColor,
+                        fontSize: 30,
+                      ),
+                      border: InputBorder.none,
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    ),
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: AppColor.kInvertedTextColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    controller: moneyTextController,
+                  ),
                 ),
               ],
             ),
             Center(
               child: SizedBox(
-                width: 150,
+                width: 300,
                 child: TextFormField(
+                  textAlign: TextAlign.center,
                   decoration: InputDecoration(
                     hintText: AppConstantStrings.addComment,
                     hintStyle: TextStyle(
@@ -120,6 +169,7 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
               ),
             ),
             5.verticalSpace(context),
+
             SizedBox(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,18 +185,53 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
                           crossAxisSpacing: 5,
                           mainAxisSpacing: 5),
                       children: [
-                        NumberButtonWidget(number: '1'),
-                        NumberButtonWidget(number: '2'),
-                        NumberButtonWidget(number: '3'),
-                        NumberButtonWidget(number: '4'),
-                        NumberButtonWidget(number: '5'),
-                        NumberButtonWidget(number: '6'),
-                        NumberButtonWidget(number: '7'),
-                        NumberButtonWidget(number: '8'),
-                        NumberButtonWidget(number: '9'),
-                        NumberButtonWidget(number: '.'),
-                        NumberButtonWidget(number: '0'),
-                        NumberButtonWidget(number: ','),
+                        NumberButtonWidget(
+                          number: '1',
+                          onTap: () => _onNumberTap('1'),
+                        ),
+                        NumberButtonWidget(
+                          number: '2',
+                          onTap: () => _onNumberTap('2'),
+                        ),
+                        NumberButtonWidget(
+                          number: '3',
+                          onTap: () => _onNumberTap('3'),
+                        ),
+                        NumberButtonWidget(
+                          number: '4',
+                          onTap: () => _onNumberTap('4'),
+                        ),
+                        NumberButtonWidget(
+                          number: '5',
+                          onTap: () => _onNumberTap('5'),
+                        ),
+                        NumberButtonWidget(
+                          number: '6',
+                          onTap: () => _onNumberTap('6'),
+                        ),
+                        NumberButtonWidget(
+                          number: '7',
+                          onTap: () => _onNumberTap('7'),
+                        ),
+                        NumberButtonWidget(
+                          number: '8',
+                          onTap: () => _onNumberTap('8'),
+                        ),
+                        NumberButtonWidget(
+                          number: '9',
+                          onTap: () => _onNumberTap('9'),
+                        ),
+                        NumberButtonWidget(
+                          number: '.',
+                          onTap: () => _onNumberTap('.'),
+                        ),
+                        NumberButtonWidget(
+                          number: '0',
+                          onTap: () => _onNumberTap('0'),
+                        ),
+                        NumberButtonWidget(
+                          number: '',
+                        ),
                       ],
                     ),
                   ),
@@ -157,68 +242,47 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
                       spacing: 5,
                       children: [
                         NumberButtonWidget(
+                          onTap: () {
+                            _onBackspaceTap();
+                          },
                           icon: Icons.backspace_outlined,
                           isNumber: false,
                           color: const Color.fromARGB(255, 250, 169, 169),
                           cWidth: MediaQuery.sizeOf(context).width / 4.6,
                           cHeight: MediaQuery.sizeOf(context).width / 4.4,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Get.defaultDialog(
-                              backgroundColor: AppColor.kBackgroundColor,
-                              title: '',
-                              content: CurrencySelectingDialog(
-                                  selectedCurrency: selectedCurrency),
-                            );
-                          },
-                          child: Obx(
-                            () => NumberButtonWidget(
-                              icon: Icons.date_range,
-                              number: selectedCurrency.value,
-                              color: const Color.fromARGB(255, 251, 214, 171),
-                              cWidth: MediaQuery.sizeOf(context).width / 4.6,
-                              cHeight: MediaQuery.sizeOf(context).width / 4.4,
-                            ),
+                        Obx(
+                          () => NumberButtonWidget(
+                            onTap: () {
+                              Get.defaultDialog(
+                                backgroundColor: AppColor.kBackgroundColor,
+                                title: AppConstantStrings.selectCurrency,
+                                content: CurrencySelectingDialog(
+                                    selectedCurrency: selectedCurrency),
+                              );
+                            },
+                            icon: Icons.date_range,
+                            number: selectedCurrency.value,
+                            color: const Color.fromARGB(255, 251, 214, 171),
+                            cWidth: MediaQuery.sizeOf(context).width / 4.6,
+                            cHeight: MediaQuery.sizeOf(context).width / 4.4,
                           ),
                         ),
                         NumberButtonWidget(
                           icon: Icons.check,
                           isNumber: false,
                           iconColor: AppColor.kTextColor,
-                          color: AppColor.kBackgroundColor,
+                          color: isTrnsactionScreen == true
+                              ? isAmountRemoving == true
+                                  ? AppColor.kAddingButtonColor
+                                  : AppColor.kRemovingButtonColor
+                              : AppColor.kBackgroundColor,
                           cWidth: MediaQuery.sizeOf(context).width / 4.6,
                           cHeight: MediaQuery.sizeOf(context).width / 2.1,
                         ),
                       ],
                     ),
                   ),
-
-                  // SizedBox(
-                  //   child:
-                  // GridView(
-                  //     physics: BouncingScrollPhysics(),
-                  //     shrinkWrap: true,
-                  //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  //         crossAxisCount: 1,
-                  //         crossAxisSpacing: 0,
-                  //         mainAxisSpacing: 5),
-                  //     children: [
-                  //       NumberButtonWidget(
-                  //         icon: Icons.date_range,
-                  //         isNumber: false,
-                  //         color: const Color.fromARGB(255, 251, 214, 171),
-                  //       ),
-                  //       NumberButtonWidget(
-                  //         icon: Icons.check,
-                  //         isNumber: false,
-                  //         cHeight: 170,
-                  //         iconColor: AppColor.kTextColor,
-                  //         color: AppColor.kBackgroundColor,
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                 ],
               ),
             ),
@@ -243,6 +307,7 @@ class NumberButtonWidget extends StatelessWidget {
     this.cHeight,
     this.iconColor,
     this.cWidth,
+    this.onTap,
   });
   String? number;
   IconData? icon;
@@ -251,26 +316,30 @@ class NumberButtonWidget extends StatelessWidget {
   double? cHeight;
   Color? iconColor;
   double? cWidth;
+  VoidCallback? onTap;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: cHeight ?? 80,
-      width: cWidth ?? 80,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          color: color ?? AppColor.kContainerColor),
-      child: Center(
-        child: isNumber == false
-            ? Icon(
-                icon,
-                color: iconColor ?? AppColor.kInvertedTextColor,
-              )
-            : AppTextWidget(
-                text: number ?? '',
-                color: AppColor.kInvertedTextColor,
-                size: 30,
-                weight: FontWeight.w600,
-              ),
+    return GestureDetector(
+      onTap: onTap ?? () {},
+      child: Container(
+        height: cHeight ?? 80,
+        width: cWidth ?? 80,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            color: color ?? AppColor.kContainerColor),
+        child: Center(
+          child: isNumber == false
+              ? Icon(
+                  icon,
+                  color: iconColor ?? AppColor.kInvertedTextColor,
+                )
+              : AppTextWidget(
+                  text: number ?? '',
+                  color: AppColor.kInvertedTextColor,
+                  size: 30,
+                  weight: FontWeight.w600,
+                ),
+        ),
       ),
     );
   }

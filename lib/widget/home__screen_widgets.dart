@@ -4,9 +4,12 @@ import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
 import 'package:cash_indo/core/images/app_images.dart';
+import 'package:cash_indo/core/routes/app_routes.dart';
 import 'package:cash_indo/view/auth/sign_up/screen_sign_up.dart';
+import 'package:cash_indo/view/dashboard/bottom_navigation/screen_navigation.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/widget/app_widgets.dart';
+import 'package:cash_indo/widget/bottom_sheets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -242,11 +245,39 @@ class TodayFinaceRowWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 20,
             children: [
-              FinanceButton(
-                title: AppConstantStrings.expenses,
+              GestureDetector(
+                onTap: () {
+                  Get.bottomSheet(
+                    MoneyKeyboardBottomSheet(
+                      isExpanseSheet: true,
+                      title: AppConstantStrings.expenses,
+                    ),
+                    isDismissible: true,
+                    enableDrag: true,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                  );
+                },
+                child: FinanceButton(
+                  title: AppConstantStrings.expenses,
+                ),
               ),
-              FinanceButton(
-                title: AppConstantStrings.income,
+              GestureDetector(
+                onTap: () {
+                  Get.bottomSheet(
+                    MoneyKeyboardBottomSheet(
+                      isExpanseSheet: false,
+                      title: AppConstantStrings.income,
+                    ),
+                    isDismissible: true,
+                    enableDrag: true,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                  );
+                },
+                child: FinanceButton(
+                  title: AppConstantStrings.income,
+                ),
               )
             ],
           ),
@@ -416,7 +447,12 @@ class SavingsWidget extends StatelessWidget {
                     ),
                     Spacer(),
                     value
-                        ? ButtonWithIcon(text: AppConstantStrings.gotoSavings)
+                        ? GestureDetector(
+                            onTap: () {
+                              AppRoutes.gotoScreenSavings();
+                            },
+                            child: ButtonWithIcon(
+                                text: AppConstantStrings.gotoSavings))
                         : SizedBox(height: 33)
                   ],
                 ),
@@ -438,89 +474,94 @@ class CreditWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        return Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: themeController.isDarkMode.value
-                ? AppColor.kHomeCreditContainerColor
-                : const Color.fromARGB(180, 184, 184, 184),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            child: Column(
-              spacing: 5,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    AppTextWidget(
-                      text: AppConstantStrings.credit,
-                      size: 16,
-                      align: TextAlign.start,
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 20,
-                    )
-                  ],
-                ),
-                Row(
-                  spacing: 2,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    AppTextWidget(
-                      text: AppConstantStrings.rupees,
-                      size: 14,
-                      weight: FontWeight.w500,
-                      align: TextAlign.start,
-                    ),
-                    AppTextWidget(
-                      text: AppConstantStrings.constantAmount,
-                      size: 18,
-                      weight: FontWeight.w700,
-                      align: TextAlign.start,
-                    ),
-                  ],
-                ),
-                Container(
-                  height: 45,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: themeController.isDarkMode.value
-                        ? AppColor.kContainerColor
-                        : AppColor.kHomeCreditContainerColor,
+        return GestureDetector(
+          onTap: () {
+            indexChangeNotifier.value = 2;
+          },
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: themeController.isDarkMode.value
+                  ? AppColor.kHomeCreditContainerColor
+                  : const Color.fromARGB(180, 184, 184, 184),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: Column(
+                spacing: 5,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      AppTextWidget(
+                        text: AppConstantStrings.credit,
+                        size: 16,
+                        align: TextAlign.start,
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 20,
+                      )
+                    ],
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Container(
-                        // height: ,
-                        width: MediaQuery.sizeOf(context).width / 2,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: themeController.isDarkMode.value
-                              ? AppColor.kHomeCreditContainerColor
-                              : AppColor.kContainerColor,
+                  Row(
+                    spacing: 2,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      AppTextWidget(
+                        text: AppConstantStrings.rupees,
+                        size: 14,
+                        weight: FontWeight.w500,
+                        align: TextAlign.start,
+                      ),
+                      AppTextWidget(
+                        text: AppConstantStrings.constantAmount,
+                        size: 18,
+                        weight: FontWeight.w700,
+                        align: TextAlign.start,
+                      ),
+                    ],
+                  ),
+                  Container(
+                    height: 45,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: themeController.isDarkMode.value
+                          ? AppColor.kContainerColor
+                          : AppColor.kHomeCreditContainerColor,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Container(
+                          // height: ,
+                          width: MediaQuery.sizeOf(context).width / 2,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: themeController.isDarkMode.value
+                                ? AppColor.kHomeCreditContainerColor
+                                : AppColor.kContainerColor,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: AppTextWidget(
-                    text: AppConstantStrings.seeAll,
-                    size: 12,
-                    weight: FontWeight.w600,
-                    align: TextAlign.start,
-                  ),
-                ),
-              ],
+                  // Align(
+                  //   alignment: Alignment.centerRight,
+                  //   child: AppTextWidget(
+                  //     text: AppConstantStrings.seeAll,
+                  //     size: 12,
+                  //     weight: FontWeight.w600,
+                  //     align: TextAlign.start,
+                  //   ),
+                  // ),
+                ],
+              ),
             ),
           ),
         );

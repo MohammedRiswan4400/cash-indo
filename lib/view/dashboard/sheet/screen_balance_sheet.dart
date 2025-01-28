@@ -1,7 +1,5 @@
-import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_const.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
-import 'package:cash_indo/core/constant/spacing_extensions.dart';
 import 'package:cash_indo/view/dashboard/sheet/tabs/credit_tab.dart';
 import 'package:cash_indo/view/dashboard/sheet/tabs/debit_tab.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';

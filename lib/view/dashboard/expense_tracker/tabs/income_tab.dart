@@ -1,7 +1,6 @@
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
-import 'package:cash_indo/view/auth/sign_up/screen_sign_up.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/widget/bottom_sheets.dart';
 import 'package:cash_indo/widget/expanse_tracker_screen_widgets.dart';
