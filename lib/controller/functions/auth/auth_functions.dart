@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cash_indo/controller/functions/auth/auth.dart';
+import 'package:cash_indo/core/routes/app_routes.dart';
 import 'package:cash_indo/widget/helper/dialoge_helper_widget.dart';
 import 'package:cash_indo/widget/helper/snack_bar_helper_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,8 +20,9 @@ class AuthFunctions {
       // storage.write(isLogged, true);
 
       // ignore: use_build_context_synchronously
+      AppRoutes.gotoBottomNavigation();
       // ScreenRoutes.gotoScreenAuthProfile(ctx, email);
-      // DailogHelper.hideDailoge();
+      DailogHelper.hideDailoge();
       // log('SignUp Success');
     } on FirebaseAuthException catch (e) {
       DailogHelper.hideDailoge();
