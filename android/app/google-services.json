@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "738862352899",
+    "project_id": "cash-indo",
+    "storage_bucket": "cash-indo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:738862352899:android:46dac4723386da96f49c36",
+        "android_client_info": {
+          "package_name": "com.example.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYW39bs6dgXH3FR5sz0U7asusTILbls_I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
