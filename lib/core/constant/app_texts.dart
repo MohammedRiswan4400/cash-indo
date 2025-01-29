@@ -102,7 +102,7 @@ class AppConstantStrings {
   // Saving Screen Screen ----------------------------------------
 
   static String boostSavings = 'Boost Savings';
-
+  static String savings = 'Savings';
   // All Const List<String> ----------------------------------------
 
   static List<String> allMonths = [

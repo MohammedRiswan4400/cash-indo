@@ -29,3 +29,43 @@ class CustomeAppBar extends StatelessWidget {
     );
   }
 }
+
+// ignore: must_be_immutable
+class AppSecondaoryTitle extends StatelessWidget {
+  AppSecondaoryTitle({
+    super.key,
+    required this.title,
+    this.subTitle,
+  });
+  final String title;
+  String? subTitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        AppRoutes.popNow();
+      },
+      child: Row(
+        spacing: 10,
+        children: [
+          Icon(Icons.arrow_back_ios_new),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AppTextWidget(
+                text: title,
+                size: 18,
+              ),
+              AppTextWidget(
+                text: subTitle ?? '',
+                size: 10,
+                weight: FontWeight.normal,
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}

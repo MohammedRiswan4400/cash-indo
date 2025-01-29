@@ -8,6 +8,7 @@ class AppColor {
   static const kContainerColor = Color.fromARGB(255, 217, 217, 217);
   static const kContainerDimColor = Color.fromARGB(108, 217, 217, 217);
   static const kArrowColor = Color.fromARGB(255, 95, 95, 95);
+  static const kMainContainerColor = Color.fromARGB(26, 212, 212, 212);
   static const kTextColor50 = Color.fromARGB(127, 255, 255, 255);
   static const kSecondaryTextColor = Color.fromARGB(255, 169, 169, 169);
   static const kDimGreyColot = Color.fromARGB(173, 93, 93, 93);

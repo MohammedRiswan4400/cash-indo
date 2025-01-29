@@ -1,6 +1,6 @@
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
-import 'package:cash_indo/view/dashboard/user_transaction/screen_user_transaction.dart';
+import 'package:cash_indo/view/dashboard/user_transaction/widgets/user_transaction_widgets.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/widget/bottom_sheets.dart';
 import 'package:flutter/material.dart';

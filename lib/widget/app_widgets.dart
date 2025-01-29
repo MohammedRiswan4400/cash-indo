@@ -55,7 +55,7 @@ class ButtonWithoutIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // width: MediaQuery.sizeOf(context).width / 2.5,
+      width: MediaQuery.sizeOf(context).width / 2.5,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100),
         color: AppColor.kContainerColor,

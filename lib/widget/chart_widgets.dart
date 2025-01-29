@@ -12,7 +12,7 @@ List<PieChartSectionData> paiChartDatas(bool isDebt) {
           fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
     ),
     PieChartSectionData(
-      color: const Color.fromARGB(255, 30, 35, 40),
+      color: Colors.transparent,
       value: 30,
       title: '',
       radius: 90,

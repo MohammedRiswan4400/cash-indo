@@ -1,13 +1,11 @@
 import 'package:cash_indo/core/constant/app_const.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
-import 'package:cash_indo/widget/app_text_widget.dart';
-import 'package:cash_indo/widget/app_widgets.dart';
 import 'package:cash_indo/widget/appbar_widget.dart';
-import 'package:cash_indo/widget/expansion_tile.dart';
-import 'package:cash_indo/widget/home__screen_widgets.dart';
-import 'package:fl_chart/fl_chart.dart';
+import 'package:cash_indo/widget/dialoge_boxes.dart';
+import 'package:cash_indo/view/dashboard/savings/widgets/savings_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ScreenSavings extends StatelessWidget {
   const ScreenSavings({super.key});
@@ -20,170 +18,43 @@ class ScreenSavings extends StatelessWidget {
           padding: AppConst.DashboardScreensHorizontalPadding,
           child: Column(
             children: [
-              CustomeAppBar(title: 'Savings'),
+              CustomeAppBar(title: AppConstantStrings.savings),
               10.verticalSpace(context),
               Expanded(
-                child: Column(
+                child: Stack(
                   children: [
-                    Container(
-                      // height: MediaQuery.sizeOf(context).width / 2
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            const Color.fromARGB(96, 130, 128, 128),
-                            const Color.fromARGB(57, 71, 69, 69)
-                          ],
-                          end: Alignment.bottomLeft,
-                          begin: Alignment.topRight,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
+                    SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          SavingsContainer(),
+                        ],
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 5),
-                        child: Column(
-                          spacing: 5,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            AppTextWidget(
-                              text: 'Car fund',
-                              size: 18,
-                              weight: FontWeight.w700,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              // crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height:
-                                      MediaQuery.sizeOf(context).width / 2.23,
-                                  width: MediaQuery.sizeOf(context).width / 2.2,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        SizedBox(
-                                          width: 100,
-                                          height: 100,
-                                          child: PieChart(
-                                            PieChartData(
-                                              sections: savingsDonotChart(),
-                                              centerSpaceRadius: 30,
-                                              sectionsSpace: 4,
-                                            ),
-                                          ),
-                                        ),
-                                        5.verticalSpace(context),
-                                        AppTextWidget(
-                                          text: AppConstantStrings
-                                              .savingsCompletedText,
-                                          size: 13,
-                                          align: TextAlign.center,
-                                          weight: FontWeight.w500,
-                                          maxLine: 2,
-                                        ),
-                                      ],
-                                    ),
+                    ),
+                    Positioned(
+                      bottom: 20,
+                      left: 0,
+                      right: 00,
+                      child: Row(
+                        children: [
+                          Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              Get.dialog(
+                                Dialog(
+                                  backgroundColor: Colors.black,
+                                  shape: ContinuousRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: SavingsAmountAddingDialoge(
+                                    isAdding: true,
                                   ),
                                 ),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.sizeOf(context).width / 2.5,
-                                  width: MediaQuery.sizeOf(context).width / 2.4,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      AppTextWidget(
-                                        text: AppConstantStrings.achivmentTitle,
-                                        size: 14,
-                                        align: TextAlign.start,
-                                        maxLine: 1,
-                                      ),
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          AppTextWidget(
-                                            text: AppConstantStrings.rupees,
-                                            size: 16,
-                                            align: TextAlign.start,
-                                            maxLine: 1,
-                                          ),
-                                          AppTextWidget(
-                                            text: AppConstantStrings
-                                                .constantAmount,
-                                            size: 18,
-                                            align: TextAlign.start,
-                                            maxLine: 1,
-                                          ),
-                                        ],
-                                      ),
-                                      Align(
-                                        alignment: Alignment.centerRight,
-                                        child: AppTextWidget(
-                                          text: AppConstantStrings.targetTitle,
-                                          size: 20,
-                                          align: TextAlign.start,
-                                          maxLine: 1,
-                                        ),
-                                      ),
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          AppTextWidget(
-                                            text: AppConstantStrings.rupees,
-                                            size: 18,
-                                            align: TextAlign.start,
-                                            maxLine: 1,
-                                          ),
-                                          AppTextWidget(
-                                            text: AppConstantStrings
-                                                .constantAmount,
-                                            size: 22,
-                                            align: TextAlign.start,
-                                            maxLine: 1,
-                                          ),
-                                        ],
-                                      ),
-                                      Spacer(),
-                                      Center(
-                                        child: GestureDetector(
-                                          child: ButtonWithoutIcon(
-                                            text:
-                                                AppConstantStrings.boostSavings,
-                                            size: 13,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                            5.verticalSpace(context),
-                            CustomExpansionTile(
-                              leading: AppTextWidget(text: '📈'),
-                              title: 'Savings Journey',
-                              children: [
-                                Icon(Icons.abc_outlined),
-                                Icon(Icons.abc_outlined),
-                                Icon(Icons.abc_outlined),
-                                Icon(Icons.abc_outlined),
-                                Icon(Icons.abc_outlined),
-                                Icon(Icons.abc_outlined),
-                                Icon(Icons.abc_outlined)
-                              ],
-                            ),
-                            5.verticalSpace(context)
-                          ],
-                        ),
+                              );
+                            },
+                            child: AddSavingWidget(),
+                          ),
+                          Spacer()
+                        ],
                       ),
                     ),
                   ],
