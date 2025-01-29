@@ -79,7 +79,8 @@ class DailogHelper {
               ),
               AppTextWidget(
                 text: message ?? "",
-                size: 20,
+                color: AppColor.kTextColor,
+                size: 16,
               ),
             ],
           ),

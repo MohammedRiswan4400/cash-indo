@@ -1,3 +1,4 @@
+import 'package:cash_indo/controller/functions/auth/auth_functions.dart';
 import 'package:cash_indo/controller/theme/theme_controller.dart';
 import 'package:cash_indo/core/constant/app_const.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
@@ -18,6 +19,10 @@ class ScreenSignUp extends StatelessWidget {
 
   final ValueNotifier<bool> _isPrivacyPolicyChecked = ValueNotifier(false);
 
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +70,7 @@ class ScreenSignUp extends StatelessWidget {
                     weight: FontWeight.w700),
                 EmailTextFormField(
                   action: TextInputAction.next,
-                  controller: TextEditingController(),
+                  controller: emailController,
                 ),
                 AppTextWidget(
                     text: AppConstantStrings.password,
@@ -73,7 +78,7 @@ class ScreenSignUp extends StatelessWidget {
                     weight: FontWeight.w700),
                 PasswordField(
                     action: TextInputAction.done,
-                    passwoedController: TextEditingController(),
+                    passwoedController: passwordController,
                     hintText: AppConstantStrings.passwordHint),
                 AppTextWidget(
                     text: AppConstantStrings.confirmPassword,
@@ -166,7 +171,12 @@ class ScreenSignUp extends StatelessWidget {
                         return GestureDetector(
                           onTap: isButtonEnabled
                               ? () {
-                                  AppRoutes.gotoBottomNavigation();
+                                  AuthFunctions.createUserWithEmailAndPassword(
+                                    ctx: context,
+                                    email: emailController.text.trim(),
+                                    password: passwordController.text.trim(),
+                                  );
+                                  // AppRoutes.gotoBottomNavigation();
                                 }
                               : null,
                           child: isButtonEnabled
