@@ -9,27 +9,32 @@ class SettingsTile extends StatelessWidget {
     required this.text,
     this.textColor,
     required this.isIcon,
+    this.onTap,
   });
   final String text;
   Color? textColor;
   final bool isIcon;
-
+  VoidCallback? onTap;
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        AppTextWidget(
-          text: text, size: 18, // ignore: unnecessary_null_in_if_null_operators
-          color: textColor ?? null,
-        ),
-        isIcon
-            ? Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 20,
-              )
-            : SizedBox()
-      ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          AppTextWidget(
+            text: text,
+            size: 18, // ignore: unnecessary_null_in_if_null_operators
+            color: textColor ?? null,
+          ),
+          isIcon
+              ? Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 20,
+                )
+              : SizedBox()
+        ],
+      ),
     );
   }
 }

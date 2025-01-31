@@ -1,3 +1,4 @@
+import 'package:cash_indo/core/constant/app_const.dart';
 import 'package:cash_indo/view/auth/login/screen_login.dart';
 import 'package:cash_indo/view/auth/sign_up/screen_sign_up.dart';
 import 'package:cash_indo/view/dashboard/bottom_navigation/screen_bottom_navigation.dart';
@@ -13,7 +14,9 @@ class AppRoutes {
       ),
     ).then(
       (value) {
-        Get.offAll(ScreenLogin());
+        Get.offAll(AppConst.storage.read(AppConst.isLogged)
+            ? ScreenBottonNavigation()
+            : ScreenLogin());
       },
     );
   }
