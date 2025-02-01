@@ -18,7 +18,7 @@ class ScreenBottonNavigation extends StatelessWidget {
     //     : const ScreenBookings(),
     ScreenExpenseTracker(),
     const ScreenBalanceSheet(),
-    const ScreenSettings()
+    ScreenSettings()
   ];
 
   @override

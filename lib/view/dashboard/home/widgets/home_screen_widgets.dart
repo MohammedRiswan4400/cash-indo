@@ -1,15 +1,19 @@
 import 'dart:math';
 
+import 'package:cash_indo/controller/functions/app_functions/app_functions.dart';
+import 'package:cash_indo/controller/functions/date_and_time/date_and_time_formates.dart';
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
 import 'package:cash_indo/core/images/app_images.dart';
 import 'package:cash_indo/core/routes/app_routes.dart';
+import 'package:cash_indo/model/user_model.dart';
 import 'package:cash_indo/view/auth/sign_up/screen_sign_up.dart';
 import 'package:cash_indo/view/dashboard/bottom_navigation/screen_navigation.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/widget/app_widgets.dart';
 import 'package:cash_indo/widget/bottom_sheets.dart';
+import 'package:cash_indo/widget/helper/shimmer_widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,6 +27,7 @@ class CashCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime todayDate = DateTime.now();
     return Container(
       height: 200,
       width: double.infinity,
@@ -32,7 +37,6 @@ class CashCardWidget extends StatelessWidget {
           colors: [
             const Color.fromARGB(255, 0, 46, 89),
             const Color.fromARGB(255, 9, 32, 53),
-            // const Color.fromARGB(255, 0, 99, 191)
           ],
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
@@ -45,7 +49,7 @@ class CashCardWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             AppTextWidget(
-                text: AppConstantStrings.todayDate,
+                text: AppDateFormates.slashFormattedDate(todayDate),
                 size: 15,
                 weight: FontWeight.w500,
                 color: AppColor.kTextColor),
@@ -73,32 +77,97 @@ class CashCardWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AppTextWidget(
-                      text: AppConstantStrings.userName,
-                      size: 15,
-                      weight: FontWeight.w500,
-                      color: AppColor.kTextColor,
-                    ),
-                    AppTextWidgetWithGFound(
-                      text: AppConstantStrings.userPhone,
-                      size: 19,
-                      weight: FontWeight.w900,
-                      color: AppColor.kTextColor,
-                    ),
-                  ],
+                StreamBuilder<UserModel?>(
+                  stream: AppFunctions.readProfile(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return ShimmerErrorWidget(
+                        firstHeight: 10,
+                        firstWidth: 100,
+                        secondHeight: 15,
+                        secondWidth: 150,
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (!snapshot.hasData || snapshot.data == null) {
+                      return ShimmerErrorWidget(
+                        firstHeight: 15,
+                        firstWidth: 100,
+                        secondHeight: 22,
+                        secondWidth: 150,
+                      );
+                    } else {
+                      final profileData = snapshot.data!;
+                      String name = profileData.name;
+                      String phoneNumber = profileData.phoneNumber;
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AppTextWidget(
+                            text: name,
+                            size: 15,
+                            weight: FontWeight.w500,
+                            color: AppColor.kTextColor,
+                          ),
+                          AppTextWidgetWithGFound(
+                            text: '+91 $phoneNumber',
+                            size: 19,
+                            weight: FontWeight.w900,
+                            color: AppColor.kTextColor,
+                          ),
+                        ],
+                      );
+                    }
+                  },
                 ),
-                Image.asset(
-                  AppImages.masterCardImage,
-                  scale: 2,
+                GestureDetector(
+                  onTap: () {
+                    print(AppFunctions.uid);
+                  },
+                  child: Image.asset(
+                    AppImages.masterCardImage,
+                    scale: 2,
+                  ),
                 )
               ],
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class ShimmerErrorWidget extends StatelessWidget {
+  const ShimmerErrorWidget({
+    super.key,
+    required this.firstWidth,
+    required this.firstHeight,
+    required this.secondWidth,
+    required this.secondHeight,
+  });
+  final double firstWidth;
+  final double firstHeight;
+  final double secondWidth;
+  final double secondHeight;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 10,
+      children: [
+        SizedBox(
+          height: firstHeight,
+          width: firstWidth,
+          child: ShimmerContainer(),
+        ),
+        SizedBox(
+          height: secondHeight,
+          width: secondWidth,
+          child: ShimmerContainer(),
+        ),
+      ],
     );
   }
 }

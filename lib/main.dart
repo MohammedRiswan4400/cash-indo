@@ -1,4 +1,5 @@
 import 'package:cash_indo/controller/theme/theme_controller.dart';
+import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/theme/theme_helper.dart';
 import 'package:cash_indo/firebase_options.dart';
 import 'package:cash_indo/view/splash/screen_splash.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
     final ThemeController themeController = Get.put(ThemeController());
     return Obx(() {
       return GetMaterialApp(
-        title: 'Cash Indo',
+        title: AppConstantStrings.appName,
         theme: AppThemes.lightTheme,
         darkTheme: AppThemes.darkTheme,
         themeMode:

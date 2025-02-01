@@ -3,10 +3,11 @@ import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:flutter/material.dart';
 
-class MonthDropDownWidget extends StatelessWidget {
-  MonthDropDownWidget({super.key});
+final ValueNotifier<String> selectedPlanNotifier = ValueNotifier('Salary');
+final ValueNotifier<String> selectedMonthNotifier = ValueNotifier('January');
 
-  final ValueNotifier<String> selectedMonthNotifier = ValueNotifier('January');
+class MonthDropDownWidget extends StatelessWidget {
+  const MonthDropDownWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -185,9 +186,7 @@ class PaymentCategoryDropDownWidget extends StatelessWidget {
 }
 
 class IncomeCategoryDropDownWidget extends StatelessWidget {
-  IncomeCategoryDropDownWidget({super.key});
-
-  final ValueNotifier<String> selectedPlanNotifier = ValueNotifier('Salary');
+  const IncomeCategoryDropDownWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

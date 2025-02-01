@@ -1,7 +1,6 @@
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
-import 'package:cash_indo/view/dashboard/expense_tracker/tabs/expanse_tab.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/widget/bottom_sheets.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/widgets/expanse_tracker_screen_widgets.dart';
@@ -193,6 +192,7 @@ class IncomeTab extends StatelessWidget {
             onPressed: () {
               Get.bottomSheet(
                 MoneyKeyboardBottomSheet(
+                  isIncomeSheet: true,
                   isExpanseSheet: false,
                   title: AppConstantStrings.income,
                 ),

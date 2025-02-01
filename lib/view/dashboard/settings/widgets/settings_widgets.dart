@@ -22,11 +22,7 @@ class SettingsTile extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          AppTextWidget(
-            text: text,
-            size: 18, // ignore: unnecessary_null_in_if_null_operators
-            color: textColor ?? null,
-          ),
+          AppTextWidget(text: text, size: 18, color: textColor),
           isIcon
               ? Icon(
                   Icons.arrow_forward_ios_rounded,

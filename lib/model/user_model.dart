@@ -1,27 +1,23 @@
 class UserModel {
   final String name;
   final String email;
-  final String phone;
+  final String phoneNumber;
+  final DateTime createdAt;
 
   UserModel({
     required this.name,
     required this.email,
-    required this.phone,
+    required this.phoneNumber,
+    required this.createdAt,
   });
 
-  factory UserModel.fromMap(Map<String, dynamic> map) {
+  // Factory method to create a UserModel from a Firestore document
+  factory UserModel.fromMap(Map<String, dynamic> data) {
     return UserModel(
-      name: map['name'] ?? '',
-      phone: map['phone'] ?? '',
-      email: map['email'] ?? '',
+      name: data['name'] ?? '',
+      email: data['email'] ?? '',
+      phoneNumber: data['phoneNumber'] ?? '',
+      createdAt: data['createdAt']?.toDate() ?? DateTime.now(),
     );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'title': phone,
-      'email': email,
-    };
   }
 }

@@ -1,6 +1,10 @@
+import 'package:cash_indo/controller/functions/app_functions/app_functions.dart';
+import 'package:cash_indo/controller/functions/app_functions/expanse_tracker_functions.dart';
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
+import 'package:cash_indo/core/routes/app_routes.dart';
+import 'package:cash_indo/model/income_model.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/widget/dialoge_boxes.dart';
 import 'package:cash_indo/widget/drop_down_widgets.dart';
@@ -15,8 +19,11 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
     required this.title,
     this.isTrnsactionScreen,
     this.isAmountRemoving,
+    this.isIncomeSheet,
   });
+  final moneyFormKey = GlobalKey<FormState>();
   final bool isExpanseSheet;
+  bool? isIncomeSheet;
   final String title;
   final RxString selectedCurrency = RxString(AppConstantStrings.rupees);
   bool? isTrnsactionScreen;
@@ -57,237 +64,272 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
         ),
       ),
       child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: 4,
-              width: 40,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: AppColor.kSecondaryTextColor,
+        child: Form(
+          key: moneyFormKey,
+          child: Column(
+            children: [
+              Container(
+                height: 4,
+                width: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: AppColor.kSecondaryTextColor,
+                ),
               ),
-            ),
-            10.verticalSpace(context),
+              10.verticalSpace(context),
 
-            isTrnsactionScreen == true
-                ? SizedBox.shrink()
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: isExpanseSheet
-                        ? [
-                            PaymentOptionsDropDownWidget(),
-                            PaymentCategoryDropDownWidget(),
-                          ]
-                        : [
-                            IncomeCategoryDropDownWidget(),
-                          ],
-                  ),
+              isTrnsactionScreen == true
+                  ? SizedBox.shrink()
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: isExpanseSheet
+                          ? [
+                              PaymentOptionsDropDownWidget(),
+                              PaymentCategoryDropDownWidget(),
+                            ]
+                          : [
+                              IncomeCategoryDropDownWidget(),
+                            ],
+                    ),
 
-            10.verticalSpace(context),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                AppTextWidget(
-                    text: AppConstantStrings.today,
-                    size: 18,
-                    weight: FontWeight.w700,
-                    color: AppColor.todayColor
-                    // const
-                    ),
-                AppTextWidget(
-                  text: title,
-                  size: 12,
-                  weight: FontWeight.w400,
-                  color: AppColor.kInvertedTextColor,
-                ),
-                SizedBox(
-                  width: 60,
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(width: 75),
-                Obx(
-                  () => Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: AppTextWidget(
-                      text: selectedCurrency.value,
-                      size: 20,
-                      weight: FontWeight.w600,
-                      color: AppColor.kInvertedTextColor,
+              10.verticalSpace(context),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  AppTextWidget(
+                      text: AppConstantStrings.today,
+                      size: 18,
+                      weight: FontWeight.w700,
+                      color: AppColor.todayColor
+                      // const
+                      ),
+                  AppTextWidget(
+                    text: title,
+                    size: 12,
+                    weight: FontWeight.w400,
+                    color: AppColor.kInvertedTextColor,
+                  ),
+                  SizedBox(
+                    width: 60,
+                  )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(width: 75),
+                  Obx(
+                    () => Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: AppTextWidget(
+                        text: selectedCurrency.value,
+                        size: 20,
+                        weight: FontWeight.w600,
+                        color: AppColor.kInvertedTextColor,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: 200,
+                  SizedBox(
+                    width: 200,
+                    child: TextFormField(
+                      keyboardType: TextInputType.none,
+                      decoration: InputDecoration(
+                        hintText: '000.00',
+                        hintStyle: TextStyle(
+                          color: AppColor.kArrowColor,
+                          fontSize: 30,
+                        ),
+                        border: InputBorder.none,
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      ),
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: AppColor.kInvertedTextColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      controller: moneyTextController,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the amount';
+                        }
+                        if (value.isEmpty) {
+                          return '';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              Center(
+                child: SizedBox(
+                  width: 300,
                   child: TextFormField(
-                    keyboardType: TextInputType.none,
+                    textAlign: TextAlign.center,
                     decoration: InputDecoration(
-                      hintText: '000.00',
+                      hintText: AppConstantStrings.addComment,
                       hintStyle: TextStyle(
                         color: AppColor.kArrowColor,
-                        fontSize: 30,
+                        fontSize: 14,
                       ),
                       border: InputBorder.none,
                       contentPadding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     ),
                     style: TextStyle(
-                      fontSize: 30,
-                      color: AppColor.kInvertedTextColor,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: Colors.black,
                     ),
-                    controller: moneyTextController,
+                    onChanged: (value) {},
                   ),
-                ),
-              ],
-            ),
-            Center(
-              child: SizedBox(
-                width: 300,
-                child: TextFormField(
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                    hintText: AppConstantStrings.addComment,
-                    hintStyle: TextStyle(
-                      color: AppColor.kArrowColor,
-                      fontSize: 14,
-                    ),
-                    border: InputBorder.none,
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  ),
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                  ),
-                  onChanged: (value) {},
                 ),
               ),
-            ),
-            5.verticalSpace(context),
+              5.verticalSpace(context),
 
-            SizedBox(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.sizeOf(context).width / 1.4,
-                    child: GridView(
-                      physics: BouncingScrollPhysics(),
-                      shrinkWrap: true,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          crossAxisSpacing: 5,
-                          mainAxisSpacing: 5),
-                      children: [
-                        NumberButtonWidget(
-                          number: '1',
-                          onTap: () => _onNumberTap('1'),
-                        ),
-                        NumberButtonWidget(
-                          number: '2',
-                          onTap: () => _onNumberTap('2'),
-                        ),
-                        NumberButtonWidget(
-                          number: '3',
-                          onTap: () => _onNumberTap('3'),
-                        ),
-                        NumberButtonWidget(
-                          number: '4',
-                          onTap: () => _onNumberTap('4'),
-                        ),
-                        NumberButtonWidget(
-                          number: '5',
-                          onTap: () => _onNumberTap('5'),
-                        ),
-                        NumberButtonWidget(
-                          number: '6',
-                          onTap: () => _onNumberTap('6'),
-                        ),
-                        NumberButtonWidget(
-                          number: '7',
-                          onTap: () => _onNumberTap('7'),
-                        ),
-                        NumberButtonWidget(
-                          number: '8',
-                          onTap: () => _onNumberTap('8'),
-                        ),
-                        NumberButtonWidget(
-                          number: '9',
-                          onTap: () => _onNumberTap('9'),
-                        ),
-                        NumberButtonWidget(
-                          number: '.',
-                          onTap: () => _onNumberTap('.'),
-                        ),
-                        NumberButtonWidget(
-                          number: '0',
-                          onTap: () => _onNumberTap('0'),
-                        ),
-                        NumberButtonWidget(
-                          number: '',
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    // color: Colors.cyanAccent,
-                    width: MediaQuery.sizeOf(context).width / 4.6,
-                    child: Column(
-                      spacing: 5,
-                      children: [
-                        NumberButtonWidget(
-                          onTap: () {
-                            _onBackspaceTap();
-                          },
-                          icon: Icons.backspace_outlined,
-                          isNumber: false,
-                          color: const Color.fromARGB(255, 250, 169, 169),
-                          cWidth: MediaQuery.sizeOf(context).width / 4.6,
-                          cHeight: MediaQuery.sizeOf(context).width / 4.4,
-                        ),
-                        Obx(
-                          () => NumberButtonWidget(
+              SizedBox(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.sizeOf(context).width / 1.4,
+                      child: GridView(
+                        physics: BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 5,
+                            mainAxisSpacing: 5),
+                        children: [
+                          NumberButtonWidget(
+                            number: '1',
+                            onTap: () => _onNumberTap('1'),
+                          ),
+                          NumberButtonWidget(
+                            number: '2',
+                            onTap: () => _onNumberTap('2'),
+                          ),
+                          NumberButtonWidget(
+                            number: '3',
+                            onTap: () => _onNumberTap('3'),
+                          ),
+                          NumberButtonWidget(
+                            number: '4',
+                            onTap: () => _onNumberTap('4'),
+                          ),
+                          NumberButtonWidget(
+                            number: '5',
+                            onTap: () => _onNumberTap('5'),
+                          ),
+                          NumberButtonWidget(
+                            number: '6',
+                            onTap: () => _onNumberTap('6'),
+                          ),
+                          NumberButtonWidget(
+                            number: '7',
+                            onTap: () => _onNumberTap('7'),
+                          ),
+                          NumberButtonWidget(
+                            number: '8',
+                            onTap: () => _onNumberTap('8'),
+                          ),
+                          NumberButtonWidget(
+                            number: '9',
+                            onTap: () => _onNumberTap('9'),
+                          ),
+                          NumberButtonWidget(
+                            number: '.',
+                            onTap: () => _onNumberTap('.'),
+                          ),
+                          NumberButtonWidget(
+                            number: '0',
+                            onTap: () => _onNumberTap('0'),
+                          ),
+                          NumberButtonWidget(
                             onTap: () {
-                              Get.defaultDialog(
-                                backgroundColor: AppColor.kBackgroundColor,
-                                title: AppConstantStrings.selectCurrency,
-                                content: CurrencySelectingDialog(
-                                    selectedCurrency: selectedCurrency),
-                              );
+                              AppRoutes.popNow();
                             },
-                            icon: Icons.date_range,
-                            number: selectedCurrency.value,
-                            color: const Color.fromARGB(255, 251, 214, 171),
+                            icon: Icons.close,
+                            isNumber: false,
+                            color: const Color.fromARGB(255, 255, 105, 105),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      // color: Colors.cyanAccent,
+                      width: MediaQuery.sizeOf(context).width / 4.6,
+                      child: Column(
+                        spacing: 5,
+                        children: [
+                          NumberButtonWidget(
+                            onTap: () {
+                              _onBackspaceTap();
+                            },
+                            icon: Icons.backspace_outlined,
+                            isNumber: false,
+                            color: const Color.fromARGB(255, 250, 169, 169),
                             cWidth: MediaQuery.sizeOf(context).width / 4.6,
                             cHeight: MediaQuery.sizeOf(context).width / 4.4,
                           ),
-                        ),
-                        NumberButtonWidget(
-                          icon: Icons.check,
-                          isNumber: false,
-                          iconColor: AppColor.kTextColor,
-                          color: isTrnsactionScreen == true
-                              ? isAmountRemoving == true
-                                  ? AppColor.kAddingButtonColor
-                                  : AppColor.kRemovingButtonColor
-                              : AppColor.kBackgroundColor,
-                          cWidth: MediaQuery.sizeOf(context).width / 4.6,
-                          cHeight: MediaQuery.sizeOf(context).width / 2.1,
-                        ),
-                      ],
+                          Obx(
+                            () => NumberButtonWidget(
+                              onTap: () {
+                                Get.defaultDialog(
+                                  backgroundColor: AppColor.kBackgroundColor,
+                                  title: AppConstantStrings.selectCurrency,
+                                  content: CurrencySelectingDialog(
+                                      selectedCurrency: selectedCurrency),
+                                );
+                              },
+                              icon: Icons.date_range,
+                              number: selectedCurrency.value,
+                              color: const Color.fromARGB(255, 251, 214, 171),
+                              cWidth: MediaQuery.sizeOf(context).width / 4.6,
+                              cHeight: MediaQuery.sizeOf(context).width / 4.4,
+                            ),
+                          ),
+                          NumberButtonWidget(
+                            onTap: () {
+                              if (moneyFormKey.currentState?.validate() ??
+                                  false) {
+                                if (isIncomeSheet != null &&
+                                    isIncomeSheet == true) {
+                                  ExpanseTrackerFunctions.writeIncome(
+                                      income: IncomeModel(
+                                        currency: selectedCurrency.value,
+                                        amount: moneyTextController.text.trim(),
+                                        category: selectedPlanNotifier.value,
+                                        createdAt: DateTime.now(),
+                                      ),
+                                      month: selectedMonthNotifier.value);
+                                }
+                              }
+                              // moneyTextController.text.trim() != null ?
+                            },
+                            icon: Icons.check,
+                            isNumber: false,
+                            iconColor: AppColor.kTextColor,
+                            color: isTrnsactionScreen == true
+                                ? isAmountRemoving == true
+                                    ? AppColor.kAddingButtonColor
+                                    : AppColor.kRemovingButtonColor
+                                : AppColor.kBackgroundColor,
+                            cWidth: MediaQuery.sizeOf(context).width / 4.6,
+                            cHeight: MediaQuery.sizeOf(context).width / 2.1,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            // 5 .verticalSpace(context),
-          ],
+              // 5 .verticalSpace(context),
+            ],
+          ),
         ),
       ),
     );

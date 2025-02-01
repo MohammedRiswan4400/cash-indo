@@ -200,8 +200,6 @@ class ScreenSignUp extends StatelessWidget {
                                               'Passwords are not same',
                                             );
                                     }
-
-                                    // AppRoutes.gotoBottomNavigation();
                                   }
                                 : null,
                             child: isButtonEnabled

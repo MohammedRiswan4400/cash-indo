@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cash_indo/controller/functions/app_functions/app_functions.dart';
 import 'package:cash_indo/controller/functions/auth/auth.dart';
 import 'package:cash_indo/core/constant/app_const.dart';
 import 'package:cash_indo/core/routes/app_routes.dart';
@@ -18,15 +19,13 @@ class AuthFunctions {
   }) async {
     try {
       DailogHelper.showDailog('Creating ...');
-      UserCredential userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      String uid = userCredential.user!.uid;
-
-      await FirebaseFirestore.instance.collection('users').doc(uid).set({
+      final String uID = AppFunctions.uid;
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uID)
+          .collection('personal_data')
+          .doc('profile')
+          .set({
         'name': name,
         'email': email,
         'phoneNumber': phoneNumber,
@@ -89,5 +88,35 @@ class AuthFunctions {
     AppConst.storage.write(AppConst.isLogged, false);
     AppRoutes.gotoScreenSignIn();
     log('Sign out Success');
+  }
+
+  static Future<void> deleteAccount(TextEditingController controller) async {
+    try {
+      DailogHelper.showDailog('Account Deleting...');
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        AuthCredential credential = EmailAuthProvider.credential(
+          email: user.email!,
+          password: controller.text.trim(),
+        );
+
+        await user.reauthenticateWithCredential(credential);
+
+        await user.delete();
+        DailogHelper.hideDailoge();
+        AppConst.storage.write(AppConst.isLogged, false);
+        AppRoutes.gotoScreenSignIn();
+        log(user.email!);
+        log("User account deleted successfully!");
+      }
+    } on FirebaseAuthException catch (e) {
+      DailogHelper.hideDailoge();
+      SnackBarHelper.snackBarFaild(
+        'Oops!',
+        e.message,
+      );
+      log(e.message.toString());
+    }
   }
 }
