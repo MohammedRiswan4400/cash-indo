@@ -1,6 +1,8 @@
+import 'package:cash_indo/controller/db/user_db/user_db.dart';
 import 'package:cash_indo/core/constant/app_const.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
+import 'package:cash_indo/model/user_model.dart';
 import 'package:cash_indo/view/auth/sign_up/screen_sign_up.dart';
 import 'package:cash_indo/view/dashboard/settings/widgets/settings_widgets.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
@@ -10,8 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ScreenSettings extends StatelessWidget {
-  ScreenSettings({super.key});
-  final TextEditingController passwordController = TextEditingController();
+  const ScreenSettings({super.key});
+
   @override
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
@@ -100,25 +102,34 @@ class ScreenSettings extends StatelessWidget {
                             text: AppConstantStrings.logOut,
                             isIcon: false,
                             textColor: Colors.orange),
-                        SettingsTile(
-                          onTap: () {
-                            user!.email != null
-                                ? Get.dialog(Dialog(
-                                    backgroundColor: Colors.black,
-                                    shape: ContinuousRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    child: DeleteAccountDialogeBox(
-                                        user: user,
-                                        passwordController: passwordController),
-                                  ))
-                                : null;
-                            // AuthFunctions.deleteAccount();
-                          },
-                          text: AppConstantStrings.deleteAccount,
-                          isIcon: false,
-                          textColor: Colors.red,
-                        ),
+
+                        ElevatedButton(
+                            onPressed: () {
+                              UserDb.createUserProfile(UserModel(
+                                // id: 1,
+                                name: 'John Doe',
+                                email: 'johndoe@example.com',
+                                phoneNumber: '1234567890',
+                              ));
+                            },
+                            child: Text('data'))
+                        // SettingsTile(
+                        //   onTap: () {
+                        //     // user!.email != null
+                        //     //     ?
+                        //     Get.dialog(Dialog(
+                        //       backgroundColor: Colors.black,
+                        //       shape: ContinuousRectangleBorder(
+                        //         borderRadius: BorderRadius.circular(30),
+                        //       ),
+                        //       child: DeleteAccountDialogeBox(),
+                        //     ));
+                        //     // : null;
+                        //   },
+                        //   text: AppConstantStrings.deleteAccount,
+                        //   isIcon: false,
+                        //   textColor: Colors.red,
+                        // ),
                       ],
                     ),
                   ),

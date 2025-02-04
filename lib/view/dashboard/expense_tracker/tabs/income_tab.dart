@@ -61,24 +61,6 @@ class IncomeTab extends StatelessWidget {
                   title: 'Buisness',
                   amount: '12,909.00',
                 ),
-                // 10.verticalSpace(context),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     AppTextWidget(
-                //       text: AppConstantStrings.today,
-                //       size: 18,
-                //       weight: FontWeight.w800,
-                //       align: TextAlign.start,
-                //     ),
-                //     Icon(
-                //       Icons.arrow_forward_ios_rounded,
-                //       size: 20,
-                //     )
-                //   ],
-                // // ),
-                // 5.verticalSpace(context),
-                10.verticalSpace(context),
                 Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),

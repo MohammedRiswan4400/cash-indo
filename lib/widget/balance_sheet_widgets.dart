@@ -1,5 +1,6 @@
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
+import 'package:cash_indo/model/contact_model.dart';
 import 'package:cash_indo/view/dashboard/user_transaction/widgets/user_transaction_widgets.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/widget/bottom_sheets.dart';
@@ -9,44 +10,34 @@ import 'package:get/get.dart';
 class UserListTile extends StatelessWidget {
   const UserListTile({
     super.key,
+    required this.contactModel,
   });
-
+  final ContactModel contactModel;
   @override
   Widget build(BuildContext context) {
+    // String firstLetter = List.of(contactModel.phoneNumber)
+    String firstLetter =
+        contactModel.name.isNotEmpty ? contactModel.name.substring(0, 2) : "";
     return Row(
       spacing: 10,
       children: [
-        CircleAvatar(radius: 25, child: AppTextWidget(text: 'R')),
+        CircleAvatar(radius: 25, child: AppTextWidget(text: firstLetter)),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AppTextWidget(
-              text: 'Riswan',
+              text: contactModel.name,
               size: 17,
             ),
             AppTextWidget(
-              text: '+91 8138874400',
+              text: contactModel.phoneNumber,
               size: 15,
               weight: FontWeight.normal,
             ),
           ],
         ),
         Spacer(),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            AppTextWidget(
-              text: '\$ 34,560.00',
-              size: 15,
-              weight: FontWeight.normal,
-            ),
-            AppTextWidget(
-              text: '16-01-2025',
-              size: 14,
-              weight: FontWeight.normal,
-            ),
-          ],
-        ),
+        Icon(Icons.arrow_forward_ios_rounded)
       ],
     );
   }

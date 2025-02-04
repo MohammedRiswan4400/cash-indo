@@ -10,14 +10,8 @@ class ScreenBottonNavigation extends StatelessWidget {
 
   final _pages = [
     ScreenHome(),
-    // storage.read(isDummyUser) == true
-    //     ? const DummyUserScreen()
-    //     : const ScreenBookNow(),
-    // storage.read(isDummyUser) == true
-    //     ? const DummyUserScreen()
-    //     : const ScreenBookings(),
     ScreenExpenseTracker(),
-    const ScreenBalanceSheet(),
+    ScreenBalanceSheet(),
     ScreenSettings()
   ];
 

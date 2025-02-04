@@ -1,4 +1,3 @@
-import 'package:cash_indo/controller/functions/app_functions/app_functions.dart';
 import 'package:cash_indo/controller/functions/app_functions/expanse_tracker_functions.dart';
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
@@ -298,17 +297,19 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
                                   false) {
                                 if (isIncomeSheet != null &&
                                     isIncomeSheet == true) {
+                                  final amount =
+                                      moneyTextController.text.trim();
                                   ExpanseTrackerFunctions.writeIncome(
                                       income: IncomeModel(
+                                        comment: '',
                                         currency: selectedCurrency.value,
-                                        amount: moneyTextController.text.trim(),
+                                        amount: double.parse(amount),
                                         category: selectedPlanNotifier.value,
                                         createdAt: DateTime.now(),
                                       ),
                                       month: selectedMonthNotifier.value);
                                 }
                               }
-                              // moneyTextController.text.trim() != null ?
                             },
                             icon: Icons.check,
                             isNumber: false,

@@ -61,7 +61,6 @@ class ScreenLogin extends StatelessWidget {
                     onTap: () {
                       if (signInFormKey.currentState?.validate() ?? false) {
                         AuthFunctions.signInWithEmailAndPassword(
-                            ctx: context,
                             email: emailController.text.trim(),
                             password: passwordController.text.trim());
                       }

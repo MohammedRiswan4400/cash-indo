@@ -1,5 +1,6 @@
 // Currency Selector Dialoge
 
+import 'package:cash_indo/controller/db/user_db/user_db.dart';
 import 'package:cash_indo/controller/functions/auth/auth_functions.dart';
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
@@ -202,6 +203,7 @@ class LogoutDialogeBox extends StatelessWidget {
             ),
             // 10.verticalSpace(context),
             AppTextWidget(
+              align: TextAlign.left,
               text: 'You’ll need to log in again to access your account.',
               size: 12,
               color: AppColor.kTextColor,
@@ -225,7 +227,7 @@ class LogoutDialogeBox extends StatelessWidget {
                   textColor: Colors.red,
                   text: 'Log out',
                   onTap: () {
-                    AuthFunctions.signOut(context);
+                    AuthFunctions.signOut();
                   },
                 ),
               ],
@@ -279,17 +281,16 @@ class DialogeBoxButton extends StatelessWidget {
 }
 
 class DeleteAccountDialogeBox extends StatelessWidget {
-  const DeleteAccountDialogeBox({
+  DeleteAccountDialogeBox({
     super.key,
-    required this.user,
-    required this.passwordController,
   });
 
-  final User? user;
-  final TextEditingController passwordController;
-
+  // final User? user;
+  // final TextEditingController passwordController;
+  final TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    // final emailID = AuthFunctions.getCurrentUserEmail();
     return Container(
       height: 300,
       width: MediaQuery.sizeOf(context).width / 1.1,
@@ -333,7 +334,7 @@ class DeleteAccountDialogeBox extends StatelessWidget {
               color: AppColor.kTextColor,
             ),
             AppTextWidget(
-              text: 'Email : ${user!.email!}',
+              text: 'Email : ${UserDb.supaEmail}',
               size: 16,
               align: TextAlign.left,
               color: AppColor.kTextColor,

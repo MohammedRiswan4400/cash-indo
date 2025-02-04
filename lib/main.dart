@@ -1,4 +1,5 @@
 import 'package:cash_indo/controller/theme/theme_controller.dart';
+import 'package:cash_indo/core/constant/app_const.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/theme/theme_helper.dart';
 import 'package:cash_indo/firebase_options.dart';
@@ -9,9 +10,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   await GetStorage.init();
+  Supabase.initialize(
+    url: AppConst.supaURL,
+    anonKey: AppConst.supaKey,
+  );
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

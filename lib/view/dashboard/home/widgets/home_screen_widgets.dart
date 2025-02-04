@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:cash_indo/controller/functions/app_functions/app_functions.dart';
+import 'package:cash_indo/controller/db/user_db/user_db.dart';
 import 'package:cash_indo/controller/functions/date_and_time/date_and_time_formates.dart';
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
@@ -78,7 +78,7 @@ class CashCardWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 StreamBuilder<UserModel?>(
-                  stream: AppFunctions.readProfile(),
+                  stream: UserDb.getUserByEmail(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return ShimmerErrorWidget(
@@ -89,41 +89,43 @@ class CashCardWidget extends StatelessWidget {
                       );
                     } else if (snapshot.hasError) {
                       return Center(child: Text('Error: ${snapshot.error}'));
-                    } else if (!snapshot.hasData || snapshot.data == null) {
+                    }
+                    if (!snapshot.hasData || snapshot.data == null) {
                       return ShimmerErrorWidget(
                         firstHeight: 15,
                         firstWidth: 100,
                         secondHeight: 22,
                         secondWidth: 150,
                       );
-                    } else {
-                      final profileData = snapshot.data!;
-                      String name = profileData.name;
-                      String phoneNumber = profileData.phoneNumber;
-
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AppTextWidget(
-                            text: name,
-                            size: 15,
-                            weight: FontWeight.w500,
-                            color: AppColor.kTextColor,
-                          ),
-                          AppTextWidgetWithGFound(
-                            text: '+91 $phoneNumber',
-                            size: 19,
-                            weight: FontWeight.w900,
-                            color: AppColor.kTextColor,
-                          ),
-                        ],
-                      );
                     }
+
+                    UserModel user = snapshot.data!;
+                    String name = user.name;
+                    String phoneNumber = user.phoneNumber;
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AppTextWidget(
+                          text: name,
+                          size: 15,
+                          weight: FontWeight.w500,
+                          color: AppColor.kTextColor,
+                        ),
+                        AppTextWidgetWithGFound(
+                          text: '+91 $phoneNumber',
+                          size: 20,
+                          weight: FontWeight.w900,
+                          color: AppColor.kTextColor,
+                        ),
+                      ],
+                    );
                   },
                 ),
                 GestureDetector(
                   onTap: () {
-                    print(AppFunctions.uid);
+                    //  final userID =   AuthFunctions.getCurrentUserId();
+                    print(UserDb.supaUID);
                   },
                   child: Image.asset(
                     AppImages.masterCardImage,
