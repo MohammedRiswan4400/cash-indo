@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class AppDateFormates {
   // 31/01/2025 Format
   static String slashFormattedDate(DateTime date) {
@@ -13,8 +15,18 @@ class AppDateFormates {
         "${date.year}";
   }
 
-  // 31-01-2025 Format
+  // 2025
   static String yearFormattedDate(DateTime date) {
     return "${date.year}";
+  }
+
+// February format
+  static String monthFormattedDate(DateTime date) {
+    return DateFormat.MMMM().format(date);
+  }
+
+// "12:23 AM"
+  static String normalFormatTime(DateTime dateTime) {
+    return DateFormat('hh:mm a').format(dateTime);
   }
 }

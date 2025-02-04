@@ -1,28 +1,31 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class IncomeModel {
   final double amount;
   final String category;
   final String comment;
+  final String? today;
   final String currency;
-  final DateTime createdAt;
+  final DateTime? createdAt;
 
   IncomeModel({
     required this.amount,
     required this.category,
     required this.comment,
+    this.today, // Allow null values
     required this.currency,
-    required this.createdAt,
+    this.createdAt,
   });
 
-  factory IncomeModel.fromMap(Map<String, dynamic> map) {
+  factory IncomeModel.fromMap(Map<String, dynamic> data) {
     return IncomeModel(
-      amount: (map['amount'] as num).toDouble(), // Ensure it's double
-      category: map['category'] ?? '',
-      comment: map['comment'] ?? '',
-      currency: map['currency'] ?? '',
-      createdAt: (map['createdAt'] as Timestamp)
-          .toDate(), // Convert Firestore Timestamp
+      today: data['today'],
+      amount: (data['amount'] as num).toDouble(),
+      category: data['category'] ?? '',
+      comment: data['comment'] ?? '',
+      currency: data['currency'] ?? '',
+      // createdAt: data['createdAt']?.toDate() ?? DateTime.now(),
+      createdAt: data['created_at'] != null
+          ? DateTime.parse(data['created_at'])
+          : null,
     );
   }
 }

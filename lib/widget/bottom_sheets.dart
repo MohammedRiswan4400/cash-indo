@@ -1,3 +1,4 @@
+import 'package:cash_indo/controller/db/income_db/income_db.dart';
 import 'package:cash_indo/controller/functions/app_functions/expanse_tracker_functions.dart';
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
@@ -7,6 +8,7 @@ import 'package:cash_indo/model/income_model.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/widget/dialoge_boxes.dart';
 import 'package:cash_indo/widget/drop_down_widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -28,6 +30,7 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
   bool? isTrnsactionScreen;
   bool? isAmountRemoving;
   final TextEditingController moneyTextController = TextEditingController();
+  final TextEditingController commentController = TextEditingController();
 
   void _onNumberTap(String number) {
     if (number == '.' && moneyTextController.text.contains('.')) {
@@ -167,6 +170,7 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
                 child: SizedBox(
                   width: 300,
                   child: TextFormField(
+                    controller: commentController,
                     textAlign: TextAlign.center,
                     decoration: InputDecoration(
                       hintText: AppConstantStrings.addComment,
@@ -299,15 +303,17 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
                                     isIncomeSheet == true) {
                                   final amount =
                                       moneyTextController.text.trim();
-                                  ExpanseTrackerFunctions.writeIncome(
-                                      income: IncomeModel(
-                                        comment: '',
-                                        currency: selectedCurrency.value,
-                                        amount: double.parse(amount),
-                                        category: selectedPlanNotifier.value,
-                                        createdAt: DateTime.now(),
-                                      ),
-                                      month: selectedMonthNotifier.value);
+                                  final comment = commentController.text.trim();
+                                  IncomeDb.addIncome(
+                                    incomeModel: IncomeModel(
+                                      // today: '',
+                                      comment: comment,
+                                      currency: selectedCurrency.value,
+                                      amount: double.parse(amount),
+                                      category: selectedPlanNotifier.value,
+                                      createdAt: DateTime.now(),
+                                    ),
+                                  );
                                 }
                               }
                             },

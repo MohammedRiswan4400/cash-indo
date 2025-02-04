@@ -88,7 +88,12 @@ class CashCardWidget extends StatelessWidget {
                         secondWidth: 150,
                       );
                     } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
+                      return ShimmerErrorWidget(
+                        firstHeight: 10,
+                        firstWidth: 100,
+                        secondHeight: 15,
+                        secondWidth: 150,
+                      );
                     }
                     if (!snapshot.hasData || snapshot.data == null) {
                       return ShimmerErrorWidget(
@@ -137,39 +142,6 @@ class CashCardWidget extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class ShimmerErrorWidget extends StatelessWidget {
-  const ShimmerErrorWidget({
-    super.key,
-    required this.firstWidth,
-    required this.firstHeight,
-    required this.secondWidth,
-    required this.secondHeight,
-  });
-  final double firstWidth;
-  final double firstHeight;
-  final double secondWidth;
-  final double secondHeight;
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 10,
-      children: [
-        SizedBox(
-          height: firstHeight,
-          width: firstWidth,
-          child: ShimmerContainer(),
-        ),
-        SizedBox(
-          height: secondHeight,
-          width: secondWidth,
-          child: ShimmerContainer(),
-        ),
-      ],
     );
   }
 }

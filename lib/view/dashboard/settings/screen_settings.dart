@@ -4,9 +4,11 @@ import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
 import 'package:cash_indo/model/user_model.dart';
 import 'package:cash_indo/view/auth/sign_up/screen_sign_up.dart';
+import 'package:cash_indo/view/dashboard/home/widgets/home_screen_widgets.dart';
 import 'package:cash_indo/view/dashboard/settings/widgets/settings_widgets.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/widget/dialoge_boxes.dart';
+import 'package:cash_indo/widget/helper/shimmer_widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,7 +18,6 @@ class ScreenSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    User? user = FirebaseAuth.instance.currentUser;
     return Scaffold(
       body: Obx(
         () {
@@ -33,29 +34,84 @@ class ScreenSettings extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         0.verticalSpace(context),
-                        Row(
-                          spacing: 10,
-                          children: [
-                            CircleAvatar(
-                                radius: 30, child: AppTextWidget(text: 'R')),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                        StreamBuilder<UserModel?>(
+                          stream: UserDb.getUserByEmail(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Row(
+                                spacing: 10,
+                                children: [
+                                  ShimmerCircleErrorWidget(radius: 30),
+                                  ShimmerErrorWidget(
+                                    firstHeight: 20,
+                                    firstWidth: 200,
+                                    secondHeight: 15,
+                                    secondWidth: 150,
+                                  ),
+                                ],
+                              );
+                            } else if (snapshot.hasError) {
+                              return Row(
+                                spacing: 10,
+                                children: [
+                                  ShimmerCircleErrorWidget(radius: 30),
+                                  ShimmerErrorWidget(
+                                    firstHeight: 20,
+                                    firstWidth: 200,
+                                    secondHeight: 15,
+                                    secondWidth: 150,
+                                  ),
+                                ],
+                              );
+                            }
+                            if (!snapshot.hasData || snapshot.data == null) {
+                              return Row(
+                                spacing: 10,
+                                children: [
+                                  ShimmerCircleErrorWidget(radius: 30),
+                                  ShimmerErrorWidget(
+                                    firstHeight: 20,
+                                    firstWidth: 200,
+                                    secondHeight: 15,
+                                    secondWidth: 150,
+                                  ),
+                                ],
+                              );
+                            }
+
+                            UserModel user = snapshot.data!;
+                            String name = user.name;
+                            String phoneNumber = user.phoneNumber;
+                            String firstLetter =
+                                name.isNotEmpty ? name.substring(0, 1) : "";
+                            return Row(
+                              spacing: 10,
                               children: [
-                                AppTextWidget(
-                                  text: 'Riswan',
-                                  size: 18,
+                                CircleAvatar(
+                                    radius: 30,
+                                    child: AppTextWidget(text: firstLetter)),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    AppTextWidget(
+                                      text: name,
+                                      size: 18,
+                                    ),
+                                    AppTextWidget(
+                                      text: phoneNumber,
+                                      size: 15,
+                                      weight: FontWeight.normal,
+                                    ),
+                                  ],
                                 ),
-                                AppTextWidget(
-                                  text: '+91 8138874400',
-                                  size: 15,
-                                  weight: FontWeight.normal,
-                                ),
+                                Spacer(),
+                                Icon(Icons.edit_outlined),
                               ],
-                            ),
-                            Spacer(),
-                            Icon(Icons.edit_outlined),
-                          ],
+                            );
+                          },
                         ),
+
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -63,9 +119,7 @@ class ScreenSettings extends StatelessWidget {
                               text: AppConstantStrings.darkMode,
                               size: 18,
                             ),
-
-                            SizedBox(
-                                width: 10), // Space between text and switch
+                            SizedBox(width: 10),
                             Switch(
                               value: themeController.isDarkMode.value,
                               onChanged: (value) {

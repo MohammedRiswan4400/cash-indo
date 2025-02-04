@@ -22,3 +22,55 @@ class ShimmerContainer extends StatelessWidget {
     );
   }
 }
+
+class ShimmerErrorWidget extends StatelessWidget {
+  const ShimmerErrorWidget({
+    super.key,
+    required this.firstWidth,
+    required this.firstHeight,
+    required this.secondWidth,
+    required this.secondHeight,
+  });
+  final double firstWidth;
+  final double firstHeight;
+  final double secondWidth;
+  final double secondHeight;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 10,
+      children: [
+        SizedBox(
+          height: firstHeight,
+          width: firstWidth,
+          child: ShimmerContainer(),
+        ),
+        SizedBox(
+          height: secondHeight,
+          width: secondWidth,
+          child: ShimmerContainer(),
+        ),
+      ],
+    );
+  }
+}
+
+class ShimmerCircleErrorWidget extends StatelessWidget {
+  const ShimmerCircleErrorWidget({
+    super.key,
+    required this.radius,
+  });
+  final double radius;
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      backgroundColor: Colors.transparent,
+      radius: radius,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(100),
+        child: ShimmerContainer(),
+      ),
+    );
+  }
+}

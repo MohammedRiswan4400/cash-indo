@@ -15,7 +15,6 @@ class UserListTile extends StatelessWidget {
   final ContactModel contactModel;
   @override
   Widget build(BuildContext context) {
-    // String firstLetter = List.of(contactModel.phoneNumber)
     String firstLetter =
         contactModel.name.isNotEmpty ? contactModel.name.substring(0, 2) : "";
     return Row(

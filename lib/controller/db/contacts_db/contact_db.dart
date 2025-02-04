@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:cash_indo/controller/db/user_db/user_db.dart';
-import 'package:cash_indo/controller/functions/app_functions/app_functions.dart';
+
 import 'package:cash_indo/model/contact_model.dart';
 import 'package:cash_indo/widget/helper/dialoge_helper_widget.dart';
 import 'package:cash_indo/widget/helper/snack_bar_helper_widget.dart';
@@ -24,7 +24,17 @@ class ContactDb {
       if (uID.isEmpty) {
         throw Exception("User is not authenticated.");
       }
+      final existingContacts = await Supabase.instance.client
+          .from('contacts')
+          .select('id')
+          .eq('user_id', uID)
+          .eq('phone', phoneNumber);
 
+      if (existingContacts.isNotEmpty) {
+        contactsNotifier.value = List.from(contactsNotifier.value)
+          ..remove(contactModel);
+        throw Exception("This phone number is already saved.");
+      }
       final response = await dataBase.insert({
         'user_id': uID,
         'name': contactModel.fullName,
@@ -51,8 +61,11 @@ class ContactDb {
       log('Auth Error: ${e.message}');
     } catch (e) {
       DailogHelper.hideDailoge();
+      final errorMessage = e is Exception
+          ? e.toString().replaceAll("Exception: ", "")
+          : "An unexpected error occurred.";
       log('Error: $e');
-      SnackBarHelper.snackBarFaild('Oops!', 'An error occurred while saving.');
+      SnackBarHelper.snackBarFaild('Oops!', errorMessage);
     }
   }
 

@@ -12,86 +12,86 @@ import 'package:flutter/material.dart';
 import '../../../widget/helper/snack_bar_helper_widget.dart';
 
 class ExpanseTrackerFunctions {
-  static Future<void> updateIncomeCategory({
-    required IncomeModel income,
-    required String month,
-  }) async {
-    final String uID = AppFunctions.uid;
-    DocumentReference totalAmountRef = FirebaseFirestore.instance
-        .collection('users')
-        .doc(uID)
-        .collection('income_data')
-        .doc(AppDateFormates.yearFormattedDate(income.createdAt));
-    // .collection(income.category)
-    // .doc('${income.category}_total');
+  // static Future<void> updateIncomeCategory({
+  //   required IncomeModel income,
+  //   required String month,
+  // }) async {
+  //   final String uID = AppFunctions.uid;
+  //   DocumentReference totalAmountRef = FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(uID)
+  //       .collection('income_data')
+  //       .doc(AppDateFormates.yearFormattedDate(income.createdAt));
+  //   // .collection(income.category)
+  //   // .doc('${income.category}_total');
 
-    await totalAmountRef.set(
-      {
-        '${income.category}_total': FieldValue.increment(income.amount),
-      },
-      SetOptions(merge: true),
-    );
-  }
+  //   await totalAmountRef.set(
+  //     {
+  //       '${income.category}_total': FieldValue.increment(income.amount),
+  //     },
+  //     SetOptions(merge: true),
+  //   );
+  // }
 
-  static Future<void> updateIncomeMonthly({
-    required IncomeModel income,
-    required String month,
-  }) async {
-    final String uID = AppFunctions.uid;
+  // static Future<void> updateIncomeMonthly({
+  //   required IncomeModel income,
+  //   required String month,
+  // }) async {
+  //   final String uID = AppFunctions.uid;
 
-    DocumentReference totalAmountRef = FirebaseFirestore.instance
-        .collection('users')
-        .doc(uID)
-        .collection('income_data')
-        .doc(AppDateFormates.yearFormattedDate(income.createdAt));
+  //   DocumentReference totalAmountRef = FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(uID)
+  //       .collection('income_data')
+  //       .doc(AppDateFormates.yearFormattedDate(income.createdAt));
 
-    await totalAmountRef.set(
-      {
-        '$month total': FieldValue.increment(income.amount),
-      },
-      SetOptions(merge: true),
-    );
-  }
+  //   await totalAmountRef.set(
+  //     {
+  //       '$month total': FieldValue.increment(income.amount),
+  //     },
+  //     SetOptions(merge: true),
+  //   );
+  // }
 
-  static Future<void> writeIncome({
-    required IncomeModel income,
-    required String month,
-  }) async {
-    try {
-      AppRoutes.popNow();
-      final String uID = AppFunctions.uid;
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uID)
-          .collection('income_data')
-          .doc(AppDateFormates.yearFormattedDate(income.createdAt))
-          .collection(month)
-          .doc(AppDateFormates.barFormattedDate(income.createdAt))
-          .collection(income.category)
-          .add({
-        'amount': income.amount,
-        'category': income.category,
-        'comment': income.comment,
-        'currency': income.currency,
-        'createdAt': DateTime.now(),
-      });
-      updateIncomeCategory(income: income, month: month);
-      updateIncomeMonthly(income: income, month: month);
-      SnackBarHelper.snackBarSuccess(
-        'Succesfull',
-        'Income added succesfull',
-      );
-    } on FirebaseAuthException catch (e) {
-      DailogHelper.hideDailoge();
-      SnackBarHelper.snackBarFaild(
-        'Oops!',
-        e.message,
-      );
-      log(e.message.toString());
-    } catch (e) {
-      log('Error: $e');
-    }
-  }
+  // static Future<void> writeIncome({
+  //   required IncomeModel income,
+  //   required String month,
+  // }) async {
+  //   try {
+  //     AppRoutes.popNow();
+  //     final String uID = AppFunctions.uid;
+  //     await FirebaseFirestore.instance
+  //         .collection('users')
+  //         .doc(uID)
+  //         .collection('income_data')
+  //         .doc(AppDateFormates.yearFormattedDate(income.createdAt))
+  //         .collection(month)
+  //         .doc(AppDateFormates.barFormattedDate(income.createdAt))
+  //         .collection(income.category)
+  //         .add({
+  //       'amount': income.amount,
+  //       'category': income.category,
+  //       'comment': income.comment,
+  //       'currency': income.currency,
+  //       'createdAt': DateTime.now(),
+  //     });
+  //     updateIncomeCategory(income: income, month: month);
+  //     updateIncomeMonthly(income: income, month: month);
+  //     SnackBarHelper.snackBarSuccess(
+  //       'Succesfull',
+  //       'Income added succesfull',
+  //     );
+  //   } on FirebaseAuthException catch (e) {
+  //     DailogHelper.hideDailoge();
+  //     SnackBarHelper.snackBarFaild(
+  //       'Oops!',
+  //       e.message,
+  //     );
+  //     log(e.message.toString());
+  //   } catch (e) {
+  //     log('Error: $e');
+  //   }
+  // }
 
   static Stream<List<Map<String, dynamic>>> getIncomeDataStream(String month) {
     final String uID = AppFunctions.uid;

@@ -7,6 +7,7 @@ class UserDb {
   static final dataBase = Supabase.instance.client.from('users');
 
   //Create a User Profile DB
+
   static Future createUserProfile(UserModel userModel) async {
     try {
       final response = await dataBase.insert(userModel.toMap());
@@ -18,6 +19,7 @@ class UserDb {
   }
 
 // Get All Users
+
   static final stream = dataBase.stream(primaryKey: ['id']).map(
       (data) => data.map((user) => UserModel.fromMap(user)).toList());
 
@@ -40,6 +42,7 @@ class UserDb {
   }
 
 // get Current User ID
+
   static String? getCurrentUserId() {
     final supabase = Supabase.instance.client;
     final session = supabase.auth.currentSession;
