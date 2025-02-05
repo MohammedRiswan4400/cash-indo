@@ -4,9 +4,11 @@ import 'package:cash_indo/controller/db/user_db/user_db.dart';
 import 'package:cash_indo/controller/functions/date_and_time/date_and_time_formates.dart';
 import 'package:cash_indo/core/routes/app_routes.dart';
 import 'package:cash_indo/model/income_model.dart';
+import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/monthly_income/income_monthly_total_bloc.dart';
 import 'package:cash_indo/widget/helper/dialoge_helper_widget.dart';
 import 'package:cash_indo/widget/helper/snack_bar_helper_widget.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class IncomeDb {
@@ -72,10 +74,9 @@ class IncomeDb {
 
           for (var income in data) {
             final incomeModel = IncomeModel.fromMap(income);
-            final todayDate = income['today'] as String?; // Allow null values
+            final todayDate = income['today'] as String?;
 
             if (todayDate != null) {
-              // Only group if 'today' is not null
               if (!groupedData.containsKey(todayDate)) {
                 groupedData[todayDate] = [];
               }
@@ -83,38 +84,35 @@ class IncomeDb {
               groupedData[todayDate]!.add(incomeModel);
             }
           }
-
           return groupedData.values.toList();
         });
   }
 
-  static Stream<double> getTotalAmountForMonth(String month) {
+  static Future<double> getMonthlyIncomeTotal(String month) async {
     final userID = UserDb.supaUID;
 
-    return dataBase
-        .stream(primaryKey: ['id'])
-        .eq('user_id', userID) // Filter by user ID
-        .map((data) {
-          double totalAmount = 0.0;
+    try {
+      final response = await Supabase.instance.client
+          .from('income')
+          .select('amount')
+          .eq('user_id', userID)
+          .eq('month', month);
 
-          for (var income in data) {
-            final incomeMonth = income['month']
-                as String; // Assuming 'month' is stored as a String (e.g., "01" for January)
-            final amount = income['amount']
-                as double; // Assuming 'amount' is stored as a double
+      if (response.isEmpty) {
+        return 0.0;
+      }
 
-            // Check if the income belongs to the specified month
-            if (incomeMonth == month) {
-              totalAmount += amount; // Add to the total amount
-            }
-          }
+      double total = response.fold(
+          0.0, (sum, record) => sum + (record['amount'] as num).toDouble());
 
-          return totalAmount; // Return the total amount for the month
-        });
+      return total;
+    } catch (e) {
+      log("Error fetching monthly total for $month: $e");
+      return 0.0;
+    }
   }
-  // static Stream<List<IncomeModel>> readContacts() {
-  //   final userID = UserDb.supaUID;
-  //   return dataBase.stream(primaryKey: ['id']).eq('user_id', userID).map(
-  //       (data) => data.map((income) => IncomeModel.fromMap(income)).toList());
-  // }
+
+  static void fetchIncome(BuildContext context, String month) {
+    context.read<IncomeMonthlyTotalBloc>().add(FetchMonthlyIncomeTotal(month));
+  }
 }

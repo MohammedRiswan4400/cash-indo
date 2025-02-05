@@ -23,14 +23,17 @@ class ShimmerContainer extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class ShimmerErrorWidget extends StatelessWidget {
-  const ShimmerErrorWidget({
+  ShimmerErrorWidget({
     super.key,
+    this.isColumn,
     required this.firstWidth,
     required this.firstHeight,
     required this.secondWidth,
     required this.secondHeight,
   });
+  bool? isColumn;
   final double firstWidth;
   final double firstHeight;
   final double secondWidth;
@@ -46,11 +49,12 @@ class ShimmerErrorWidget extends StatelessWidget {
           width: firstWidth,
           child: ShimmerContainer(),
         ),
-        SizedBox(
-          height: secondHeight,
-          width: secondWidth,
-          child: ShimmerContainer(),
-        ),
+        isColumn == false
+            ? SizedBox()
+            : SizedBox(
+                height: secondHeight,
+                width: secondWidth,
+                child: ShimmerContainer())
       ],
     );
   }

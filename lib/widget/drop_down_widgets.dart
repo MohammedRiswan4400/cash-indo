@@ -1,3 +1,4 @@
+import 'package:cash_indo/controller/db/income_db/income_db.dart';
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
@@ -38,6 +39,7 @@ class MonthDropDownWidget extends StatelessWidget {
               onChanged: (String? newValue) {
                 if (newValue != null) {
                   selectedMonthNotifier.value = newValue;
+                  IncomeDb.fetchIncome(context, newValue);
                 }
               },
               items: AppConstantStrings.allMonths

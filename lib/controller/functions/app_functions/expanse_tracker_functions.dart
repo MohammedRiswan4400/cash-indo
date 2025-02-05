@@ -1,15 +1,11 @@
 import 'dart:developer';
 
 import 'package:cash_indo/controller/functions/app_functions/app_functions.dart';
-import 'package:cash_indo/controller/functions/date_and_time/date_and_time_formates.dart';
-import 'package:cash_indo/core/routes/app_routes.dart';
 import 'package:cash_indo/model/income_model.dart';
 import 'package:cash_indo/widget/helper/dialoge_helper_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import '../../../widget/helper/snack_bar_helper_widget.dart';
 
 class ExpanseTrackerFunctions {
   // static Future<void> updateIncomeCategory({
@@ -137,7 +133,7 @@ class ExpanseTrackerFunctions {
 
             for (var categoryDoc in categorySnapshot.docs) {
               debugPrint('Category Document: ${categoryDoc.id}');
-              incomeData.add(categoryDoc.data() as Map<String, dynamic>);
+              incomeData.add(categoryDoc.data());
             }
           }
         }
@@ -238,13 +234,12 @@ class ExpanseTrackerFunctions {
         .snapshots()
         .map((snapshot) {
       if (snapshot.docs.isNotEmpty) {
-        print(
-            "Fetched ${snapshot.docs.length} income records for $category on $date");
+        log("Fetched ${snapshot.docs.length} income records for $category on $date");
         return snapshot.docs
             .map((doc) => IncomeModel.fromMap(doc.data()))
             .toList();
       } else {
-        print("No income records found for $category on $date");
+        log("No income records found for $category on $date");
         return [];
       }
     });
@@ -269,10 +264,10 @@ class ExpanseTrackerFunctions {
 //       .snapshots()
 //       .map((snapshot) {
 //         if (snapshot.docs.isNotEmpty) {
-//           print("Fetched ${snapshot.docs.length} income records for $category on $date");
+//           log("Fetched ${snapshot.docs.length} income records for $category on $date");
 //           return snapshot.docs.map((doc) => IncomeModel.fromMap(doc.data())).toList();
 //         } else {
-//           print("No income records found for $category on $date");
+//           log("No income records found for $category on $date");
 //           return [];
 //         }
 //       });
@@ -297,10 +292,10 @@ class ExpanseTrackerFunctions {
       if (snapshot.exists && snapshot.data() != null) {
         List<String> categories =
             List<String>.from(snapshot.data()?['categories'] ?? []);
-        print("Fetched Categories for $date: $categories");
+        log("Fetched Categories for $date: $categories");
         return categories;
       }
-      print("No categories found for $date");
+      log("No categories found for $date");
       return [];
     });
   }

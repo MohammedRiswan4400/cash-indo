@@ -1,5 +1,4 @@
 import 'package:cash_indo/controller/db/income_db/income_db.dart';
-import 'package:cash_indo/controller/functions/app_functions/expanse_tracker_functions.dart';
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
@@ -8,7 +7,6 @@ import 'package:cash_indo/model/income_model.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/widget/dialoge_boxes.dart';
 import 'package:cash_indo/widget/drop_down_widgets.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

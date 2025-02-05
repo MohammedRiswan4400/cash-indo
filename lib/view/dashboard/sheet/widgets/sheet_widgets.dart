@@ -4,6 +4,7 @@ import 'package:cash_indo/controller/db/contacts_db/contact_db.dart';
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
+import 'package:cash_indo/widget/helper/shimmer_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_contact_picker/model/contact.dart';
 
@@ -190,6 +191,45 @@ class NewContactWidget extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class ContactLoadingWidget extends StatelessWidget {
+  const ContactLoadingWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      spacing: 10,
+      children: [
+        Row(
+          spacing: 20,
+          children: [
+            ShimmerCircleErrorWidget(radius: 30),
+            ShimmerErrorWidget(
+              firstWidth: 200,
+              firstHeight: 20,
+              secondWidth: 150,
+              secondHeight: 10,
+            )
+          ],
+        ),
+        Row(
+          spacing: 20,
+          children: [
+            ShimmerCircleErrorWidget(radius: 30),
+            ShimmerErrorWidget(
+              firstWidth: 200,
+              firstHeight: 20,
+              secondWidth: 150,
+              secondHeight: 10,
+            )
+          ],
+        ),
+      ],
     );
   }
 }

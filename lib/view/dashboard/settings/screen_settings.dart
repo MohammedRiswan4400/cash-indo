@@ -4,12 +4,10 @@ import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
 import 'package:cash_indo/model/user_model.dart';
 import 'package:cash_indo/view/auth/sign_up/screen_sign_up.dart';
-import 'package:cash_indo/view/dashboard/home/widgets/home_screen_widgets.dart';
 import 'package:cash_indo/view/dashboard/settings/widgets/settings_widgets.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/widget/dialoge_boxes.dart';
 import 'package:cash_indo/widget/helper/shimmer_widgets.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -79,7 +77,6 @@ class ScreenSettings extends StatelessWidget {
                                 ],
                               );
                             }
-
                             UserModel user = snapshot.data!;
                             String name = user.name;
                             String phoneNumber = user.phoneNumber;
@@ -111,7 +108,6 @@ class ScreenSettings extends StatelessWidget {
                             );
                           },
                         ),
-
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -156,17 +152,16 @@ class ScreenSettings extends StatelessWidget {
                             text: AppConstantStrings.logOut,
                             isIcon: false,
                             textColor: Colors.orange),
-
                         ElevatedButton(
-                            onPressed: () {
-                              UserDb.createUserProfile(UserModel(
-                                // id: 1,
-                                name: 'John Doe',
-                                email: 'johndoe@example.com',
-                                phoneNumber: '1234567890',
-                              ));
-                            },
-                            child: Text('data'))
+                          onPressed: () {
+                            UserDb.createUserProfile(UserModel(
+                              name: 'John Doe',
+                              email: 'johndoe@example.com',
+                              phoneNumber: '1234567890',
+                            ));
+                          },
+                          child: Text('data'),
+                        ),
                         // SettingsTile(
                         //   onTap: () {
                         //     // user!.email != null

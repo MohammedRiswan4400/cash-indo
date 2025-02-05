@@ -7,6 +7,7 @@ import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
 import 'package:cash_indo/core/routes/app_routes.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
+// ignore: unused_import
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -281,16 +282,12 @@ class DialogeBoxButton extends StatelessWidget {
 }
 
 class DeleteAccountDialogeBox extends StatelessWidget {
-  DeleteAccountDialogeBox({
+  const DeleteAccountDialogeBox({
     super.key,
   });
 
-  // final User? user;
-  // final TextEditingController passwordController;
-  final TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    // final emailID = AuthFunctions.getCurrentUserEmail();
     return Container(
       height: 300,
       width: MediaQuery.sizeOf(context).width / 1.1,
@@ -341,7 +338,7 @@ class DeleteAccountDialogeBox extends StatelessWidget {
             ),
             PasswordField(
                 action: TextInputAction.done,
-                passwoedController: passwordController,
+                passwoedController: TextEditingController(),
                 hintText: AppConstantStrings.passwordHint),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -361,7 +358,7 @@ class DeleteAccountDialogeBox extends StatelessWidget {
                   textColor: Colors.red,
                   text: 'Delete account',
                   onTap: () {
-                    AuthFunctions.deleteAccount(passwordController);
+                    // AuthFunctions.deleteUserByEmail(UserDb.supaEmail);
                   },
                 ),
               ],

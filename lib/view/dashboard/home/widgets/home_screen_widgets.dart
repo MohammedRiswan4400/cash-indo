@@ -130,7 +130,7 @@ class CashCardWidget extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     //  final userID =   AuthFunctions.getCurrentUserId();
-                    print(UserDb.supaUID);
+                    // log(UserDb.supaUID);
                   },
                   child: Image.asset(
                     AppImages.masterCardImage,
