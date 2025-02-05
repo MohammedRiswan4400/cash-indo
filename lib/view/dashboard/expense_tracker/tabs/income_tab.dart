@@ -5,7 +5,9 @@ import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
 import 'package:cash_indo/model/income_model.dart';
-import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/monthly_income/income_monthly_total_bloc.dart';
+import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/category/by_category_bloc.dart';
+import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/date/by_date_bloc.dart';
+import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/monthly_total/income_monthly_total_bloc.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/widget/bottom_sheets.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/widgets/expanse_tracker_screen_widgets.dart';
@@ -103,120 +105,144 @@ class IncomeTab extends StatelessWidget {
                         text: AppConstantStrings.incomeTracker,
                       ),
                       5.verticalSpace(context),
-                      IncomeProgressBarWidget(
-                        title: 'Job',
-                        amount: '12,909.00',
+                      BlocConsumer<ByCategoryBloc, ByCategoryState>(
+                        listener: (context, state) {
+                          if (state is ByCategoryError) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(state.errorMessage)));
+                          }
+                        },
+                        builder: (context, state) {
+                          if (state is ByCategoryLoading) {
+                            return Center(child: CircularProgressIndicator());
+                          }
+
+                          if (state is ByCategoryByCategoryLoaded) {
+                            final categoryIncome = state.categoryByCategory;
+                            if (categoryIncome.isEmpty) {
+                              return Text("No income data available.");
+                            }
+                            return ListView.builder(
+                              physics: BouncingScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: categoryIncome.length,
+                              itemBuilder: (context, index) {
+                                final entry = categoryIncome[index];
+                                return IncomeProgressBarWidget(
+                                  title: entry['category'],
+                                  amount: '₹ ${entry['total']}',
+                                );
+                              },
+                            );
+                          }
+                          return Center(
+                              child: Text("No income data available."));
+                        },
                       ),
-                      IncomeProgressBarWidget(
-                        title: 'Trade',
-                        amount: '12,909.00',
-                      ),
-                      IncomeProgressBarWidget(
-                        title: 'Buisness',
-                        amount: '12,909.00',
-                      ),
+
                       10.verticalSpace(context),
-
-                      StreamBuilder<List<List<IncomeModel>>>(
-                        stream: IncomeDb.readIncome(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return ShimmerErrorWidget(
-                                firstWidth: double.infinity,
-                                firstHeight: 40,
-                                secondWidth: double.infinity,
-                                secondHeight: 40);
+                      BlocConsumer<ByDateBloc, ByDateState>(
+                        listener: (context, state) {
+                          if (state is ByDateError) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(state.errorMessage)),
+                            );
+                          }
+                        },
+                        builder: (context, state) {
+                          if (state is ByDateLoading) {
+                            return Center(child: CircularProgressIndicator());
                           }
 
-                          if (snapshot.hasError) {
-                            log(snapshot.error.toString());
-                            return ShimmerErrorWidget(
-                                firstWidth: double.infinity,
-                                firstHeight: 40,
-                                secondWidth: double.infinity,
-                                secondHeight: 40);
+                          if (state is ByDateError) {
+                            return Center(
+                                child: Text("Error: ${state.errorMessage}"));
                           }
 
-                          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                            return Center(child: Text('No data available.'));
-                          }
+                          if (state is ByDateLoaded) {
+                            final groupedData = state.groupedData;
 
-                          final groupedData = snapshot.data!;
+                            return ListView.separated(
+                              reverse: true,
+                              separatorBuilder: (context, index) =>
+                                  10.verticalSpace(context),
+                              shrinkWrap: true,
+                              physics: BouncingScrollPhysics(),
+                              itemCount: groupedData.length,
+                              itemBuilder: (context, index) {
+                                final incomeList = groupedData[index];
+                                final todayDate =
+                                    AppDateFormates.barFormattedDate(
+                                        DateTime.now());
+                                final incomeDate =
+                                    AppDateFormates.barFormattedDate(
+                                        incomeList.first.createdAt!);
 
-                          return ListView.separated(
-                            separatorBuilder: (context, index) =>
-                                10.verticalSpace(context),
-                            shrinkWrap: true,
-                            physics: BouncingScrollPhysics(),
-                            itemCount: groupedData.length,
-                            itemBuilder: (context, index) {
-                              final incomeList = groupedData[index];
-                              final todayDate =
-                                  AppDateFormates.barFormattedDate(
-                                      DateTime.now());
-                              final incomeDate =
-                                  AppDateFormates.barFormattedDate(
-                                      incomeList.first.createdAt!);
-
-                              return Container(
-                                decoration: BoxDecoration(
+                                return Container(
+                                  decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
                                     border: Border.all(width: 0.2),
-                                    color: AppColor.kMainContainerColor),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 5),
-                                  child: CustomExpansionTile(
-                                    leading: AppTextWidget(text: '📆'),
-                                    title: todayDate == incomeDate
-                                        ? AppConstantStrings.today
-                                        : incomeDate,
-                                    children: [
-                                      ...incomeList.map(
-                                        (income) {
-                                          return Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 4),
-                                            child: Row(
-                                              children: [
-                                                AppTextWidget(
-                                                  text:
-                                                      '${income.currency} ${income.amount}',
-                                                  size: 16,
-                                                  weight: FontWeight.w600,
-                                                  align: TextAlign.start,
-                                                ),
-                                                20.horizontalSpace(context),
-                                                AppTextWidget(
-                                                  text: '(${income.category})',
-                                                  size: 15,
-                                                  color: const Color.fromARGB(
-                                                      255, 139, 139, 139),
-                                                  weight: FontWeight.w500,
-                                                  align: TextAlign.start,
-                                                ),
-                                                Spacer(),
-                                                AppTextWidget(
-                                                  text: AppDateFormates
-                                                      .normalFormatTime(
-                                                          income.createdAt!),
-                                                  size: 15,
-                                                  color: AppColor.kArrowColor,
-                                                  weight: FontWeight.w500,
-                                                  align: TextAlign.start,
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ],
+                                    color: AppColor.kMainContainerColor,
                                   ),
-                                ),
-                              );
-                            },
-                          );
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 5),
+                                    child: CustomExpansionTile(
+                                      leading: AppTextWidget(text: '📆'),
+                                      title: todayDate == incomeDate
+                                          ? AppConstantStrings.today
+                                          : incomeDate,
+                                      children: [
+                                        ...incomeList.map(
+                                          (income) {
+                                            return Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 4),
+                                              child: Row(
+                                                children: [
+                                                  AppTextWidget(
+                                                    text:
+                                                        '${income.currency} ${income.amount}',
+                                                    size: 16,
+                                                    weight: FontWeight.w600,
+                                                    align: TextAlign.start,
+                                                  ),
+                                                  20.horizontalSpace(context),
+                                                  AppTextWidget(
+                                                    text:
+                                                        '(${income.category})',
+                                                    size: 15,
+                                                    color: const Color.fromARGB(
+                                                        255, 139, 139, 139),
+                                                    weight: FontWeight.w500,
+                                                    align: TextAlign.start,
+                                                  ),
+                                                  Spacer(),
+                                                  AppTextWidget(
+                                                    text: AppDateFormates
+                                                        .normalFormatTime(
+                                                            income.createdAt!),
+                                                    size: 15,
+                                                    color: AppColor.kArrowColor,
+                                                    weight: FontWeight.w500,
+                                                    align: TextAlign.start,
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          }
+
+                          return Center(
+                              child: Text("No data available for this month."));
                         },
                       ),
                       10.verticalSpace(context),

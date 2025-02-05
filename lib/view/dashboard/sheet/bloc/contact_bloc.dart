@@ -14,11 +14,8 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
   ContactBloc() : super(ContactInitial()) {
     on<FetchContactsEvent>(_onFetchContacts);
     on<ContactUpdatedEvent>(_onContactUpdated);
-    // on<TriggerSnackbarEvent>(_onTriggerSnackbar);
-    // on<NavigateToContactDetailsEvent>(_onNavigateToContactDetails);
   }
 
-  // 🔹 Fetch contacts from Supabase and listen to the stream
   Future<void> _onFetchContacts(
       FetchContactsEvent event, Emitter<ContactState> emit) async {
     emit(ContactLoading());
@@ -44,18 +41,6 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
       ContactUpdatedEvent event, Emitter<ContactState> emit) {
     emit(ContactLoaded(event.contacts));
   }
-
-  // // 🔹 Show a snackbar action
-  // void _onTriggerSnackbar(
-  //     TriggerSnackbarEvent event, Emitter<ContactState> emit) {
-  //   emit(ShowContactSnackbar(event.message));
-  // }
-
-  // // 🔹 Navigate to contact details
-  // void _onNavigateToContactDetails(
-  //     NavigateToContactDetailsEvent event, Emitter<ContactState> emit) {
-  //   emit(NavigateToContactDetails(event.contact));
-  // }
 
   @override
   Future<void> close() {

@@ -324,7 +324,7 @@ class IncomeProgressBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 5,
+      spacing: 2,
       children: [
         AppTextWidget(
           text: title,
@@ -332,7 +332,7 @@ class IncomeProgressBarWidget extends StatelessWidget {
           weight: FontWeight.w600,
         ),
         Container(
-          height: 45,
+          height: 40,
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),

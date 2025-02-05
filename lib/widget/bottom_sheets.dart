@@ -302,7 +302,9 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
                                   final amount =
                                       moneyTextController.text.trim();
                                   final comment = commentController.text.trim();
+
                                   IncomeDb.addIncome(
+                                    context: context,
                                     incomeModel: IncomeModel(
                                       // today: '',
                                       comment: comment,

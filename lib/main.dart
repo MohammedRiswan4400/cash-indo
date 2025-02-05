@@ -2,7 +2,9 @@ import 'package:cash_indo/controller/theme/theme_controller.dart';
 import 'package:cash_indo/core/constant/app_const.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/theme/theme_helper.dart';
-import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/monthly_income/income_monthly_total_bloc.dart';
+import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/category/by_category_bloc.dart';
+import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/date/by_date_bloc.dart';
+import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/monthly_total/income_monthly_total_bloc.dart';
 import 'package:cash_indo/view/dashboard/sheet/bloc/contact_bloc.dart';
 import 'package:cash_indo/view/splash/screen_splash.dart';
 import 'package:device_preview/device_preview.dart';
@@ -39,6 +41,12 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => IncomeMonthlyTotalBloc(),
+        ),
+        BlocProvider<ByDateBloc>(
+          create: (context) => ByDateBloc(),
+        ),
+        BlocProvider<ByCategoryBloc>(
+          create: (context) => ByCategoryBloc(),
         ),
         BlocProvider(
           create: (context) => ContactBloc()..add(FetchContactsEvent()),

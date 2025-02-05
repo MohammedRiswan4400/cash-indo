@@ -4,7 +4,9 @@ import 'package:cash_indo/controller/db/user_db/user_db.dart';
 import 'package:cash_indo/controller/functions/date_and_time/date_and_time_formates.dart';
 import 'package:cash_indo/core/routes/app_routes.dart';
 import 'package:cash_indo/model/income_model.dart';
-import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/monthly_income/income_monthly_total_bloc.dart';
+import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/category/by_category_bloc.dart';
+import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/date/by_date_bloc.dart';
+import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/monthly_total/income_monthly_total_bloc.dart';
 import 'package:cash_indo/widget/helper/dialoge_helper_widget.dart';
 import 'package:cash_indo/widget/helper/snack_bar_helper_widget.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +19,8 @@ class IncomeDb {
   static final dataBase = Supabase.instance.client.from('income');
 
   //write
-  static Future<void> addIncome({required IncomeModel incomeModel}) async {
+  static Future<void> addIncome(
+      {required IncomeModel incomeModel, required BuildContext context}) async {
     try {
       DailogHelper.showDailog('Saving ...');
       final String uID = UserDb.supaUID;
@@ -40,6 +43,10 @@ class IncomeDb {
 
       DailogHelper.hideDailoge();
       AppRoutes.popNow();
+      IncomeDb.fetchIncome(
+        context,
+        AppDateFormates.monthFormattedDate(DateTime.now()),
+      );
       if (response.isNotEmpty) {
         SnackBarHelper.snackBarSuccess(
           'Succesfull',
@@ -63,37 +70,68 @@ class IncomeDb {
   }
 
   //read
-  static Stream<List<List<IncomeModel>>> readIncome() {
+  static Future<List<List<IncomeModel>>> readIncome(String month) async {
     final userID = UserDb.supaUID;
 
-    return dataBase
-        .stream(primaryKey: ['id'])
-        .eq('user_id', userID)
-        .map((data) {
-          final groupedData = <String, List<IncomeModel>>{};
+    try {
+      final data = await dataBase
+          .select('*') // Select all the required columns
+          .eq('user_id', userID) // Filter by user ID
+          .eq('month', month); // Filter by month
 
-          for (var income in data) {
-            final incomeModel = IncomeModel.fromMap(income);
-            final todayDate = income['today'] as String?;
+      final groupedData = <String, List<IncomeModel>>{};
 
-            if (todayDate != null) {
-              if (!groupedData.containsKey(todayDate)) {
-                groupedData[todayDate] = [];
-              }
+      for (var income in data) {
+        final incomeModel = IncomeModel.fromMap(income);
+        final todayDate = income['today'] as String?;
 
-              groupedData[todayDate]!.add(incomeModel);
-            }
+        if (todayDate != null) {
+          if (!groupedData.containsKey(todayDate)) {
+            groupedData[todayDate] = [];
           }
-          return groupedData.values.toList();
-        });
+
+          groupedData[todayDate]!.add(incomeModel);
+        }
+      }
+
+      return groupedData.values
+          .toList(); // Return the grouped data for the month
+    } catch (e) {
+      log("Error fetching monthly income for $month: $e");
+      return [];
+    }
   }
+
+  // static Stream<List<List<IncomeModel>>> readIncome() {
+  //   final userID = UserDb.supaUID;
+
+  //   return dataBase
+  //       .stream(primaryKey: ['id'])
+  //       .eq('user_id', userID)
+  //       .map((data) {
+  //         final groupedData = <String, List<IncomeModel>>{};
+
+  //         for (var income in data) {
+  //           final incomeModel = IncomeModel.fromMap(income);
+  //           final todayDate = income['today'] as String?;
+
+  //           if (todayDate != null) {
+  //             if (!groupedData.containsKey(todayDate)) {
+  //               groupedData[todayDate] = [];
+  //             }
+
+  //             groupedData[todayDate]!.add(incomeModel);
+  //           }
+  //         }
+  //         return groupedData.values.toList();
+  //       });
+  // }
 
   static Future<double> getMonthlyIncomeTotal(String month) async {
     final userID = UserDb.supaUID;
 
     try {
-      final response = await Supabase.instance.client
-          .from('income')
+      final response = await dataBase
           .select('amount')
           .eq('user_id', userID)
           .eq('month', month);
@@ -112,7 +150,50 @@ class IncomeDb {
     }
   }
 
+  static Future<List<Map<String, dynamic>>> getMonthlyIncomeByCategory(
+      String month) async {
+    final userID = UserDb.supaUID;
+
+    try {
+      final response = await dataBase
+          .select('category, amount') // Select category and amount
+          .eq('user_id', userID)
+          .eq('month', month);
+
+      if (response.isEmpty) {
+        return [];
+      }
+
+      // Create a map to store category-wise total
+      Map<String, double> categoryTotals = {};
+
+      for (var record in response) {
+        String category = record['category'];
+        double amount = (record['amount'] as num).toDouble();
+
+        // Add amount to the category's total
+        if (categoryTotals.containsKey(category)) {
+          categoryTotals[category] = categoryTotals[category]! + amount;
+        } else {
+          categoryTotals[category] = amount;
+        }
+      }
+
+      // Convert map to a list of {category, total}
+      List<Map<String, dynamic>> categoryList = categoryTotals.entries
+          .map((entry) => {'category': entry.key, 'total': entry.value})
+          .toList();
+
+      return categoryList;
+    } catch (e) {
+      log("Error fetching monthly income by category for $month: $e");
+      return [];
+    }
+  }
+
   static void fetchIncome(BuildContext context, String month) {
+    context.read<ByCategoryBloc>().add(FetchByCategoryByCategoryEvent(month));
     context.read<IncomeMonthlyTotalBloc>().add(FetchMonthlyIncomeTotal(month));
+    context.read<ByDateBloc>().add(FetchByDateEvent(month));
   }
 }
