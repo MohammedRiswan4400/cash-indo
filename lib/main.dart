@@ -2,12 +2,10 @@ import 'package:cash_indo/controller/theme/theme_controller.dart';
 import 'package:cash_indo/core/constant/app_const.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/theme/theme_helper.dart';
-import 'package:cash_indo/firebase_options.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/monthly_income/income_monthly_total_bloc.dart';
 import 'package:cash_indo/view/dashboard/sheet/bloc/contact_bloc.dart';
 import 'package:cash_indo/view/splash/screen_splash.dart';
 import 'package:device_preview/device_preview.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,15 +14,13 @@ import 'package:get_storage/get_storage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   Supabase.initialize(
     url: AppConst.supaURL,
     anonKey: AppConst.supaKey,
   );
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+
   runApp(
     DevicePreview(
       enabled: !kReleaseMode,

@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:cash_indo/controller/db/user_db/user_db.dart';
 import 'package:cash_indo/controller/functions/date_and_time/date_and_time_formates.dart';
 import 'package:cash_indo/core/color/app_color.dart';
@@ -128,10 +127,7 @@ class CashCardWidget extends StatelessWidget {
                   },
                 ),
                 GestureDetector(
-                  onTap: () {
-                    //  final userID =   AuthFunctions.getCurrentUserId();
-                    // log(UserDb.supaUID);
-                  },
+                  onTap: () {},
                   child: Image.asset(
                     AppImages.masterCardImage,
                     scale: 2,
@@ -309,9 +305,14 @@ class TodayFinaceRowWidget extends StatelessWidget {
                 onTap: () {
                   Get.bottomSheet(
                     MoneyKeyboardBottomSheet(
+                      isIncomeSheet: true,
                       isExpanseSheet: false,
                       title: AppConstantStrings.income,
                     ),
+                    // MoneyKeyboardBottomSheet(
+                    //   isExpanseSheet: false,
+                    //   title: AppConstantStrings.income,
+                    // ),
                     isDismissible: true,
                     enableDrag: true,
                     isScrollControlled: true,

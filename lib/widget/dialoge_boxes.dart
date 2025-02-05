@@ -7,8 +7,6 @@ import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
 import 'package:cash_indo/core/routes/app_routes.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
-// ignore: unused_import
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'form_fields.dart';
