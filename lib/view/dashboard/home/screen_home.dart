@@ -3,6 +3,7 @@ import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/view/dashboard/home/widgets/home_screen_widgets.dart';
+import 'package:cash_indo/widget/appbar_widget.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -18,7 +19,7 @@ class ScreenHome extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AppTextWidget(text: AppConstantStrings.appName),
+              AppBarWidget(title: AppConstantStrings.appName),
               AppTextWidget(text: AppConstantStrings.subName, size: 12),
               10.verticalSpace(context),
               Expanded(

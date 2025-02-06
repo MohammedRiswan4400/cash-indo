@@ -1,15 +1,15 @@
 part of 'by_category_bloc.dart';
 
-abstract class ByCategoryEvent extends Equatable {
+abstract class IncomeByCategoryEvent extends Equatable {
   @override
   List<Object?> get props => [];
 }
 
 // 🔹 Event to fetch category-wise income for a month
-class FetchByCategoryByCategoryEvent extends ByCategoryEvent {
+class FetchIncomeByCategoryEvent extends IncomeByCategoryEvent {
   final String month;
 
-  FetchByCategoryByCategoryEvent(this.month);
+  FetchIncomeByCategoryEvent(this.month);
 
   @override
   List<Object?> get props => [month];

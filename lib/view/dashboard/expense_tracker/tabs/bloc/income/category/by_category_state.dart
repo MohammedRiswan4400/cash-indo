@@ -1,31 +1,31 @@
 part of 'by_category_bloc.dart';
 
-abstract class ByCategoryState extends Equatable {
+abstract class IncomeByCategoryState extends Equatable {
   @override
   List<Object?> get props => [];
 }
 
 // 🔹 Initial state
-class ByCategoryInitial extends ByCategoryState {}
+class IncomeByCategoryInitial extends IncomeByCategoryState {}
 
 // 🔹 Loading state
-class ByCategoryLoading extends ByCategoryState {}
+class IncomeByCategoryLoading extends IncomeByCategoryState {}
 
 // 🔹 Success state with category-wise totals
-class ByCategoryByCategoryLoaded extends ByCategoryState {
-  final List<Map<String, dynamic>> categoryByCategory;
+class IncomeByCategoryLoaded extends IncomeByCategoryState {
+  final List<Map<String, dynamic>> categoryIncomeByCategory;
 
-  ByCategoryByCategoryLoaded(this.categoryByCategory);
+  IncomeByCategoryLoaded(this.categoryIncomeByCategory);
 
   @override
-  List<Object?> get props => [categoryByCategory];
+  List<Object?> get props => [categoryIncomeByCategory];
 }
 
 // 🔹 Error state
-class ByCategoryError extends ByCategoryState {
+class IncomeByCategoryError extends IncomeByCategoryState {
   final String errorMessage;
 
-  ByCategoryError(this.errorMessage);
+  IncomeByCategoryError(this.errorMessage);
 
   @override
   List<Object?> get props => [errorMessage];

@@ -105,20 +105,21 @@ class IncomeTab extends StatelessWidget {
                         text: AppConstantStrings.incomeTracker,
                       ),
                       5.verticalSpace(context),
-                      BlocConsumer<ByCategoryBloc, ByCategoryState>(
+                      BlocConsumer<IncomeByCategoryBloc, IncomeByCategoryState>(
                         listener: (context, state) {
-                          if (state is ByCategoryError) {
+                          if (state is IncomeByCategoryError) {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text(state.errorMessage)));
                           }
                         },
                         builder: (context, state) {
-                          if (state is ByCategoryLoading) {
+                          if (state is IncomeByCategoryLoading) {
                             return Center(child: CircularProgressIndicator());
                           }
 
-                          if (state is ByCategoryByCategoryLoaded) {
-                            final categoryIncome = state.categoryByCategory;
+                          if (state is IncomeByCategoryLoaded) {
+                            final categoryIncome =
+                                state.categoryIncomeByCategory;
                             if (categoryIncome.isEmpty) {
                               return Text("No income data available.");
                             }
@@ -141,25 +142,25 @@ class IncomeTab extends StatelessWidget {
                       ),
 
                       10.verticalSpace(context),
-                      BlocConsumer<ByDateBloc, ByDateState>(
+                      BlocConsumer<IncomeByDateBloc, IncomeByDateState>(
                         listener: (context, state) {
-                          if (state is ByDateError) {
+                          if (state is IncomeByDateError) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text(state.errorMessage)),
                             );
                           }
                         },
                         builder: (context, state) {
-                          if (state is ByDateLoading) {
+                          if (state is IncomeByDateLoading) {
                             return Center(child: CircularProgressIndicator());
                           }
 
-                          if (state is ByDateError) {
+                          if (state is IncomeByDateError) {
                             return Center(
                                 child: Text("Error: ${state.errorMessage}"));
                           }
 
-                          if (state is ByDateLoaded) {
+                          if (state is IncomeByDateLoaded) {
                             final groupedData = state.groupedData;
 
                             return ListView.separated(

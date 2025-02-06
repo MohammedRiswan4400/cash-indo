@@ -6,6 +6,7 @@ import 'package:cash_indo/model/user_model.dart';
 import 'package:cash_indo/view/auth/sign_up/screen_sign_up.dart';
 import 'package:cash_indo/view/dashboard/settings/widgets/settings_widgets.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
+import 'package:cash_indo/widget/appbar_widget.dart';
 import 'package:cash_indo/widget/dialoge_boxes.dart';
 import 'package:cash_indo/widget/helper/shimmer_widgets.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class ScreenSettings extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AppTextWidget(text: AppConstantStrings.settings),
+                  AppBarWidget(title: AppConstantStrings.settings),
                   Expanded(
                     child: Column(
                       spacing: 20,

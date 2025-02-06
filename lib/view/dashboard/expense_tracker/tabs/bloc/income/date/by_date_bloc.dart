@@ -1,55 +1,27 @@
-import 'package:bloc/bloc.dart';
 import 'package:cash_indo/controller/db/income_db/income_db.dart';
 import 'package:cash_indo/model/income_model.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'by_date_event.dart';
 part 'by_date_state.dart';
 
-// class ByDateBloc extends Bloc<ByDateEvent, ByDateState> {
-//   ByDateBloc() : super(ByDateInitial());
-
-//   // @override
-//   Stream<ByDateState> mapEventToState(ByDateEvent event)  {
-//        on<FetchByDateEvent>(_onFetchByDate);
-//     if (event is FetchByDateEvent) {
-//       yield* _onFetchByDate(event);  // Use yield* to handle async operations
-//     }
-//   }
-
-//   // 🔹 Fetch income data by date for the selected month
-//   Future<void> _onFetchByDate(FetchByDateEvent event)  {
-//     yield ByDateLoading();  // Emit loading state while fetching data
-
-//     try {
-//       // Fetch income data for the selected month asynchronously
-//       final groupedData = await UserDb.readIncome(event.month);
-
-//       // Emit the success state with the grouped data once fetched
-//       yield ByDateLoaded(groupedData);
-//     } catch (e) {
-//       // Emit the error state if fetching data fails
-//       yield ByDateError("Failed to fetch income by date: $e");
-//     }
-//   }
-// }
-
-class ByDateBloc extends Bloc<ByDateEvent, ByDateState> {
-  ByDateBloc() : super(ByDateInitial()) {
-    on<FetchByDateEvent>(_onFetchByDateByDate);
+class IncomeByDateBloc extends Bloc<IncomeByDateEvent, IncomeByDateState> {
+  IncomeByDateBloc() : super(IncomeByDateInitial()) {
+    on<FetchIncomeByDateEvent>(_onFetchIncomeByDateIncomeByDate);
   }
 
   // 🔹 Fetch category-wise income and update state
-  Future<void> _onFetchByDateByDate(
-      FetchByDateEvent event, Emitter<ByDateState> emit) async {
-    emit(ByDateLoading());
+  Future<void> _onFetchIncomeByDateIncomeByDate(
+      FetchIncomeByDateEvent event, Emitter<IncomeByDateState> emit) async {
+    emit(IncomeByDateLoading());
 
     try {
       final categoryData = await IncomeDb.readIncome(event.month);
 
-      emit(ByDateLoaded(categoryData));
+      emit(IncomeByDateLoaded(categoryData));
     } catch (e) {
-      emit(ByDateError("Failed to fetch income by category"));
+      emit(IncomeByDateError("Failed to fetch income by category"));
     }
   }
 }

@@ -3,6 +3,7 @@ import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/view/auth/sign_up/screen_sign_up.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/view/dashboard/home/widgets/home_screen_widgets.dart';
+import 'package:cash_indo/widget/expansion_tile.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 // Tab One +++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -240,6 +241,141 @@ List<BarChartGroupData> expanseTrackerChartGroupes() {
       );
     },
   );
+}
+
+// ignore: must_be_immutable
+class ExpanseSmallTile extends StatelessWidget {
+  ExpanseSmallTile({
+    super.key,
+    required this.icon,
+    required this.payMethode,
+    required this.amount,
+    this.color,
+    required this.comment,
+    required this.trail,
+    required this.category,
+  });
+  final IconData icon;
+  final String payMethode;
+  final String amount;
+  final String trail;
+  final String comment;
+  final String category;
+  Color? color;
+
+  Map<String, dynamic> getCategoryIconAndColor(String category) {
+    switch (category) {
+      case 'Food':
+        return {
+          'icon': Icons.fastfood_outlined,
+          'color': const Color.fromARGB(255, 214, 227, 161)
+        };
+      case 'Shopping':
+        return {
+          'icon': Icons.shopping_bag_outlined,
+          'color': const Color.fromARGB(255, 161, 227, 207)
+        };
+      case 'Bill Payments':
+        return {
+          'icon': Icons.receipt_long_rounded,
+          'color': const Color.fromARGB(255, 148, 139, 244),
+        };
+      case 'Travel':
+        return {
+          'icon': Icons.local_gas_station_outlined,
+          'color':
+              //  const Color.fromARGB(255, 251, 91, 51)
+              const Color.fromARGB(255, 227, 161, 161)
+        };
+      case 'EMI':
+        return {
+          'icon': Icons.payments_outlined,
+          'color': const Color.fromARGB(255, 161, 197, 244)
+        };
+      default:
+        return {
+          'icon': Icons.category_outlined,
+          'color': const Color.fromARGB(255, 51, 138, 251),
+        }; // Default values
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final categoryData = getCategoryIconAndColor(category);
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(width: 0.2),
+        color: AppColor.kMainContainerColor,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        child: CustomExpansionTile(
+          leading: CircleAvatar(
+            radius: 20,
+            backgroundColor: categoryData['color'] ??
+                const Color.fromARGB(255, 214, 227, 161),
+            child: Icon(
+              categoryData['icon'],
+              color: AppColor.kInvertedTextColor,
+              size: 18,
+            ),
+          ),
+          title: amount,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  comment != ''
+                      ? Column(
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.sizeOf(context).width / 1.3,
+                              child: AppTextWidget(
+                                text: comment,
+                                align: TextAlign.start,
+                                size: 15,
+                                weight: FontWeight.w500,
+                              ),
+                            ),
+                            Divider(
+                              color: AppColor.kArrowColor,
+                            )
+                          ],
+                        )
+                      : SizedBox(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    spacing: 20,
+                    children: [
+                      AppTextWidget(
+                        text: category,
+                        size: 15,
+                        weight: FontWeight.w700,
+                      ),
+                      AppTextWidget(
+                        text: payMethode,
+                        size: 13,
+                      ),
+                      // Spacer(),
+                      AppTextWidget(
+                        text: trail,
+                        size: 13,
+                        weight: FontWeight.w500,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 // Currency Selector ------------------------------------

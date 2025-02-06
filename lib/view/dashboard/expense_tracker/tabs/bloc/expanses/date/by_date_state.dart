@@ -1,31 +1,31 @@
 part of 'by_date_bloc.dart';
 
-abstract class IncomeByDateState extends Equatable {
+abstract class ExpenseByDateState extends Equatable {
   @override
   List<Object?> get props => [];
 }
 
 // Initial state before fetching
-class IncomeByDateInitial extends IncomeByDateState {}
+class ExpenseByDateInitial extends ExpenseByDateState {}
 
 // Loading state when data is being fetched
-class IncomeByDateLoading extends IncomeByDateState {}
+class ExpenseByDateLoading extends ExpenseByDateState {}
 
 // Success state containing the grouped income data
-class IncomeByDateLoaded extends IncomeByDateState {
-  final List<List<IncomeModel>> groupedData;
+class ExpenseByDateLoaded extends ExpenseByDateState {
+  final List<List<ExpenseModel>> groupedData;
 
-  IncomeByDateLoaded(this.groupedData);
+  ExpenseByDateLoaded(this.groupedData);
 
   @override
   List<Object?> get props => [groupedData];
 }
 
 // Error state if something goes wrong while fetching data
-class IncomeByDateError extends IncomeByDateState {
+class ExpenseByDateError extends ExpenseByDateState {
   final String errorMessage;
 
-  IncomeByDateError(this.errorMessage);
+  ExpenseByDateError(this.errorMessage);
 
   @override
   List<Object?> get props => [errorMessage];

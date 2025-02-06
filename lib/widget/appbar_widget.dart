@@ -69,3 +69,18 @@ class AppSecondaoryTitle extends StatelessWidget {
     );
   }
 }
+
+class AppBarWidget extends StatelessWidget {
+  const AppBarWidget({
+    super.key,
+    required this.title,
+  });
+  final String title;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 15),
+      child: AppTextWidget(text: title),
+    );
+  }
+}

@@ -1,8 +1,10 @@
+import 'package:cash_indo/controller/db/expense_db/expense_db.dart';
 import 'package:cash_indo/controller/db/income_db/income_db.dart';
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
 import 'package:cash_indo/core/routes/app_routes.dart';
+import 'package:cash_indo/model/expense_model.dart';
 import 'package:cash_indo/model/income_model.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/widget/dialoge_boxes.dart';
@@ -310,7 +312,27 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
                                       comment: comment,
                                       currency: selectedCurrency.value,
                                       amount: double.parse(amount),
-                                      category: selectedPlanNotifier.value,
+                                      category:
+                                          selectedIncomePlanNotifier.value,
+                                      createdAt: DateTime.now(),
+                                    ),
+                                  );
+                                }
+                                if (isExpanseSheet == true) {
+                                  final amount =
+                                      moneyTextController.text.trim();
+                                  final comment = commentController.text.trim();
+
+                                  ExpenseDb.addExpense(
+                                    context: context,
+                                    expenseModel: ExpenseModel(
+                                      paymentMethode:
+                                          selectedPaymentMethodeNotifier.value,
+                                      // today: '',
+                                      comment: comment,
+                                      currency: selectedCurrency.value,
+                                      amount: double.parse(amount),
+                                      category: selectedCategoryNotifier.value,
                                       createdAt: DateTime.now(),
                                     ),
                                   );

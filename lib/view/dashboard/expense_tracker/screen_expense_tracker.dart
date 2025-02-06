@@ -2,6 +2,7 @@ import 'package:cash_indo/core/constant/app_const.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/expanse_tab.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/income_tab.dart';
+import 'package:cash_indo/widget/appbar_widget.dart';
 import 'package:cash_indo/widget/tab_bar_widgets.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/widget/drop_down_widgets.dart';
@@ -22,7 +23,7 @@ class ScreenExpenseTracker extends StatelessWidget {
               spacing: 10,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AppTextWidget(text: AppConstantStrings.expanseTracker),
+                AppBarWidget(title: AppConstantStrings.expanseTracker),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

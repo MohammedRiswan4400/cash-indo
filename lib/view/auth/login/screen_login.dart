@@ -85,6 +85,7 @@ class ScreenLogin extends StatelessWidget {
                     ),
                   ),
                 ),
+                15.verticalSpace(context),
               ],
             ),
           ),

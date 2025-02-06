@@ -102,31 +102,6 @@ class IncomeDb {
     }
   }
 
-  // static Stream<List<List<IncomeModel>>> readIncome() {
-  //   final userID = UserDb.supaUID;
-
-  //   return dataBase
-  //       .stream(primaryKey: ['id'])
-  //       .eq('user_id', userID)
-  //       .map((data) {
-  //         final groupedData = <String, List<IncomeModel>>{};
-
-  //         for (var income in data) {
-  //           final incomeModel = IncomeModel.fromMap(income);
-  //           final todayDate = income['today'] as String?;
-
-  //           if (todayDate != null) {
-  //             if (!groupedData.containsKey(todayDate)) {
-  //               groupedData[todayDate] = [];
-  //             }
-
-  //             groupedData[todayDate]!.add(incomeModel);
-  //           }
-  //         }
-  //         return groupedData.values.toList();
-  //       });
-  // }
-
   static Future<double> getMonthlyIncomeTotal(String month) async {
     final userID = UserDb.supaUID;
 
@@ -192,8 +167,8 @@ class IncomeDb {
   }
 
   static void fetchIncome(BuildContext context, String month) {
-    context.read<ByCategoryBloc>().add(FetchByCategoryByCategoryEvent(month));
+    context.read<IncomeByCategoryBloc>().add(FetchIncomeByCategoryEvent(month));
     context.read<IncomeMonthlyTotalBloc>().add(FetchMonthlyIncomeTotal(month));
-    context.read<ByDateBloc>().add(FetchByDateEvent(month));
+    context.read<IncomeByDateBloc>().add(FetchIncomeByDateEvent(month));
   }
 }

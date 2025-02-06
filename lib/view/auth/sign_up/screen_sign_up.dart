@@ -240,6 +240,7 @@ class ScreenSignUp extends StatelessWidget {
                           weight: FontWeight.w600),
                     ),
                   ),
+                  15.verticalSpace(context),
                 ],
               ),
             ),

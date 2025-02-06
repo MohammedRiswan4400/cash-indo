@@ -7,6 +7,7 @@ import 'package:cash_indo/core/routes/app_routes.dart';
 import 'package:cash_indo/view/dashboard/sheet/bloc/contact_bloc.dart';
 import 'package:cash_indo/view/dashboard/sheet/widgets/sheet_widgets.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
+import 'package:cash_indo/widget/appbar_widget.dart';
 import 'package:cash_indo/widget/balance_sheet_widgets.dart';
 import 'package:cash_indo/widget/helper/snack_bar_helper_widget.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ class ScreenBalanceSheet extends StatelessWidget {
             spacing: 10,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AppTextWidget(text: AppConstantStrings.balanceSheet),
+              AppBarWidget(title: AppConstantStrings.balanceSheet),
               Align(
                 alignment: Alignment.centerRight,
                 child: GestureDetector(

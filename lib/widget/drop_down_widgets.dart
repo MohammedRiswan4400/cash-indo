@@ -1,11 +1,16 @@
+import 'package:cash_indo/controller/db/expense_db/expense_db.dart';
 import 'package:cash_indo/controller/db/income_db/income_db.dart';
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:flutter/material.dart';
 
-final ValueNotifier<String> selectedPlanNotifier = ValueNotifier('Salary');
+final ValueNotifier<String> selectedIncomePlanNotifier =
+    ValueNotifier('Salary');
+final ValueNotifier<String> selectedCategoryNotifier = ValueNotifier('Food');
 final ValueNotifier<String> selectedMonthNotifier = ValueNotifier('January');
+final ValueNotifier<String> selectedPaymentMethodeNotifier =
+    ValueNotifier('Cash');
 
 class MonthDropDownWidget extends StatelessWidget {
   const MonthDropDownWidget({super.key});
@@ -40,6 +45,7 @@ class MonthDropDownWidget extends StatelessWidget {
                 if (newValue != null) {
                   selectedMonthNotifier.value = newValue;
                   IncomeDb.fetchIncome(context, newValue);
+                  ExpenseDb.fetchExpense(context, newValue);
                 }
               },
               items: AppConstantStrings.allMonths
@@ -65,12 +71,10 @@ class MonthDropDownWidget extends StatelessWidget {
 class PaymentOptionsDropDownWidget extends StatelessWidget {
   PaymentOptionsDropDownWidget({super.key});
 
-  final ValueNotifier<String> selectedPaymentMethode = ValueNotifier('Cash');
-
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: selectedPaymentMethode,
+      valueListenable: selectedPaymentMethodeNotifier,
       builder: (context, selectedMethode, _) {
         return Container(
           height: 40,
@@ -92,7 +96,7 @@ class PaymentOptionsDropDownWidget extends StatelessWidget {
               underline: SizedBox(),
               onChanged: (String? newValue) {
                 if (newValue != null) {
-                  selectedPaymentMethode.value = newValue;
+                  selectedPaymentMethodeNotifier.value = newValue;
                 }
               },
               items: AppConstantStrings.paymentMedthods
@@ -131,8 +135,6 @@ class PaymentOptionsDropDownWidget extends StatelessWidget {
 
 class PaymentCategoryDropDownWidget extends StatelessWidget {
   PaymentCategoryDropDownWidget({super.key});
-
-  final ValueNotifier<String> selectedCategoryNotifier = ValueNotifier('Food');
 
   @override
   Widget build(BuildContext context) {
@@ -193,7 +195,7 @@ class IncomeCategoryDropDownWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: selectedPlanNotifier,
+      valueListenable: selectedIncomePlanNotifier,
       builder: (context, selectedPlan, _) {
         return Container(
           height: 40,
@@ -220,7 +222,7 @@ class IncomeCategoryDropDownWidget extends StatelessWidget {
               underline: Container(height: 2),
               onChanged: (String? newValue) {
                 if (newValue != null) {
-                  selectedPlanNotifier.value = newValue;
+                  selectedIncomePlanNotifier.value = newValue;
                 }
               },
               items: AppConstantStrings.incomePlans
