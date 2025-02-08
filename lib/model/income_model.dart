@@ -1,4 +1,5 @@
 class IncomeModel {
+  final int? id;
   final double amount;
   final String category;
   final String comment;
@@ -7,6 +8,7 @@ class IncomeModel {
   final DateTime? createdAt;
 
   IncomeModel({
+    this.id,
     required this.amount,
     required this.category,
     required this.comment,
@@ -17,6 +19,7 @@ class IncomeModel {
 
   factory IncomeModel.fromMap(Map<String, dynamic> data) {
     return IncomeModel(
+      id: data['id'],
       today: data['today'],
       amount: (data['amount'] as num).toDouble(),
       category: data['category'] ?? '',

@@ -50,8 +50,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<IncomeByCategoryBloc>(
             create: (context) => IncomeByCategoryBloc()),
         BlocProvider<ExpenseByCategoryBloc>(
-          create: (context) => ExpenseByCategoryBloc(),
-        ),
+            create: (context) => ExpenseByCategoryBloc()),
         BlocProvider<WeeklyExpenseChartBloc>(
             create: (context) => WeeklyExpenseChartBloc()),
         BlocProvider(

@@ -47,7 +47,7 @@ class ScreenNavigations extends StatelessWidget {
                   icon: indexChangeNotifier.value == 1
                       ? const Icon(Icons.account_balance_wallet_rounded)
                       : const Icon(Icons.account_balance_wallet_outlined),
-                  label: AppConstantStrings.expenses,
+                  label: AppConstantStrings.cashFlow,
                 ),
                 BottomNavigationBarItem(
                   icon: indexChangeNotifier.value == 2

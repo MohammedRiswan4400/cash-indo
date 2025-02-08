@@ -1,5 +1,6 @@
 import 'package:cash_indo/controller/db/expense_db/expense_db.dart';
 import 'package:cash_indo/controller/db/income_db/income_db.dart';
+import 'package:cash_indo/controller/functions/date_and_time/date_and_time_formates.dart';
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
@@ -8,7 +9,9 @@ import 'package:flutter/material.dart';
 final ValueNotifier<String> selectedIncomePlanNotifier =
     ValueNotifier('Salary');
 final ValueNotifier<String> selectedCategoryNotifier = ValueNotifier('Food');
-final ValueNotifier<String> selectedMonthNotifier = ValueNotifier('January');
+final ValueNotifier<String> selectedMonthNotifier = ValueNotifier(
+  AppDateFormates.monthFormattedDate(DateTime.now()),
+);
 final ValueNotifier<String> selectedPaymentMethodeNotifier =
     ValueNotifier('Cash');
 
@@ -44,8 +47,14 @@ class MonthDropDownWidget extends StatelessWidget {
               onChanged: (String? newValue) {
                 if (newValue != null) {
                   selectedMonthNotifier.value = newValue;
-                  IncomeDb.fetchIncome(context, newValue);
-                  ExpenseDb.fetchExpense(context, newValue);
+                  IncomeDb.fetchIncome(
+                    context,
+                    newValue,
+                  );
+                  ExpenseDb.fetchExpense(
+                    context,
+                    newValue,
+                  );
                 }
               },
               items: AppConstantStrings.allMonths

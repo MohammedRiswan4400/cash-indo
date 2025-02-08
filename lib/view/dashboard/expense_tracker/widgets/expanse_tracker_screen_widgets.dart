@@ -423,7 +423,7 @@ class ExpanseSmallTile extends StatelessWidget {
                   ),
                   10.verticalSpace(context),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    // mainAxisAlignment: MainAxisAlignment.end,
                     spacing: 20,
                     children: [
                       // smallButton(
@@ -436,10 +436,12 @@ class ExpanseSmallTile extends StatelessWidget {
                               shape: ContinuousRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),
                               ),
-                              child: ExpenseDeleteDialogeBox(
+                              child: DeleteDialogeBox(
+                                deleteWhat: 'Expense',
                                 ontap: () {
                                   ExpenseDb.deleteExpense(
                                     context,
+                                    //Issue here ------------------------------------------------------------------------------------------------------------------------
                                     AppDateFormates.monthFormattedDate(
                                         DateTime.now()),
                                     id,

@@ -165,15 +165,12 @@ class ExpenseDb {
       };
 
       for (var expense in response) {
-        final String today = expense['today']; // Example: "07-02-2025"
+        final String today = expense['today'];
         final double amount = (expense['amount'] as num).toDouble();
 
-        // ✅ Convert `today` (07-02-2025) into a weekday ("Sat")
         DateTime date = DateFormat("dd-MM-yyyy").parse(today);
-        String weekday =
-            DateFormat('E').format(date); // "E" = Short day format (Sat)
+        String weekday = DateFormat('E').format(date);
 
-        // ✅ Add amount to the correct weekday
         if (weeklyTotals.containsKey(weekday)) {
           weeklyTotals[weekday] = weeklyTotals[weekday]! + amount;
         }
@@ -303,7 +300,7 @@ class ExpenseDb {
 
       return weeklyTotal;
     } catch (e) {
-      print("Error fetching weekly total: $e");
+      log("Error fetching weekly total: $e");
       return 0.0;
     }
   }

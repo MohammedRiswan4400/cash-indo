@@ -18,6 +18,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import '../../../../widget/dialoge_boxes.dart';
+
 class IncomeTab extends StatelessWidget {
   const IncomeTab({
     super.key,
@@ -194,40 +196,137 @@ class IncomeTab extends StatelessWidget {
                                       children: [
                                         ...incomeList.map(
                                           (income) {
-                                            return Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 4),
-                                              child: Row(
-                                                children: [
-                                                  AppTextWidget(
-                                                    text:
-                                                        '${income.currency} ${income.amount}',
-                                                    size: 16,
-                                                    weight: FontWeight.w600,
-                                                    align: TextAlign.start,
-                                                  ),
-                                                  20.horizontalSpace(context),
-                                                  AppTextWidget(
-                                                    text:
-                                                        '(${income.category})',
-                                                    size: 15,
-                                                    color: const Color.fromARGB(
-                                                        255, 139, 139, 139),
-                                                    weight: FontWeight.w500,
-                                                    align: TextAlign.start,
-                                                  ),
-                                                  Spacer(),
-                                                  AppTextWidget(
-                                                    text: AppDateFormates
-                                                        .normalFormatTime(
-                                                            income.createdAt!),
-                                                    size: 15,
+                                            return Container(
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  border: Border.all(
                                                     color: AppColor.kArrowColor,
-                                                    weight: FontWeight.w500,
-                                                    align: TextAlign.start,
-                                                  ),
-                                                ],
+                                                  )),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 4,
+                                                        horizontal: 8),
+                                                child: Column(
+                                                  spacing: 10,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        AppTextWidget(
+                                                          text:
+                                                              '${income.currency} ${income.amount}',
+                                                          size: 16,
+                                                          weight:
+                                                              FontWeight.w600,
+                                                          align:
+                                                              TextAlign.start,
+                                                        ),
+                                                        AppTextWidget(
+                                                          text: income.category,
+                                                          size: 15,
+                                                          color: const Color
+                                                              .fromARGB(255,
+                                                              139, 139, 139),
+                                                          weight:
+                                                              FontWeight.w500,
+                                                          align:
+                                                              TextAlign.start,
+                                                        ),
+                                                        AppTextWidget(
+                                                          text: AppDateFormates
+                                                              .normalFormatTime(
+                                                                  income
+                                                                      .createdAt!),
+                                                          size: 15,
+                                                          color: AppColor
+                                                              .kArrowColor,
+                                                          weight:
+                                                              FontWeight.w500,
+                                                          align:
+                                                              TextAlign.start,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
+                                                      children: [
+                                                        SizedBox(
+                                                          // color: Colors.amber,
+                                                          width:
+                                                              MediaQuery.sizeOf(
+                                                                          context)
+                                                                      .width /
+                                                                  2,
+                                                          child: AppTextWidget(
+                                                            text:
+                                                                income.comment,
+                                                            size: 15,
+                                                            color: const Color
+                                                                .fromARGB(255,
+                                                                139, 139, 139),
+                                                            weight:
+                                                                FontWeight.w500,
+                                                            align:
+                                                                TextAlign.start,
+                                                          ),
+                                                        ),
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            Get.dialog(Dialog(
+                                                                backgroundColor:
+                                                                    Colors
+                                                                        .black,
+                                                                shape:
+                                                                    ContinuousRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              30),
+                                                                ),
+                                                                child:
+                                                                    DeleteDialogeBox(
+                                                                  deleteWhat:
+                                                                      'Income',
+                                                                  ontap: () {
+                                                                    IncomeDb
+                                                                        .deleteIncome(
+                                                                      context,
+                                                                      //Issue here ------------------------------------------------------------------------------------------------------------------------
+                                                                      AppDateFormates
+                                                                          .monthFormattedDate(
+                                                                              DateTime.now()),
+                                                                      income
+                                                                          .id!,
+                                                                    );
+                                                                  },
+                                                                )));
+                                                            // IncomeDb
+                                                            //     .deleteIncome(
+                                                            //   context,
+                                                            //   AppDateFormates
+                                                            //       .monthFormattedDate(
+                                                            //           DateTime
+                                                            //               .now()),
+                                                            //   income.id!,
+                                                            // );
+                                                          },
+                                                          child: smallButton(
+                                                            isDelete: true,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             );
                                           },

@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 import 'package:cash_indo/controller/db/user_db/user_db.dart';
 import 'package:cash_indo/controller/functions/date_and_time/date_and_time_formates.dart';
 import 'package:cash_indo/core/color/app_color.dart';
@@ -34,6 +35,8 @@ class CashCardWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         gradient: LinearGradient(
           colors: [
+            // Colors.black,
+            // const Color.fromARGB(255, 255, 82, 82),
             const Color.fromARGB(255, 0, 46, 89),
             const Color.fromARGB(255, 9, 32, 53),
           ],
@@ -48,10 +51,11 @@ class CashCardWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             AppTextWidget(
-                text: AppDateFormates.slashFormattedDate(todayDate),
-                size: 15,
-                weight: FontWeight.w500,
-                color: AppColor.kTextColor),
+              text: AppDateFormates.slashFormattedDate(todayDate),
+              size: 15,
+              weight: FontWeight.w500,
+              color: AppColor.kTextColor,
+            ),
             Align(
               alignment: Alignment.centerRight,
               child: Column(

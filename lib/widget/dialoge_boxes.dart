@@ -199,6 +199,7 @@ class LogoutDialogeBox extends StatelessWidget {
               text: 'Are you sure you want to log out?',
               size: 16,
               color: AppColor.kTextColor,
+              align: TextAlign.left,
             ),
             // 10.verticalSpace(context),
             AppTextWidget(
@@ -238,11 +239,13 @@ class LogoutDialogeBox extends StatelessWidget {
   }
 }
 
-class ExpenseDeleteDialogeBox extends StatelessWidget {
-  const ExpenseDeleteDialogeBox({
+class DeleteDialogeBox extends StatelessWidget {
+  const DeleteDialogeBox({
     super.key,
     required this.ontap,
+    required this.deleteWhat,
   });
+  final String deleteWhat;
   final VoidCallback ontap;
   @override
   Widget build(BuildContext context) {
@@ -277,7 +280,7 @@ class ExpenseDeleteDialogeBox extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AppTextWidget(
-              text: 'Are you sure you want to delete this expense?',
+              text: 'Are you sure you want to delete this $deleteWhat?',
               size: 16,
               align: TextAlign.left,
               color: AppColor.kTextColor,

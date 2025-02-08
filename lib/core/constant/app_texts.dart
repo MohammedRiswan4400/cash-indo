@@ -18,6 +18,7 @@ class AppConstantStrings {
   static String credit = 'Credit';
   static String debt = 'Debt';
   static String expanseTracker = 'Expanse Tracker';
+  static String cashFlow = 'Cash Flow';
   static String balanceSheet = 'Balance Sheet';
 
   //Splash Screen ----------------------------------------

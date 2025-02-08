@@ -1,3 +1,5 @@
+import 'package:cash_indo/controller/db/expense_db/expense_db.dart';
+import 'package:cash_indo/controller/functions/date_and_time/date_and_time_formates.dart';
 import 'package:cash_indo/core/constant/app_const.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/expanse_tab.dart';
@@ -23,7 +25,7 @@ class ScreenExpenseTracker extends StatelessWidget {
               spacing: 10,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AppBarWidget(title: AppConstantStrings.expanseTracker),
+                AppBarWidget(title: AppConstantStrings.cashFlow),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

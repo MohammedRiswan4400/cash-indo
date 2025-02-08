@@ -166,6 +166,29 @@ class IncomeDb {
     }
   }
 
+  static Future<bool> deleteIncome(
+    BuildContext context,
+    String month,
+    int expenseId,
+  ) async {
+    try {
+      final response =
+          await dataBase.delete().eq('id', expenseId).select().single();
+      log(response.toString());
+      fetchIncome(context, month);
+      AppRoutes.popNow();
+      SnackBarHelper.snackBarSuccess(
+        'Delete succesfull',
+        'Income delete succesfull',
+      );
+      return true;
+    } catch (e) {
+      SnackBarHelper.snackBarFaild('Oops!', e.toString());
+      log("❌ Error deleting expense: $e");
+      return false;
+    }
+  }
+
   static void fetchIncome(BuildContext context, String month) {
     context.read<IncomeByCategoryBloc>().add(FetchIncomeByCategoryEvent(month));
     context.read<IncomeMonthlyTotalBloc>().add(FetchMonthlyIncomeTotal(month));
