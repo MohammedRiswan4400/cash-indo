@@ -1,17 +1,21 @@
 import 'dart:developer';
 
 import 'package:cash_indo/controller/db/expense_db/expense_db.dart';
+import 'package:cash_indo/controller/functions/date_and_time/date_and_time_formates.dart';
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
+import 'package:cash_indo/core/constant/spacing_extensions.dart';
 import 'package:cash_indo/view/auth/sign_up/screen_sign_up.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/highest_expense/highest_expense_bloc.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/weekly_chart/weekly_expense_chart_bloc.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/view/dashboard/home/widgets/home_screen_widgets.dart';
+import 'package:cash_indo/widget/dialoge_boxes.dart';
 import 'package:cash_indo/widget/expansion_tile.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 // Tab One +++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // First Widget ----------------------------------------
@@ -187,13 +191,13 @@ class ExpenseBarGraphWidget extends StatelessWidget {
             if (state is HighestWeeklyExpensesLoaded) {
               highestSpendingDay = state.highestDay;
               highestSpendingAmount = state.highestAmount;
-              maxYValue = highestSpendingAmount + 100; // ✅ Ensure correct maxY
+              maxYValue = highestSpendingAmount + 100;
             }
 
             return SizedBox();
           },
         ),
-        if (barChartData.isNotEmpty) // ✅ Ensure chartData is available
+        if (barChartData.isNotEmpty)
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
@@ -253,23 +257,25 @@ class ExpenseBarGraphWidget extends StatelessWidget {
                               sideTitles: SideTitles(showTitles: false),
                             ),
                             topTitles: AxisTitles(
-                              sideTitles: SideTitles(showTitles: false),
+                              // axisNameWidget: Container(
+                              //   color: const Color.fromARGB(0, 255, 193, 7),
+                              //   height: 100,
+                              // ),
+                              sideTitles: SideTitles(
+                                showTitles: false,
+                              ),
                             ),
                             bottomTitles: AxisTitles(
                               sideTitles: SideTitles(
-                                  showTitles: false,
-                                  getTitlesWidget: (value, meta) {
-                                    return Padding(
-                                      padding: EdgeInsets.only(top: 5),
-                                      child: Text(
-                                        value
-                                            .toInt()
-                                            .toString(), // Display day number on x-axis
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 12),
-                                      ),
-                                    );
-                                  }),
+                                showTitles: false,
+                              ),
+                            ),
+                          ),
+                          barTouchData: BarTouchData(
+                            touchTooltipData: BarTouchTooltipData(
+                              tooltipRoundedRadius: 100,
+                              fitInsideVertically: true,
+                              // tooltipMargin: 10,
                             ),
                           ),
                           maxY: maxYValue,
@@ -279,8 +285,7 @@ class ExpenseBarGraphWidget extends StatelessWidget {
                     ),
                   ),
                   Row(
-                    mainAxisAlignment:
-                        MainAxisAlignment.spaceEvenly, // Space between items
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: AppConstantStrings.allWeeks.map((day) {
                       return AppTextWidget(
                         text: day,
@@ -338,6 +343,7 @@ class ExpanseSmallTile extends StatelessWidget {
     required this.comment,
     required this.trail,
     required this.category,
+    required this.id,
   });
   final String payMethode;
   final String amount;
@@ -345,6 +351,7 @@ class ExpanseSmallTile extends StatelessWidget {
   final String comment;
   final String category;
   Color? color;
+  final int id;
 
   @override
   Widget build(BuildContext context) {
@@ -414,6 +421,38 @@ class ExpanseSmallTile extends StatelessWidget {
                       ),
                     ],
                   ),
+                  10.verticalSpace(context),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    spacing: 20,
+                    children: [
+                      // smallButton(
+                      //   isDelete: false,
+                      // ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.dialog(Dialog(
+                              backgroundColor: Colors.black,
+                              shape: ContinuousRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: ExpenseDeleteDialogeBox(
+                                ontap: () {
+                                  ExpenseDb.deleteExpense(
+                                    context,
+                                    AppDateFormates.monthFormattedDate(
+                                        DateTime.now()),
+                                    id,
+                                  );
+                                },
+                              )));
+                        },
+                        child: smallButton(
+                          isDelete: true,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             )
@@ -421,6 +460,34 @@ class ExpanseSmallTile extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class smallButton extends StatelessWidget {
+  const smallButton({
+    super.key,
+    required this.isDelete,
+  });
+  final bool isDelete;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            color: isDelete ? Colors.redAccent : Colors.green),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+          child: Row(
+            spacing: 4,
+            children: [
+              AppTextWidget(
+                // weight: FontWeight.normal,
+                text: isDelete ? 'Delete' : 'Edit',
+                size: 12,
+              ),
+            ],
+          ),
+        ));
   }
 }
 

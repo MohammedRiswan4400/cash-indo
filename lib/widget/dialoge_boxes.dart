@@ -238,6 +238,80 @@ class LogoutDialogeBox extends StatelessWidget {
   }
 }
 
+class ExpenseDeleteDialogeBox extends StatelessWidget {
+  const ExpenseDeleteDialogeBox({
+    super.key,
+    required this.ontap,
+  });
+  final VoidCallback ontap;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 140,
+      width: MediaQuery.sizeOf(context).width / 1.1,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        gradient: LinearGradient(
+          colors: [
+            const Color.fromARGB(255, 58, 58, 58),
+            const Color.fromARGB(255, 32, 32, 32)
+          ],
+          end: Alignment.bottomLeft,
+          begin: Alignment.topRight,
+        ),
+        border: Border.all(width: 0.5),
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(1, 5),
+            blurRadius: 10,
+            spreadRadius: 0,
+            color: AppColor.kshadowColor,
+          )
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Column(
+          spacing: 5,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AppTextWidget(
+              text: 'Are you sure you want to delete this expense?',
+              size: 16,
+              align: TextAlign.left,
+              color: AppColor.kTextColor,
+            ),
+            // 10.verticalSpace(context),
+
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              spacing: 20,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                DialogeBoxButton(
+                  size: 10,
+                  textColor: AppColor.kArrowColor,
+                  text: 'Cancel',
+                  onTap: () {
+                    AppRoutes.popNow();
+                  },
+                ),
+                DialogeBoxButton(
+                  size: 14,
+                  textColor: Colors.red,
+                  text: 'Delete',
+                  onTap: ontap,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class DialogeBoxButton extends StatelessWidget {
   const DialogeBoxButton({
     super.key,

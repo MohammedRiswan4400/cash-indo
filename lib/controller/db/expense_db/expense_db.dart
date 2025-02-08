@@ -308,6 +308,29 @@ class ExpenseDb {
     }
   }
 
+  static Future<bool> deleteExpense(
+    BuildContext context,
+    String month,
+    int expenseId,
+  ) async {
+    try {
+      final response =
+          await dataBase.delete().eq('id', expenseId).select().single();
+      log(response.toString());
+      fetchExpense(context, month);
+      AppRoutes.popNow();
+      SnackBarHelper.snackBarSuccess(
+        'Delete succesfull',
+        'Expense delete succesfull',
+      );
+      return true;
+    } catch (e) {
+      SnackBarHelper.snackBarFaild('Oops!', e.toString());
+      log("❌ Error deleting expense: $e");
+      return false;
+    }
+  }
+
   static void fetchExpense(BuildContext context, String month) {
     context.read<ExpenseByDateBloc>().add(FetchExpenseByDateEvent(month));
     context

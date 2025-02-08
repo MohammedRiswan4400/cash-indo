@@ -153,33 +153,6 @@ class ScreenSettings extends StatelessWidget {
                             text: AppConstantStrings.logOut,
                             isIcon: false,
                             textColor: Colors.orange),
-                        ElevatedButton(
-                          onPressed: () {
-                            UserDb.createUserProfile(UserModel(
-                              name: 'John Doe',
-                              email: 'johndoe@example.com',
-                              phoneNumber: '1234567890',
-                            ));
-                          },
-                          child: Text('data'),
-                        ),
-                        // SettingsTile(
-                        //   onTap: () {
-                        //     // user!.email != null
-                        //     //     ?
-                        //     Get.dialog(Dialog(
-                        //       backgroundColor: Colors.black,
-                        //       shape: ContinuousRectangleBorder(
-                        //         borderRadius: BorderRadius.circular(30),
-                        //       ),
-                        //       child: DeleteAccountDialogeBox(),
-                        //     ));
-                        //     // : null;
-                        //   },
-                        //   text: AppConstantStrings.deleteAccount,
-                        //   isIcon: false,
-                        //   textColor: Colors.red,
-                        // ),
                       ],
                     ),
                   ),

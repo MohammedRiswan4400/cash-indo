@@ -69,7 +69,7 @@ class ExpanseTab extends StatelessWidget {
                         },
                       );
                     }
-                    return Center(child: Text("No income data available."));
+                    return Center(child: Text("No expense data available."));
                   },
                 ),
                 10.verticalSpace(context),
@@ -115,13 +115,13 @@ class ExpanseTab extends StatelessWidget {
                             physics: BouncingScrollPhysics(),
                             itemCount: groupedData.length,
                             itemBuilder: (context, index) {
-                              final incomeList = groupedData[index];
+                              final expenseList = groupedData[index];
                               final todayDate =
                                   AppDateFormates.barFormattedDate(
                                       DateTime.now());
-                              final incomeDate =
+                              final expenseDate =
                                   AppDateFormates.barFormattedDate(
-                                      incomeList.first.createdAt!);
+                                      expenseList.first.createdAt!);
 
                               return Container(
                                 decoration: BoxDecoration(
@@ -134,25 +134,27 @@ class ExpanseTab extends StatelessWidget {
                                       horizontal: 8, vertical: 5),
                                   child: CustomExpansionTile(
                                     leading: AppTextWidget(text: '📆'),
-                                    title: todayDate == incomeDate
+                                    title: todayDate == expenseDate
                                         ? AppConstantStrings.today
-                                        : incomeDate,
+                                        : expenseDate,
                                     children: [
-                                      ...incomeList.map(
-                                        (income) {
+                                      ...expenseList.map(
+                                        (expense) {
                                           return Padding(
                                             padding: const EdgeInsets.symmetric(
                                               vertical: 4,
                                             ),
                                             child: ExpanseSmallTile(
-                                              category: income.category,
-                                              comment: income.comment,
+                                              id: expense.id!,
+                                              category: expense.category,
+                                              comment: expense.comment,
                                               amount:
-                                                  '${income.currency} ${income.amount}',
-                                              payMethode: income.paymentMethode,
+                                                  '${expense.currency} ${expense.amount}',
+                                              payMethode:
+                                                  expense.paymentMethode,
                                               trail: AppDateFormates
                                                   .normalFormatTime(
-                                                      income.createdAt!),
+                                                      expense.createdAt!),
                                             ),
                                           );
                                         },
@@ -185,7 +187,7 @@ class ExpanseTab extends StatelessWidget {
                 MoneyKeyboardBottomSheet(
                   isIncomeSheet: false,
                   isExpanseSheet: true,
-                  title: AppConstantStrings.income,
+                  title: AppConstantStrings.expenses,
                 ),
                 isDismissible: true,
                 enableDrag: true,

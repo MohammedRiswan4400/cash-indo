@@ -1,4 +1,5 @@
 class ExpenseModel {
+  final int? id;
   final double amount;
   final String category;
   final String comment;
@@ -8,6 +9,7 @@ class ExpenseModel {
   final String paymentMethode;
 
   ExpenseModel({
+    this.id,
     required this.paymentMethode,
     required this.amount,
     required this.category,
@@ -19,6 +21,7 @@ class ExpenseModel {
 
   factory ExpenseModel.fromMap(Map<String, dynamic> data) {
     return ExpenseModel(
+      id: data['id'],
       paymentMethode: data['payment_methode'],
       today: data['today'],
       amount: (data['amount'] as num).toDouble(),
