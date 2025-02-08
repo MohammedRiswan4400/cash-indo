@@ -120,13 +120,13 @@ class AppConstantStrings {
     'December',
   ];
   static List<String> allWeeks = [
+    'Sun',
     'Mon',
     'Tue',
     'Wed',
     'Thu',
     'Fri',
     'Sat',
-    'Sun'
   ];
 
   static List<Map<String, String>> paymentMedthods = [

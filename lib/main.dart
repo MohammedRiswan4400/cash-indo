@@ -2,7 +2,10 @@ import 'package:cash_indo/controller/theme/theme_controller.dart';
 import 'package:cash_indo/core/constant/app_const.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/theme/theme_helper.dart';
+import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/category/category_bloc.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/date/by_date_bloc.dart';
+import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/highest_expense/highest_expense_bloc.dart';
+import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/weekly_chart/weekly_expense_chart_bloc.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/category/by_category_bloc.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/date/by_date_bloc.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/monthly_total/income_monthly_total_bloc.dart';
@@ -40,21 +43,21 @@ class MyApp extends StatelessWidget {
     final ThemeController themeController = Get.put(ThemeController());
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => IncomeMonthlyTotalBloc(),
-        ),
-        BlocProvider<IncomeByDateBloc>(
-          create: (context) => IncomeByDateBloc(),
-        ),
+        BlocProvider(create: (context) => IncomeMonthlyTotalBloc()),
+        BlocProvider<IncomeByDateBloc>(create: (context) => IncomeByDateBloc()),
         BlocProvider<ExpenseByDateBloc>(
-          create: (context) => ExpenseByDateBloc(),
-        ),
+            create: (context) => ExpenseByDateBloc()),
         BlocProvider<IncomeByCategoryBloc>(
-          create: (context) => IncomeByCategoryBloc(),
+            create: (context) => IncomeByCategoryBloc()),
+        BlocProvider<ExpenseByCategoryBloc>(
+          create: (context) => ExpenseByCategoryBloc(),
         ),
+        BlocProvider<WeeklyExpenseChartBloc>(
+            create: (context) => WeeklyExpenseChartBloc()),
         BlocProvider(
           create: (context) => ContactBloc()..add(FetchContactsEvent()),
         ),
+        BlocProvider(create: (context) => HighestExpenseBloc()),
       ],
       child: Obx(() {
         return GetMaterialApp(

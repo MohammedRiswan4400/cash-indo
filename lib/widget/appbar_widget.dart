@@ -10,22 +10,25 @@ class CustomeAppBar extends StatelessWidget {
   final String title;
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      spacing: 20,
-      children: [
-        GestureDetector(
-          onTap: () {
-            AppRoutes.popNow();
-          },
-          child: Icon(
-            Icons.arrow_back_ios_new_rounded,
+    return Padding(
+      padding: const EdgeInsets.only(top: 15),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        spacing: 20,
+        children: [
+          GestureDetector(
+            onTap: () {
+              AppRoutes.popNow();
+            },
+            child: Icon(
+              Icons.arrow_back_ios_new_rounded,
+            ),
           ),
-        ),
-        AppTextWidget(
-          text: title,
-        )
-      ],
+          AppTextWidget(
+            text: title,
+          )
+        ],
+      ),
     );
   }
 }
@@ -42,29 +45,32 @@ class AppSecondaoryTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        AppRoutes.popNow();
-      },
-      child: Row(
-        spacing: 10,
-        children: [
-          Icon(Icons.arrow_back_ios_new),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AppTextWidget(
-                text: title,
-                size: 18,
-              ),
-              AppTextWidget(
-                text: subTitle ?? '',
-                size: 10,
-                weight: FontWeight.normal,
-              ),
-            ],
-          )
-        ],
+    return Padding(
+      padding: const EdgeInsets.only(top: 15),
+      child: GestureDetector(
+        onTap: () {
+          AppRoutes.popNow();
+        },
+        child: Row(
+          spacing: 10,
+          children: [
+            Icon(Icons.arrow_back_ios_new),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppTextWidget(
+                  text: title,
+                  size: 18,
+                ),
+                AppTextWidget(
+                  text: subTitle ?? '',
+                  size: 10,
+                  weight: FontWeight.normal,
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

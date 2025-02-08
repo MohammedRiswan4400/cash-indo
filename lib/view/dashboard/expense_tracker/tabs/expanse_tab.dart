@@ -2,6 +2,7 @@ import 'package:cash_indo/controller/functions/date_and_time/date_and_time_forma
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
+import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/category/category_bloc.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/date/by_date_bloc.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/widget/bottom_sheets.dart';
@@ -32,44 +33,45 @@ class ExpanseTab extends StatelessWidget {
                 ExpanseChartWidget(),
                 0.verticalSpace(context),
                 AppTextWidget(
-                  text: AppConstantStrings.allExpensesTitle,
-                  size: 16,
+                    text: AppConstantStrings.allExpensesTitle, size: 16),
+                // 10.verticalSpace(context),
+                BlocConsumer<ExpenseByCategoryBloc, ExpenseByCategoryState>(
+                  listener: (context, state) {
+                    if (state is ExpenseByCategoryError) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(state.errorMessage)));
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is ExpenseByCategoryLoading) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+
+                    if (state is ExpenseByCategoryLoaded) {
+                      final categoryExpense = state.categoryExpenseByCategory;
+                      if (categoryExpense.isEmpty) {
+                        return Text("No expense data available.");
+                      }
+                      return ListView.separated(
+                        separatorBuilder: (context, index) {
+                          return 10.verticalSpace(context);
+                        },
+                        physics: BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: categoryExpense.length,
+                        itemBuilder: (context, index) {
+                          final entry = categoryExpense[index];
+                          return ExpanseTile(
+                            category: entry['category'],
+                            amount: '${entry['total']}',
+                            trail: '12 %',
+                          );
+                        },
+                      );
+                    }
+                    return Center(child: Text("No income data available."));
+                  },
                 ),
-                ExpanseTile(
-                  icon: Icons.fastfood_outlined,
-                  title: 'Food',
-                  amount: '20,000',
-                  trail: '12 %',
-                ),
-                ExpanseTile(
-                  icon: Icons.shopping_bag_outlined,
-                  title: 'Shopping',
-                  amount: '80,000',
-                  color: const Color.fromARGB(255, 161, 227, 207),
-                  trail: '12 %',
-                ),
-                ExpanseTile(
-                  icon: Icons.receipt_long_rounded,
-                  title: 'Bill Payments',
-                  amount: '1,860',
-                  color: const Color.fromARGB(255, 185, 139, 244),
-                  trail: '12 %',
-                ),
-                ExpanseTile(
-                  icon: Icons.local_gas_station_outlined,
-                  title: 'Fuel',
-                  amount: '80,000',
-                  color: const Color.fromARGB(255, 227, 161, 161),
-                  trail: '12 %',
-                ),
-                ExpanseTile(
-                  icon: Icons.payments_outlined,
-                  title: 'EMI',
-                  amount: '1,000',
-                  color: const Color.fromARGB(255, 161, 197, 244),
-                  trail: '12 %',
-                ),
-                10.verticalSpace(context),
                 10.verticalSpace(context),
                 BlocConsumer<ExpenseByDateBloc, ExpenseByDateState>(
                   listener: (context, state) {
@@ -145,7 +147,6 @@ class ExpanseTab extends StatelessWidget {
                                             child: ExpanseSmallTile(
                                               category: income.category,
                                               comment: income.comment,
-                                              icon: Icons.fastfood_outlined,
                                               amount:
                                                   '${income.currency} ${income.amount}',
                                               payMethode: income.paymentMethode,

@@ -84,7 +84,8 @@ class ScreenBalanceSheet extends StatelessWidget {
                                 final contact = contacts[index];
                                 return GestureDetector(
                                   onTap: () {
-                                    AppRoutes.gotoScreenUserTransaction(false);
+                                    AppRoutes.gotoScreenUserTransaction(
+                                        false, contact);
                                   },
                                   child: UserListTile(
                                     contactModel: contact,

@@ -4,11 +4,16 @@ import 'package:cash_indo/controller/db/user_db/user_db.dart';
 import 'package:cash_indo/controller/functions/date_and_time/date_and_time_formates.dart';
 import 'package:cash_indo/core/routes/app_routes.dart';
 import 'package:cash_indo/model/expense_model.dart';
+import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/category/category_bloc.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/date/by_date_bloc.dart';
+import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/highest_expense/highest_expense_bloc.dart';
+import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/weekly_chart/weekly_expense_chart_bloc.dart';
 import 'package:cash_indo/widget/helper/dialoge_helper_widget.dart';
 import 'package:cash_indo/widget/helper/snack_bar_helper_widget.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ExpenseDb {
@@ -92,7 +97,225 @@ class ExpenseDb {
     }
   }
 
+  static Future<List<Map<String, dynamic>>> getMonthlyExpenseByCategory(
+      String month) async {
+    final userID = UserDb.supaUID;
+
+    try {
+      final response = await dataBase
+          .select('category, amount')
+          .eq('user_id', userID)
+          .eq('month', month);
+
+      if (response.isEmpty) {
+        return [];
+      }
+
+      // Create a map to store category-wise total
+      Map<String, double> categoryTotals = {};
+
+      for (var record in response) {
+        String category = record['category'];
+        double amount = (record['amount'] as num).toDouble();
+
+        // Add amount to the category's total
+        if (categoryTotals.containsKey(category)) {
+          categoryTotals[category] = categoryTotals[category]! + amount;
+        } else {
+          categoryTotals[category] = amount;
+        }
+      }
+
+      // Convert map to a list of {category, total}
+      List<Map<String, dynamic>> categoryList = categoryTotals.entries
+          .map((entry) => {'category': entry.key, 'total': entry.value})
+          .toList();
+
+      return categoryList;
+    } catch (e) {
+      log("Error fetching monthly income by category for $month: $e");
+      return [];
+    }
+  }
+
+  static Future<List<BarChartGroupData>> readWeaklyExpenseChartData(
+      String month) async {
+    final userID = UserDb.supaUID; // Assuming you have user authentication
+
+    try {
+      final response = await dataBase
+          .select('today, amount') // Select today and amount fields
+          .eq('user_id', userID)
+          .eq('month', month)
+          .order('today', ascending: true); // Order by date
+
+      if (response.isEmpty) {
+        return [];
+      }
+
+      // ✅ Map of total expenses per weekday (Sun - Sat)
+      Map<String, double> weeklyTotals = {
+        "Sun": 0.0,
+        "Mon": 0.0,
+        "Tue": 0.0,
+        "Wed": 0.0,
+        "Thu": 0.0,
+        "Fri": 0.0,
+        "Sat": 0.0
+      };
+
+      for (var expense in response) {
+        final String today = expense['today']; // Example: "07-02-2025"
+        final double amount = (expense['amount'] as num).toDouble();
+
+        // ✅ Convert `today` (07-02-2025) into a weekday ("Sat")
+        DateTime date = DateFormat("dd-MM-yyyy").parse(today);
+        String weekday =
+            DateFormat('E').format(date); // "E" = Short day format (Sat)
+
+        // ✅ Add amount to the correct weekday
+        if (weeklyTotals.containsKey(weekday)) {
+          weeklyTotals[weekday] = weeklyTotals[weekday]! + amount;
+        }
+      }
+
+      // ✅ Convert into BarChartGroupData with correct X-Axis mapping
+      List<String> weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+      return List.generate(weekDays.length, (index) {
+        String day = weekDays[index]; // Get weekday name
+        double totalAmount = weeklyTotals[day]!; // Get total for the day
+
+        return BarChartGroupData(
+          x: index, // X-Axis corresponds to week order (0=Sun, 1=Mon, ..., 6=Sat)
+          barRods: [
+            BarChartRodData(
+              toY: totalAmount, // Y-Axis = Total spent on that day
+              color: Colors.blueAccent, // Customize bar color
+              width: 10, // Customize bar width
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ],
+        );
+      });
+    } catch (e) {
+      print("Error fetching expense data: $e");
+      return [];
+    }
+  }
+
+  static Future<Map<String, dynamic>> getHighestWeeklyExpense(
+      String month) async {
+    final userID = UserDb.supaUID; // Assuming user authentication
+
+    try {
+      final response = await dataBase
+          .select('today, amount') // Select today and amount fields
+          .eq('user_id', userID)
+          .eq('month', month)
+          .order('today', ascending: true); // Order by date
+
+      if (response.isEmpty) {
+        return {"day": "None", "amount": 0.0}; // No data
+      }
+
+      // ✅ Map of total expenses per weekday (Sun - Sat)
+      Map<String, double> weeklyTotals = {
+        "Sun": 0.0,
+        "Mon": 0.0,
+        "Tue": 0.0,
+        "Wed": 0.0,
+        "Thu": 0.0,
+        "Fri": 0.0,
+        "Sat": 0.0
+      };
+
+      for (var expense in response) {
+        final String today = expense['today']; // Example: "07-02-2025"
+        final double amount = (expense['amount'] as num).toDouble();
+
+        // ✅ Convert `today` (07-02-2025) into a weekday ("Sat")
+        DateTime date = DateFormat("dd-MM-yyyy").parse(today);
+        String weekday =
+            DateFormat('E').format(date); // "E" = Short day format (Sat)
+
+        // ✅ Add amount to the correct weekday
+        if (weeklyTotals.containsKey(weekday)) {
+          weeklyTotals[weekday] = weeklyTotals[weekday]! + amount;
+        }
+      }
+
+      // ✅ Get the highest spending day
+      return getHighestExpenseDay(weeklyTotals);
+    } catch (e) {
+      print("Error fetching highest weekly expense: $e");
+      return {"day": "Error", "amount": 0.0}; // Error handling
+    }
+  }
+
+  /// ✅ Get the highest expense day and amount from the weekly data
+  static Map<String, dynamic> getHighestExpenseDay(
+      Map<String, double> weeklyTotals) {
+    String highestDay = "";
+    double highestAmount = 0.0;
+
+    weeklyTotals.forEach((day, amount) {
+      if (amount > highestAmount) {
+        highestAmount = amount;
+        highestDay = day;
+      }
+    });
+
+    return {
+      "day": highestDay,
+      "amount": highestAmount,
+    };
+  }
+
+  static Future<double> getWeeklyTotal() async {
+    final userID = UserDb.supaUID;
+
+    try {
+      // Get today's date
+      DateTime today = DateTime.now();
+      String todayStr = DateFormat("dd-MM-yyyy").format(today);
+
+      // Get the date 7 days ago
+      DateTime sevenDaysAgo = today.subtract(Duration(days: 6));
+      String sevenDaysAgoStr = DateFormat("dd-MM-yyyy").format(sevenDaysAgo);
+
+      // Fetch all expenses within the last 7 days
+      final response = await Supabase.instance.client
+          .from('expenses') // Your Supabase table
+          .select('today, amount') // Select today and amount fields
+          .eq('user_id', userID)
+          .gte('today', sevenDaysAgoStr) // Greater than or equal to 7 days ago
+          .lte('today', todayStr); // Less than or equal to today
+
+      if (response.isEmpty) {
+        return 0.0; // No expenses, return 0
+      }
+
+      // ✅ Sum all expenses in the last 7 days
+      double weeklyTotal = response.fold(0.0, (sum, expense) {
+        return sum + (expense['amount'] as num).toDouble();
+      });
+
+      return weeklyTotal;
+    } catch (e) {
+      print("Error fetching weekly total: $e");
+      return 0.0;
+    }
+  }
+
   static void fetchExpense(BuildContext context, String month) {
     context.read<ExpenseByDateBloc>().add(FetchExpenseByDateEvent(month));
+    context
+        .read<ExpenseByCategoryBloc>()
+        .add(FetchExpenseByCategoryEvent(month));
+    context
+        .read<WeeklyExpenseChartBloc>()
+        .add(FetchWeeklyExpenseChartEvent(month));
+    context.read<HighestExpenseBloc>().add(FetchHighestWeeklyExpenseEvent());
   }
 }

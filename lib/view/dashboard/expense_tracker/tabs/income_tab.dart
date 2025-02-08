@@ -99,7 +99,6 @@ class IncomeTab extends StatelessWidget {
                           );
                         },
                       ),
-
                       10.verticalSpace(context),
                       AppTextWidget(
                         text: AppConstantStrings.incomeTracker,
@@ -140,7 +139,6 @@ class IncomeTab extends StatelessWidget {
                               child: Text("No income data available."));
                         },
                       ),
-
                       10.verticalSpace(context),
                       BlocConsumer<IncomeByDateBloc, IncomeByDateState>(
                         listener: (context, state) {
@@ -247,56 +245,6 @@ class IncomeTab extends StatelessWidget {
                         },
                       ),
                       10.verticalSpace(context),
-                      // Container(
-                      //   decoration: BoxDecoration(
-                      //       borderRadius: BorderRadius.circular(15),
-                      //       border: Border.all(width: 0.2),
-                      //       color: AppColor.kMainContainerColor),
-                      //   child: Padding(
-                      //     padding:
-                      //         const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                      //     child: CustomExpansionTile(
-                      //       leading: AppTextWidget(text: '📆'),
-                      //       title: '30-01-25',
-                      //       children: [
-                      //         ListView.builder(
-                      //           physics: BouncingScrollPhysics(),
-                      //           shrinkWrap: true,
-                      //           itemCount: 5,
-                      //           itemBuilder: (context, index) {
-                      //             return Row(
-                      //               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //               children: [
-                      //                 AppTextWidget(
-                      //                   text: '\$ 20,985.00',
-                      //                   size: 16,
-                      //                   weight: FontWeight.w600,
-                      //                   align: TextAlign.start,
-                      //                 ),
-                      //                 20.horizontalSpace(context),
-                      //                 AppTextWidget(
-                      //                   text: '(Job)',
-                      //                   size: 15,
-                      //                   color: AppColor.kArrowColor,
-                      //                   weight: FontWeight.w500,
-                      //                   align: TextAlign.start,
-                      //                 ),
-                      //                 Spacer(),
-                      //                 AppTextWidget(
-                      //                   text: '12:23 am',
-                      //                   size: 15,
-                      //                   color: AppColor.kArrowColor,
-                      //                   weight: FontWeight.w500,
-                      //                   align: TextAlign.start,
-                      //                 ),
-                      //               ],
-                      //             );
-                      //           },
-                      //         ),
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
                       30.verticalSpace(context),
                     ],
                   ),

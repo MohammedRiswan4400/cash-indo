@@ -1,4 +1,5 @@
 import 'package:cash_indo/core/constant/app_const.dart';
+import 'package:cash_indo/model/contact_model.dart';
 import 'package:cash_indo/view/auth/login/screen_login.dart';
 import 'package:cash_indo/view/auth/sign_up/screen_sign_up.dart';
 import 'package:cash_indo/view/dashboard/bottom_navigation/screen_bottom_navigation.dart';
@@ -45,9 +46,12 @@ class AppRoutes {
     Get.offAll(() => ScreenBottonNavigation());
   }
 
-  static gotoScreenUserTransaction(bool isDebit) {
+  static gotoScreenUserTransaction(bool isDebit, ContactModel contactModel) {
     Get.to(
-      () => ScreenUserTransaction(isDebit: isDebit),
+      () => ScreenUserTransaction(
+        isDebit: isDebit,
+        contactModel: contactModel,
+      ),
     );
   }
 

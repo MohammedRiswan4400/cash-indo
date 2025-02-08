@@ -56,7 +56,7 @@ class LiabilitiesAddingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 2,
+      bottom: 10,
       right: 2,
       left: 2,
       child: Row(

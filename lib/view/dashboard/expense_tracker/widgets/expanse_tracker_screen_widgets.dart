@@ -1,11 +1,17 @@
+import 'dart:developer';
+
+import 'package:cash_indo/controller/db/expense_db/expense_db.dart';
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/view/auth/sign_up/screen_sign_up.dart';
+import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/highest_expense/highest_expense_bloc.dart';
+import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/weekly_chart/weekly_expense_chart_bloc.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/view/dashboard/home/widgets/home_screen_widgets.dart';
 import 'package:cash_indo/widget/expansion_tile.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 // Tab One +++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // First Widget ----------------------------------------
@@ -114,122 +120,201 @@ class ExpanseChartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: AppColor.kContainerColor,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 4, left: 4, right: 4, top: 10),
-        child: Column(
-          spacing: 5,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                AppTextWidget(
-                  text: 'Weekly Tracker',
-                  size: 17,
-                  weight: FontWeight.w600,
-                  color: AppColor.kInvertedTextColor,
-                ),
-                Row(
-                  spacing: 20,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    legendWidgets(
-                      color: Colors.green,
-                      text: AppConstantStrings.week,
-                    ),
-                    // legendWidgets(
-                    //   color: Colors.redAccent,
-                    //   text: AppConstantStrings.lastWeek,
-                    // ),
-                  ],
-                ),
-              ],
+    return BlocConsumer<WeeklyExpenseChartBloc, WeeklyExpenseChartState>(
+      listener: (context, state) {
+        if (state is WeeklyExpenseChartError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.errorMessage)),
+          );
+        }
+      },
+      builder: (context, state) {
+        if (state is WeeklyExpenseChartLoading) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        List<BarChartGroupData> barChartData = [];
+        double? maxYValue;
+        if (state is WeeklyExpenseChartLoaded) {
+          barChartData = state.chartData;
+          log('ssssssss');
+          return ExpenseBarGraphWidget(
+            barChartData: barChartData,
+          );
+        }
+
+        log('message');
+        return ExpenseBarGraphWidget(
+          barChartData: barChartData,
+        );
+      },
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class ExpenseBarGraphWidget extends StatelessWidget {
+  ExpenseBarGraphWidget({
+    super.key,
+    required this.barChartData,
+    // required this.maxYValue,
+  });
+
+  final List<BarChartGroupData> barChartData;
+  double? maxYValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        BlocConsumer<HighestExpenseBloc, HighestExpenseState>(
+          listener: (context, state) {
+            if (state is HighestExpenseError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.errorMessage)),
+              );
+            }
+          },
+          builder: (context, state) {
+            if (state is HighestExpenseLoading) {
+              return Center(child: CircularProgressIndicator());
+            }
+
+            String highestSpendingDay = "N/A";
+            double highestSpendingAmount = 0.0;
+            double? maxYValue; // Default maxY
+
+            if (state is HighestWeeklyExpensesLoaded) {
+              highestSpendingDay = state.highestDay;
+              highestSpendingAmount = state.highestAmount;
+              maxYValue = highestSpendingAmount + 100; // ✅ Ensure correct maxY
+            }
+
+            return SizedBox();
+          },
+        ),
+        if (barChartData.isNotEmpty) // ✅ Ensure chartData is available
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: AppColor.kContainerColor,
             ),
-            Container(
-              decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black,
+            child: Padding(
+              padding:
+                  const EdgeInsets.only(bottom: 4, left: 4, right: 4, top: 10),
+              child: Column(
+                spacing: 5,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      AppTextWidget(
+                        text: 'Weekly Tracker',
+                        size: 17,
+                        weight: FontWeight.w600,
+                        color: AppColor.kInvertedTextColor,
+                      ),
+                      Row(
+                        spacing: 20,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          legendWidgets(
+                            color: Colors.green,
+                            text: AppConstantStrings.week,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  borderRadius: BorderRadius.circular(10)),
-              height: 220,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: BarChart(
-                  curve: Curves.bounceIn,
-                  transformationConfig: FlTransformationConfig(
-                    panEnabled: false,
-                    scaleEnabled: false,
-                  ),
-                  BarChartData(
-                    extraLinesData: ExtraLinesData(extraLinesOnTop: false),
-                    backgroundColor: const Color.fromARGB(255, 4, 51, 42),
-                    titlesData: FlTitlesData(
-                      leftTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          showTitles: false,
+                  Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.black,
                         ),
-                      ),
-                      rightTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          showTitles: false,
+                        borderRadius: BorderRadius.circular(10)),
+                    height: 220,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: BarChart(
+                        curve: Curves.easeInOut,
+                        transformationConfig: FlTransformationConfig(
+                          panEnabled: false,
+                          scaleEnabled: false,
                         ),
-                      ),
-                      topTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          showTitles: false,
-                        ),
-                      ),
-                      bottomTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          showTitles: false,
+                        BarChartData(
+                          extraLinesData:
+                              ExtraLinesData(extraLinesOnTop: false),
+                          backgroundColor: const Color.fromARGB(255, 4, 51, 42),
+                          titlesData: FlTitlesData(
+                            leftTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                            rightTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                            topTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                            bottomTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                  showTitles: false,
+                                  getTitlesWidget: (value, meta) {
+                                    return Padding(
+                                      padding: EdgeInsets.only(top: 5),
+                                      child: Text(
+                                        value
+                                            .toInt()
+                                            .toString(), // Display day number on x-axis
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 12),
+                                      ),
+                                    );
+                                  }),
+                            ),
+                          ),
+                          maxY: maxYValue,
+                          barGroups: expanseTrackerChartGroupes(barChartData),
                         ),
                       ),
                     ),
-                    maxY: 100,
-                    barGroups: expanseTrackerChartGroupes(),
                   ),
-                ),
+                  Row(
+                    mainAxisAlignment:
+                        MainAxisAlignment.spaceEvenly, // Space between items
+                    children: AppConstantStrings.allWeeks.map((day) {
+                      return AppTextWidget(
+                        text: day,
+                        size: 11,
+                        weight: FontWeight.w600,
+                        color: AppColor.kInvertedTextColor,
+                      );
+                    }).toList(),
+                  ),
+                ],
               ),
             ),
-            Row(
-              mainAxisAlignment:
-                  MainAxisAlignment.spaceEvenly, // Space between items
-              children: AppConstantStrings.allWeeks.map((day) {
-                return AppTextWidget(
-                  text: day,
-                  size: 11,
-                  weight: FontWeight.w600,
-                  color: AppColor.kInvertedTextColor,
-                );
-              }).toList(),
-            ),
-          ],
-        ),
-      ),
+          ),
+      ],
     );
   }
 }
 
 // Sub Widget
-List<BarChartGroupData> expanseTrackerChartGroupes() {
+List<BarChartGroupData> expanseTrackerChartGroupes(
+    List<BarChartGroupData> data) {
   return List.generate(
-    listDataModel.length,
+    data.length,
     (index) {
-      final active = double.parse(listDataModel[index].value!);
-      // final absent = active - index * 5;
+      final BarChartGroupData barData = data[index];
       return BarChartGroupData(
-        x: index,
+        x: barData.x,
         barRods: [
           BarChartRodData(
-            toY: active,
+            toY: barData.barRods.first.toY,
             color: Colors.green,
             width: 25,
             backDrawRodData: BackgroundBarChartRodData(
-              toY: active,
+              toY: barData.barRods.first.toY,
               color: Colors.redAccent,
             ),
             borderRadius: BorderRadius.only(
@@ -247,7 +332,6 @@ List<BarChartGroupData> expanseTrackerChartGroupes() {
 class ExpanseSmallTile extends StatelessWidget {
   ExpanseSmallTile({
     super.key,
-    required this.icon,
     required this.payMethode,
     required this.amount,
     this.color,
@@ -255,50 +339,12 @@ class ExpanseSmallTile extends StatelessWidget {
     required this.trail,
     required this.category,
   });
-  final IconData icon;
   final String payMethode;
   final String amount;
   final String trail;
   final String comment;
   final String category;
   Color? color;
-
-  Map<String, dynamic> getCategoryIconAndColor(String category) {
-    switch (category) {
-      case 'Food':
-        return {
-          'icon': Icons.fastfood_outlined,
-          'color': const Color.fromARGB(255, 214, 227, 161)
-        };
-      case 'Shopping':
-        return {
-          'icon': Icons.shopping_bag_outlined,
-          'color': const Color.fromARGB(255, 161, 227, 207)
-        };
-      case 'Bill Payments':
-        return {
-          'icon': Icons.receipt_long_rounded,
-          'color': const Color.fromARGB(255, 148, 139, 244),
-        };
-      case 'Travel':
-        return {
-          'icon': Icons.local_gas_station_outlined,
-          'color':
-              //  const Color.fromARGB(255, 251, 91, 51)
-              const Color.fromARGB(255, 227, 161, 161)
-        };
-      case 'EMI':
-        return {
-          'icon': Icons.payments_outlined,
-          'color': const Color.fromARGB(255, 161, 197, 244)
-        };
-      default:
-        return {
-          'icon': Icons.category_outlined,
-          'color': const Color.fromARGB(255, 51, 138, 251),
-        }; // Default values
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -384,32 +430,29 @@ class ExpanseSmallTile extends StatelessWidget {
 class ExpanseTile extends StatelessWidget {
   ExpanseTile({
     super.key,
-    required this.icon,
-    required this.title,
     required this.amount,
-    this.color,
     required this.trail,
+    required this.category,
   });
-  final IconData icon;
-  final String title;
   final String amount;
   final String trail;
-  Color? color;
+  final String category;
   @override
   Widget build(BuildContext context) {
+    final categoryData = getCategoryIconAndColor(category);
     return Row(
       spacing: 20,
       children: [
         CircleAvatar(
           radius: 25,
-          backgroundColor: color ?? const Color.fromARGB(255, 214, 227, 161),
-          child: Icon(icon, color: AppColor.kInvertedTextColor),
+          backgroundColor: categoryData['color'],
+          child: Icon(categoryData['icon'], color: AppColor.kInvertedTextColor),
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AppTextWidget(
-              text: title,
+              text: category,
               size: 15,
             ),
             Row(
@@ -422,7 +465,7 @@ class ExpanseTile extends StatelessWidget {
                   weight: FontWeight.w500,
                 ),
                 AppTextWidget(
-                  text: amount,
+                  text: amount.toString(),
                   size: 13,
                   weight: FontWeight.w700,
                 ),
@@ -496,7 +539,7 @@ class IncomeProgressBarWidget extends StatelessWidget {
         Align(
           alignment: Alignment.centerRight,
           child: AppTextWidget(
-            text: '\$ $amount',
+            text: amount,
             size: 16,
             weight: FontWeight.w600,
             align: TextAlign.start,
@@ -504,5 +547,42 @@ class IncomeProgressBarWidget extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+Map<String, dynamic> getCategoryIconAndColor(String category) {
+  switch (category) {
+    case 'Food':
+      return {
+        'icon': Icons.fastfood_outlined,
+        'color': const Color.fromARGB(255, 214, 227, 161)
+      };
+    case 'Shopping':
+      return {
+        'icon': Icons.shopping_bag_outlined,
+        'color': const Color.fromARGB(255, 161, 227, 207)
+      };
+    case 'Bill Payments':
+      return {
+        'icon': Icons.receipt_long_rounded,
+        'color': const Color.fromARGB(255, 148, 139, 244),
+      };
+    case 'Travel':
+      return {
+        'icon': Icons.local_gas_station_outlined,
+        'color':
+            //  const Color.fromARGB(255, 251, 91, 51)
+            const Color.fromARGB(255, 227, 161, 161)
+      };
+    case 'EMI':
+      return {
+        'icon': Icons.payments_outlined,
+        'color': const Color.fromARGB(255, 161, 197, 244)
+      };
+    default:
+      return {
+        'icon': Icons.category_outlined,
+        'color': const Color.fromARGB(255, 51, 138, 251),
+      }; // Default values
   }
 }
