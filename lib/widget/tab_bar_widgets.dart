@@ -1,5 +1,6 @@
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
+import 'package:cash_indo/widget/expansion_tile.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -27,6 +28,9 @@ class TabsWidget extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(4.0),
           child: TabBar(
+            onTap: (value) {
+              isListExpanded.value = false;
+            },
             labelPadding: EdgeInsets.zero,
             isScrollable: false,
             indicatorPadding: EdgeInsets.zero,

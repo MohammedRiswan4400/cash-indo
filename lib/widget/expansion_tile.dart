@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:cash_indo/view/dashboard/savings/cubit/expansion_cubit.dart';
 
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+final ValueNotifier<bool> isListExpanded = ValueNotifier(false);
 
 class CustomExpansionTile extends StatelessWidget {
   const CustomExpansionTile({
@@ -29,6 +33,8 @@ class CustomExpansionTile extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       context.read<ExpansionCubit>().toggle();
+
+                      // log(isExpanded.toString());
                     },
                     child: Container(
                       decoration: BoxDecoration(

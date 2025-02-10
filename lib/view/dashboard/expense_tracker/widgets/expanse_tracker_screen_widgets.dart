@@ -423,12 +423,9 @@ class ExpanseSmallTile extends StatelessWidget {
                   ),
                   10.verticalSpace(context),
                   Row(
-                    // mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     spacing: 20,
                     children: [
-                      // smallButton(
-                      //   isDelete: false,
-                      // ),
                       GestureDetector(
                         onTap: () {
                           Get.dialog(Dialog(
@@ -465,6 +462,7 @@ class ExpanseSmallTile extends StatelessWidget {
   }
 }
 
+// ignore: camel_case_types
 class smallButton extends StatelessWidget {
   const smallButton({
     super.key,

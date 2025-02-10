@@ -4,10 +4,10 @@ import 'package:cash_indo/controller/functions/date_and_time/date_and_time_forma
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
-import 'package:cash_indo/model/income_model.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/category/by_category_bloc.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/date/by_date_bloc.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/monthly_total/income_monthly_total_bloc.dart';
+
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/widget/bottom_sheets.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/widgets/expanse_tracker_screen_widgets.dart';
@@ -27,6 +27,7 @@ class IncomeTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // isListExpanded.value = false;
     return Stack(
       children: [
         SizedBox(
@@ -343,32 +344,43 @@ class IncomeTab extends StatelessWidget {
                               child: Text("No data available for this month."));
                         },
                       ),
-                      10.verticalSpace(context),
                       30.verticalSpace(context),
                     ],
                   ),
                 );
               }),
         ),
-        Positioned(
-          bottom: 20,
-          right: 10,
-          child: FloatingActionButton(
-            onPressed: () {
-              Get.bottomSheet(
-                MoneyKeyboardBottomSheet(
-                  isIncomeSheet: true,
-                  isExpanseSheet: false,
-                  title: AppConstantStrings.income,
-                ),
-                isDismissible: true,
-                enableDrag: true,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-              );
-            },
-            child: const Icon(Icons.add),
-          ),
+        ValueListenableBuilder<bool>(
+          valueListenable: isListExpanded,
+          builder: (context, isExpanded, _) {
+            return Positioned(
+              bottom: 20,
+              right: 10,
+              child: AnimatedOpacity(
+                opacity: !isExpanded ? 1.0 : 0.0,
+                duration: Duration(milliseconds: 600),
+                curve: Curves.easeInOut,
+                child: !isExpanded
+                    ? FloatingActionButton(
+                        onPressed: () {
+                          Get.bottomSheet(
+                            MoneyKeyboardBottomSheet(
+                              isIncomeSheet: true,
+                              isExpanseSheet: false,
+                              title: AppConstantStrings.income,
+                            ),
+                            isDismissible: true,
+                            enableDrag: true,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                          );
+                        },
+                        child: Icon(Icons.add),
+                      )
+                    : SizedBox(),
+              ),
+            );
+          },
         ),
       ],
     );

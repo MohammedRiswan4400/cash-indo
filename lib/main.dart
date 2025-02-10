@@ -9,6 +9,7 @@ import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/week
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/category/by_category_bloc.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/date/by_date_bloc.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/monthly_total/income_monthly_total_bloc.dart';
+import 'package:cash_indo/view/dashboard/savings/cubit/expansion_cubit.dart';
 import 'package:cash_indo/view/dashboard/sheet/bloc/contact_bloc.dart';
 import 'package:cash_indo/view/splash/screen_splash.dart';
 import 'package:device_preview/device_preview.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => IncomeMonthlyTotalBloc()),
         BlocProvider<IncomeByDateBloc>(create: (context) => IncomeByDateBloc()),
+        BlocProvider<ExpansionCubit>(create: (context) => ExpansionCubit()),
         BlocProvider<ExpenseByDateBloc>(
             create: (context) => ExpenseByDateBloc()),
         BlocProvider<IncomeByCategoryBloc>(

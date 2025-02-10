@@ -58,9 +58,15 @@ class AppSecondaoryTitle extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AppTextWidget(
-                  text: title,
-                  size: 18,
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width / 2.4,
+                  // color: Colors.amber,
+                  child: AppTextWidget(
+                    align: TextAlign.left,
+                    maxLine: 1,
+                    text: title,
+                    size: 18,
+                  ),
                 ),
                 AppTextWidget(
                   text: subTitle ?? '',
