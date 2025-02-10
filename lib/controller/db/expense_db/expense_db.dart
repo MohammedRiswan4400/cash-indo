@@ -8,6 +8,7 @@ import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/cate
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/date/by_date_bloc.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/highest_expense/highest_expense_bloc.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/weekly_chart/weekly_expense_chart_bloc.dart';
+import 'package:cash_indo/widget/expansion_tile.dart';
 import 'package:cash_indo/widget/helper/dialoge_helper_widget.dart';
 import 'package:cash_indo/widget/helper/snack_bar_helper_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -316,6 +317,7 @@ class ExpenseDb {
       log(response.toString());
       fetchExpense(context, month);
       AppRoutes.popNow();
+      isListExpanded.value = false;
       SnackBarHelper.snackBarSuccess(
         'Delete succesfull',
         'Expense delete succesfull',

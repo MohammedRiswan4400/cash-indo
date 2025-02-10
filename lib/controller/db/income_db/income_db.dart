@@ -7,6 +7,7 @@ import 'package:cash_indo/model/income_model.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/category/by_category_bloc.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/date/by_date_bloc.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/monthly_total/income_monthly_total_bloc.dart';
+import 'package:cash_indo/widget/expansion_tile.dart';
 import 'package:cash_indo/widget/helper/dialoge_helper_widget.dart';
 import 'package:cash_indo/widget/helper/snack_bar_helper_widget.dart';
 import 'package:flutter/material.dart';
@@ -177,6 +178,7 @@ class IncomeDb {
       log(response.toString());
       fetchIncome(context, month);
       AppRoutes.popNow();
+      isListExpanded.value = false;
       SnackBarHelper.snackBarSuccess(
         'Delete succesfull',
         'Income delete succesfull',
