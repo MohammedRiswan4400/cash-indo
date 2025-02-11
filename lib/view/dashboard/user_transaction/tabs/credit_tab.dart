@@ -1,6 +1,7 @@
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
+import 'package:cash_indo/model/contact_model.dart';
 import 'package:cash_indo/view/dashboard/user_transaction/widgets/user_transaction_widgets.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/widget/balance_sheet_widgets.dart';
@@ -14,8 +15,9 @@ List<Contact>? contacts;
 class CreditTab extends StatelessWidget {
   CreditTab({
     super.key,
+    required this.contactModel,
   });
-
+  final ContactModel contactModel;
   // final FlutterNativeContactPicker _contactPicker =
   //     FlutterNativeContactPicker();
 
@@ -108,6 +110,7 @@ class CreditTab extends StatelessWidget {
         ),
         LiabilitiesAddingWidget(
           text: AppConstantStrings.credit,
+          contactModel: contactModel,
           isDebt: false,
         )
       ],

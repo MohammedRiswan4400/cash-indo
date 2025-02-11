@@ -1,11 +1,13 @@
 import 'dart:developer';
 
 import 'package:cash_indo/controller/db/expense_db/expense_db.dart';
-import 'package:cash_indo/controller/functions/date_and_time/date_and_time_formates.dart';
+import 'package:cash_indo/core/formats/formats_functions.dart';
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
 import 'package:cash_indo/view/auth/sign_up/screen_sign_up.dart';
+import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/category/category_bloc.dart';
+import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/date/by_date_bloc.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/highest_expense/highest_expense_bloc.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/weekly_chart/weekly_expense_chart_bloc.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
@@ -40,7 +42,7 @@ class ExpanseByDateRange extends StatelessWidget {
           children: [
             ExpanceTitleAndAmount(
               title: 'Day',
-              amount: '6,12,000',
+              amount: AppFormats.moneyFormat('689000'),
             ),
             AppTextWidget(
               text: '|',
@@ -50,7 +52,7 @@ class ExpanseByDateRange extends StatelessWidget {
             ),
             ExpanceTitleAndAmount(
               title: 'Week',
-              amount: '69,000',
+              amount: AppFormats.moneyFormat('69000'),
             ),
             AppTextWidget(
               text: '|',
@@ -58,9 +60,25 @@ class ExpanseByDateRange extends StatelessWidget {
               weight: FontWeight.w500,
               color: AppColor.kTextColor,
             ),
-            ExpanceTitleAndAmount(
-              title: 'Month',
-              amount: '6,000',
+            FutureBuilder<double>(
+              future: ExpenseDb.getMonthlyExpenseTotal(
+                  "February"), // Pass current month
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                      child: CircularProgressIndicator()); // Loading state
+                } else if (snapshot.hasError) {
+                  return Center(
+                      child: Text("Error loading data")); // Error state
+                } else {
+                  double expense = snapshot.data ?? 0.0;
+                  return ExpanceTitleAndAmount(
+                    title: 'Month',
+                    amount:
+                        '${AppFormats.moneyFormat(expense.toStringAsFixed(0))}',
+                  );
+                }
+              },
             ),
           ],
         ),
@@ -69,7 +87,208 @@ class ExpanseByDateRange extends StatelessWidget {
   }
 }
 
-// FirstWidget sub widgets ----------------------------------------
+// Second Widget ----------------------------------------
+
+class ExpanseChartWidget extends StatelessWidget {
+  const ExpanseChartWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<WeeklyExpenseChartBloc, WeeklyExpenseChartState>(
+      listener: (context, state) {
+        if (state is WeeklyExpenseChartError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.errorMessage)),
+          );
+        }
+      },
+      builder: (context, state) {
+        if (state is WeeklyExpenseChartLoading) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        List<BarChartGroupData> barChartData = [];
+        // double? maxYValue;
+        if (state is WeeklyExpenseChartLoaded) {
+          barChartData = state.chartData;
+          log('ssssssss');
+          return ExpenseBarGraphWidget(
+            barChartData: barChartData,
+          );
+        }
+
+        log('message');
+        return ExpenseBarGraphWidget(
+          barChartData: barChartData,
+        );
+      },
+    );
+  }
+}
+
+// Third widgets ----------------------------------------
+
+class ExpenseCategoryWidget extends StatelessWidget {
+  const ExpenseCategoryWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<ExpenseByCategoryBloc, ExpenseByCategoryState>(
+      listener: (context, state) {
+        if (state is ExpenseByCategoryError) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(state.errorMessage)));
+        }
+      },
+      builder: (context, state) {
+        if (state is ExpenseByCategoryLoading) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        if (state is ExpenseByCategoryLoaded) {
+          final categoryExpense = state.categoryExpenseByCategory;
+          if (categoryExpense.isEmpty) {
+            return Text("No expense data available.");
+          }
+          return ListView.separated(
+            separatorBuilder: (context, index) {
+              return 10.verticalSpace(context);
+            },
+            physics: BouncingScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: categoryExpense.length,
+            itemBuilder: (context, index) {
+              final totalSum = categoryExpense.fold(0.0,
+                  (sum, item) => sum + (item['total'] as num)); // Total sum
+              final entry = categoryExpense[index];
+              final double entryTotal = entry['total'] as double;
+              final double percentage =
+                  totalSum > 0 ? (entryTotal / totalSum) * 100 : 0.0;
+
+              return ExpanseTile(
+                category: entry['category'],
+                amount: '${entry['total']}',
+                trail: '${percentage.toStringAsFixed(0)}%',
+              );
+            },
+          );
+        }
+        return Center(child: Text("No expense data available."));
+      },
+    );
+  }
+}
+
+// Fourth Widget --------------------------------------------------
+
+class DailyExpenseListTile extends StatelessWidget {
+  const DailyExpenseListTile({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<ExpenseByDateBloc, ExpenseByDateState>(
+      listener: (context, state) {
+        if (state is ExpenseByDateError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.errorMessage)),
+          );
+        }
+      },
+      builder: (context, state) {
+        if (state is ExpenseByDateLoading) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        if (state is ExpenseByDateError) {
+          return Center(child: Text("Error: ${state.errorMessage}"));
+        }
+
+        if (state is ExpenseByDateLoaded) {
+          final groupedData = state.groupedData;
+
+          return Column(
+            children: [
+              Row(
+                spacing: 20,
+                children: [
+                  AppTextWidget(text: '📉'),
+                  AppTextWidget(
+                    text: AppConstantStrings.seeAll,
+                    size: 16,
+                  ),
+                ],
+              ),
+              10.verticalSpace(context),
+              ListView.separated(
+                reverse: true,
+                separatorBuilder: (context, index) => 10.verticalSpace(context),
+                shrinkWrap: true,
+                physics: BouncingScrollPhysics(),
+                itemCount: groupedData.length,
+                itemBuilder: (context, index) {
+                  final expenseList = groupedData[index];
+                  final todayDate = AppFormats.barFormattedDate(DateTime.now());
+                  final expenseDate =
+                      AppFormats.barFormattedDate(expenseList.first.createdAt!);
+
+                  return Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(width: 0.2),
+                      color: AppColor.kMainContainerColor,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 5),
+                      child: CustomExpansionTile(
+                        leading: AppTextWidget(text: '📆'),
+                        title: todayDate == expenseDate
+                            ? AppConstantStrings.today
+                            : expenseDate,
+                        children: [
+                          ...expenseList.map(
+                            (expense) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 4,
+                                ),
+                                child: ExpanseSmallTile(
+                                  id: expense.id!,
+                                  category: expense.category,
+                                  comment: expense.comment,
+                                  amount:
+                                      '${expense.currency} ${AppFormats.moneyFormat(expense.amount.toString())}',
+                                  payMethode: expense.paymentMethode,
+                                  trail: AppFormats.normalFormatTime(
+                                    expense.createdAt!,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          );
+        }
+
+        return Center(child: Text("No data available for this month."));
+      },
+    );
+  }
+}
+
+// sub widgets
 
 class ExpanceTitleAndAmount extends StatelessWidget {
   const ExpanceTitleAndAmount({
@@ -115,47 +334,6 @@ class ExpanceTitleAndAmount extends StatelessWidget {
   }
 }
 
-// Second Widget ----------------------------------------
-
-class ExpanseChartWidget extends StatelessWidget {
-  const ExpanseChartWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocConsumer<WeeklyExpenseChartBloc, WeeklyExpenseChartState>(
-      listener: (context, state) {
-        if (state is WeeklyExpenseChartError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.errorMessage)),
-          );
-        }
-      },
-      builder: (context, state) {
-        if (state is WeeklyExpenseChartLoading) {
-          return Center(child: CircularProgressIndicator());
-        }
-
-        List<BarChartGroupData> barChartData = [];
-        double? maxYValue;
-        if (state is WeeklyExpenseChartLoaded) {
-          barChartData = state.chartData;
-          log('ssssssss');
-          return ExpenseBarGraphWidget(
-            barChartData: barChartData,
-          );
-        }
-
-        log('message');
-        return ExpenseBarGraphWidget(
-          barChartData: barChartData,
-        );
-      },
-    );
-  }
-}
-
 // ignore: must_be_immutable
 class ExpenseBarGraphWidget extends StatelessWidget {
   ExpenseBarGraphWidget({
@@ -184,14 +362,12 @@ class ExpenseBarGraphWidget extends StatelessWidget {
               return Center(child: CircularProgressIndicator());
             }
 
-            String highestSpendingDay = "N/A";
+            // ignore: unused_local_variable
             double highestSpendingAmount = 0.0;
-            double? maxYValue; // Default maxY
+// Default maxY
 
             if (state is HighestWeeklyExpensesLoaded) {
-              highestSpendingDay = state.highestDay;
               highestSpendingAmount = state.highestAmount;
-              maxYValue = highestSpendingAmount + 100;
             }
 
             return SizedBox();
@@ -439,7 +615,7 @@ class ExpanseSmallTile extends StatelessWidget {
                                   ExpenseDb.deleteExpense(
                                     context,
                                     //Issue here ------------------------------------------------------------------------------------------------------------------------
-                                    AppDateFormates.monthFormattedDate(
+                                    AppFormats.monthFormattedDate(
                                         DateTime.now()),
                                     id,
                                   );
@@ -495,7 +671,7 @@ class smallButton extends StatelessWidget {
 
 // ignore: must_be_immutable
 class ExpanseTile extends StatelessWidget {
-  ExpanseTile({
+  const ExpanseTile({
     super.key,
     required this.amount,
     required this.trail,
@@ -532,7 +708,7 @@ class ExpanseTile extends StatelessWidget {
                   weight: FontWeight.w500,
                 ),
                 AppTextWidget(
-                  text: amount.toString(),
+                  text: AppFormats.moneyFormat(amount).toString(),
                   size: 13,
                   weight: FontWeight.w700,
                 ),
@@ -557,65 +733,6 @@ class ExpanseTile extends StatelessWidget {
 // Tab Two +++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // First Widget ----------------------------------------
-
-class IncomeProgressBarWidget extends StatelessWidget {
-  const IncomeProgressBarWidget({
-    super.key,
-    required this.title,
-    required this.amount,
-  });
-  final String title;
-  final String amount;
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 2,
-      children: [
-        AppTextWidget(
-          text: title,
-          size: 18,
-          weight: FontWeight.w600,
-        ),
-        Container(
-          height: 40,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: themeController.isDarkMode.value
-                ? AppColor.kContainerColor
-                : AppColor.kHomeCreditContainerColor,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(2.0),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                // height: ,
-                width: MediaQuery.sizeOf(context).width / 2,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: themeController.isDarkMode.value
-                      ? AppColor.kHomeCreditContainerColor
-                      : AppColor.kContainerColor,
-                ),
-              ),
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: AppTextWidget(
-            text: amount,
-            size: 16,
-            weight: FontWeight.w600,
-            align: TextAlign.start,
-          ),
-        ),
-      ],
-    );
-  }
-}
 
 Map<String, dynamic> getCategoryIconAndColor(String category) {
   switch (category) {

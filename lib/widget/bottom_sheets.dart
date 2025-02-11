@@ -1,37 +1,43 @@
+import 'package:cash_indo/controller/db/credit_db/credit_db.dart';
 import 'package:cash_indo/controller/db/expense_db/expense_db.dart';
 import 'package:cash_indo/controller/db/income_db/income_db.dart';
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
 import 'package:cash_indo/core/routes/app_routes.dart';
+import 'package:cash_indo/model/contact_model.dart';
+import 'package:cash_indo/model/credit_model.dart';
 import 'package:cash_indo/model/expense_model.dart';
 import 'package:cash_indo/model/income_model.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/widget/dialoge_boxes.dart';
 import 'package:cash_indo/widget/drop_down_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 // ignore: must_be_immutable
 class MoneyKeyboardBottomSheet extends StatelessWidget {
-  MoneyKeyboardBottomSheet({
-    super.key,
-    required this.isExpanseSheet,
-    required this.title,
-    this.isTrnsactionScreen,
-    this.isAmountRemoving,
-    this.isIncomeSheet,
-  });
+  MoneyKeyboardBottomSheet(
+      {super.key,
+      required this.isExpanseSheet,
+      required this.title,
+      this.isTrnsactionScreen,
+      this.isAmountRemoving,
+      this.isIncomeSheet,
+      this.thisIs,
+      this.contactModel});
   final moneyFormKey = GlobalKey<FormState>();
   final bool isExpanseSheet;
   bool? isIncomeSheet;
+  ContactModel? contactModel;
   final String title;
   final RxString selectedCurrency = RxString(AppConstantStrings.rupees);
   bool? isTrnsactionScreen;
   bool? isAmountRemoving;
   final TextEditingController moneyTextController = TextEditingController();
   final TextEditingController commentController = TextEditingController();
-
+  String? thisIs;
   void _onNumberTap(String number) {
     if (number == '.' && moneyTextController.text.contains('.')) {
       return;
@@ -152,6 +158,7 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                       controller: moneyTextController,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -299,12 +306,11 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
                             onTap: () {
                               if (moneyFormKey.currentState?.validate() ??
                                   false) {
+                                final amount = moneyTextController.text.trim();
+                                final comment = commentController.text.trim();
+
                                 if (isIncomeSheet != null &&
                                     isIncomeSheet == true) {
-                                  final amount =
-                                      moneyTextController.text.trim();
-                                  final comment = commentController.text.trim();
-
                                   IncomeDb.addIncome(
                                     context: context,
                                     incomeModel: IncomeModel(
@@ -317,23 +323,29 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
                                       createdAt: DateTime.now(),
                                     ),
                                   );
-                                }
-                                if (isExpanseSheet == true) {
-                                  final amount =
-                                      moneyTextController.text.trim();
-                                  final comment = commentController.text.trim();
-
+                                } else if (isExpanseSheet == true) {
                                   ExpenseDb.addExpense(
                                     context: context,
                                     expenseModel: ExpenseModel(
                                       paymentMethode:
                                           selectedPaymentMethodeNotifier.value,
-                                      // today: '',
                                       comment: comment,
                                       currency: selectedCurrency.value,
                                       amount: double.parse(amount),
                                       category: selectedCategoryNotifier.value,
                                       createdAt: DateTime.now(),
+                                    ),
+                                  );
+                                } else if (thisIs != null &&
+                                    thisIs == 'Credit') {
+                                  CreditDb.addCredit(
+                                    creditModel: CreditModel(
+                                      contactName: contactModel!.name,
+                                      contactPhone: contactModel!.phoneNumber,
+                                      amount: double.parse(amount),
+                                      comment: comment,
+                                      currency: selectedCurrency.value,
+                                      // isSend: false,
                                     ),
                                   );
                                 }

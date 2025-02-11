@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:cash_indo/controller/db/user_db/user_db.dart';
-import 'package:cash_indo/controller/functions/date_and_time/date_and_time_formates.dart';
+import 'package:cash_indo/core/formats/formats_functions.dart';
 import 'package:cash_indo/core/routes/app_routes.dart';
 import 'package:cash_indo/model/expense_model.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/category/category_bloc.dart';
@@ -34,9 +34,9 @@ class ExpenseDb {
 
       final response = await dataBase.insert({
         'user_id': uID,
-        'year': AppDateFormates.yearFormattedDate(DateTime.now()),
-        'month': AppDateFormates.monthFormattedDate(DateTime.now()),
-        'today': AppDateFormates.barFormattedDate(DateTime.now()),
+        'year': AppFormats.yearFormattedDate(DateTime.now()),
+        'month': AppFormats.monthFormattedDate(DateTime.now()),
+        'today': AppFormats.barFormattedDate(DateTime.now()),
         'category': expenseModel.category,
         'amount': expenseModel.amount,
         'comment': expenseModel.comment,
@@ -48,7 +48,9 @@ class ExpenseDb {
       DailogHelper.hideDailoge();
       AppRoutes.popNow();
       ExpenseDb.fetchExpense(
-          context, AppDateFormates.monthFormattedDate(DateTime.now()));
+          // ignore: use_build_context_synchronously
+          context,
+          AppFormats.monthFormattedDate(DateTime.now()));
       if (response.isNotEmpty) {
         SnackBarHelper.snackBarSuccess(
           'Succesfull',
@@ -197,7 +199,7 @@ class ExpenseDb {
         );
       });
     } catch (e) {
-      print("Error fetching expense data: $e");
+      debugPrint("Error fetching expense data: $e");
       return [];
     }
   }
@@ -246,7 +248,7 @@ class ExpenseDb {
       // ✅ Get the highest spending day
       return getHighestExpenseDay(weeklyTotals);
     } catch (e) {
-      print("Error fetching highest weekly expense: $e");
+      debugPrint("Error fetching highest weekly expense: $e");
       return {"day": "Error", "amount": 0.0}; // Error handling
     }
   }
@@ -270,38 +272,26 @@ class ExpenseDb {
     };
   }
 
-  static Future<double> getWeeklyTotal() async {
+  static Future<double> getMonthlyExpenseTotal(String month) async {
     final userID = UserDb.supaUID;
 
     try {
-      // Get today's date
-      DateTime today = DateTime.now();
-      String todayStr = DateFormat("dd-MM-yyyy").format(today);
-
-      // Get the date 7 days ago
-      DateTime sevenDaysAgo = today.subtract(Duration(days: 6));
-      String sevenDaysAgoStr = DateFormat("dd-MM-yyyy").format(sevenDaysAgo);
-
-      // Fetch all expenses within the last 7 days
-      final response = await Supabase.instance.client
-          .from('expenses') // Your Supabase table
-          .select('today, amount') // Select today and amount fields
+      final response = await dataBase
+          .select('amount') // Select only the 'amount' column
           .eq('user_id', userID)
-          .gte('today', sevenDaysAgoStr) // Greater than or equal to 7 days ago
-          .lte('today', todayStr); // Less than or equal to today
+          .eq('month', month); // Filter by month
 
       if (response.isEmpty) {
-        return 0.0; // No expenses, return 0
+        return 0.0; // Return 0 if no expenses exist
       }
 
-      // ✅ Sum all expenses in the last 7 days
-      double weeklyTotal = response.fold(0.0, (sum, expense) {
-        return sum + (expense['amount'] as num).toDouble();
-      });
+      // Sum all amounts
+      double total = response.fold(
+          0.0, (sum, record) => sum + (record['amount'] as num).toDouble());
 
-      return weeklyTotal;
+      return total;
     } catch (e) {
-      log("Error fetching weekly total: $e");
+      log("Error fetching monthly expense total for $month: $e");
       return 0.0;
     }
   }
@@ -315,6 +305,7 @@ class ExpenseDb {
       final response =
           await dataBase.delete().eq('id', expenseId).select().single();
       log(response.toString());
+      // ignore: use_build_context_synchronously
       fetchExpense(context, month);
       AppRoutes.popNow();
       isListExpanded.value = false;

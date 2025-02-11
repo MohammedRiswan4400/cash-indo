@@ -1,7 +1,7 @@
-import 'package:bloc/bloc.dart';
 import 'package:cash_indo/controller/db/expense_db/expense_db.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'weekly_expense_chart_event.dart';
 part 'weekly_expense_chart_state.dart';

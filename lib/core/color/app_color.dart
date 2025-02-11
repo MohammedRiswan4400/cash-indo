@@ -19,9 +19,10 @@ class AppColor {
   static const kExpanseByDateRangeContainerColor =
       Color.fromARGB(255, 94, 88, 133);
   static const kPaymentSelectingContainerColor =
-      Color.fromARGB(255, 207, 240, 202);
+      Color.fromARGB(255, 159, 227, 149);
+  // Color.fromARGB(255, 207, 240, 202);
   static const kPaymentCategoryContainerWidget =
-      Color.fromARGB(255, 176, 208, 225);
+      Color.fromARGB(255, 188, 135, 252);
 
   static const kIncomeTypeSelectingContainerColor =
       Color.fromARGB(255, 255, 136, 175);

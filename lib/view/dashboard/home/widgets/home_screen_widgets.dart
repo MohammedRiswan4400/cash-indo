@@ -1,7 +1,6 @@
 import 'dart:math';
-import 'dart:ui';
 import 'package:cash_indo/controller/db/user_db/user_db.dart';
-import 'package:cash_indo/controller/functions/date_and_time/date_and_time_formates.dart';
+import 'package:cash_indo/core/formats/formats_functions.dart';
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
@@ -51,7 +50,7 @@ class CashCardWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             AppTextWidget(
-              text: AppDateFormates.slashFormattedDate(todayDate),
+              text: AppFormats.slashFormattedDate(todayDate),
               size: 15,
               weight: FontWeight.w500,
               color: AppColor.kTextColor,

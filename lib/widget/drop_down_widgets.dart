@@ -1,16 +1,18 @@
 import 'package:cash_indo/controller/db/expense_db/expense_db.dart';
 import 'package:cash_indo/controller/db/income_db/income_db.dart';
-import 'package:cash_indo/controller/functions/date_and_time/date_and_time_formates.dart';
+import 'package:cash_indo/core/formats/formats_functions.dart';
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 final ValueNotifier<String> selectedIncomePlanNotifier =
     ValueNotifier('Salary');
 final ValueNotifier<String> selectedCategoryNotifier = ValueNotifier('Food');
 final ValueNotifier<String> selectedMonthNotifier = ValueNotifier(
-  AppDateFormates.monthFormattedDate(DateTime.now()),
+  AppFormats.monthFormattedDate(DateTime.now()),
 );
 final ValueNotifier<String> selectedPaymentMethodeNotifier =
     ValueNotifier('Cash');
@@ -78,7 +80,7 @@ class MonthDropDownWidget extends StatelessWidget {
 }
 
 class PaymentOptionsDropDownWidget extends StatelessWidget {
-  PaymentOptionsDropDownWidget({super.key});
+  const PaymentOptionsDropDownWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +145,7 @@ class PaymentOptionsDropDownWidget extends StatelessWidget {
 }
 
 class PaymentCategoryDropDownWidget extends StatelessWidget {
-  PaymentCategoryDropDownWidget({super.key});
+  const PaymentCategoryDropDownWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -251,5 +253,27 @@ class IncomeCategoryDropDownWidget extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class MoneyTextController extends TextEditingController {
+  final NumberFormat _formatter = NumberFormat("#,##0", "en_US");
+
+  @override
+  set text(String newText) {
+    String sanitizedText =
+        newText.replaceAll(",", ""); // Remove commas before reformatting
+    if (sanitizedText.isEmpty) {
+      super.text = "";
+      return;
+    }
+
+    try {
+      double value = double.parse(sanitizedText);
+      super.text = _formatter.format(value); // Apply formatted text
+      selection = TextSelection.collapsed(offset: super.text.length);
+    } catch (e) {
+      // Prevent invalid input
+    }
   }
 }

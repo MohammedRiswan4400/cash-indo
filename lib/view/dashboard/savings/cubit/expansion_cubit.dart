@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cash_indo/widget/expansion_tile.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,6 +7,5 @@ class ExpansionCubit extends Cubit<bool> {
   void toggle() {
     emit(!state);
     isListExpanded.value = state;
-    log(isListExpanded.value.toString());
   }
 }

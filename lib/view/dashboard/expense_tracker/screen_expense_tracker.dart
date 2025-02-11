@@ -1,16 +1,11 @@
-import 'package:cash_indo/controller/db/expense_db/expense_db.dart';
-import 'package:cash_indo/controller/functions/date_and_time/date_and_time_formates.dart';
 import 'package:cash_indo/core/constant/app_const.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/expanse_tab.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/income_tab.dart';
-import 'package:cash_indo/view/dashboard/savings/cubit/expansion_cubit.dart';
 import 'package:cash_indo/widget/appbar_widget.dart';
 import 'package:cash_indo/widget/tab_bar_widgets.dart';
-import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/widget/drop_down_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ScreenExpenseTracker extends StatelessWidget {
   const ScreenExpenseTracker({super.key});

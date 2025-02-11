@@ -43,7 +43,9 @@ class ScreenUserTransaction extends StatelessWidget {
                 Expanded(
                   child: TabBarView(
                     children: [
-                      CreditTab(),
+                      CreditTab(
+                        contactModel: contactModel,
+                      ),
                       DebitTab(),
                     ],
                   ),

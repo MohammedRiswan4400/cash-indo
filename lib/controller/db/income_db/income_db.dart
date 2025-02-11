@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:cash_indo/controller/db/user_db/user_db.dart';
-import 'package:cash_indo/controller/functions/date_and_time/date_and_time_formates.dart';
+import 'package:cash_indo/core/formats/formats_functions.dart';
 import 'package:cash_indo/core/routes/app_routes.dart';
 import 'package:cash_indo/model/income_model.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/category/by_category_bloc.dart';
@@ -32,9 +32,9 @@ class IncomeDb {
 
       final response = await dataBase.insert({
         'user_id': uID,
-        'year': AppDateFormates.yearFormattedDate(DateTime.now()),
-        'month': AppDateFormates.monthFormattedDate(DateTime.now()),
-        'today': AppDateFormates.barFormattedDate(DateTime.now()),
+        'year': AppFormats.yearFormattedDate(DateTime.now()),
+        'month': AppFormats.monthFormattedDate(DateTime.now()),
+        'today': AppFormats.barFormattedDate(DateTime.now()),
         'category': incomeModel.category,
         'amount': incomeModel.amount,
         'comment': incomeModel.comment,
@@ -45,8 +45,9 @@ class IncomeDb {
       DailogHelper.hideDailoge();
       AppRoutes.popNow();
       IncomeDb.fetchIncome(
+        // ignore: use_build_context_synchronously
         context,
-        AppDateFormates.monthFormattedDate(DateTime.now()),
+        AppFormats.monthFormattedDate(DateTime.now()),
       );
       if (response.isNotEmpty) {
         SnackBarHelper.snackBarSuccess(
@@ -176,6 +177,7 @@ class IncomeDb {
       final response =
           await dataBase.delete().eq('id', expenseId).select().single();
       log(response.toString());
+      // ignore: use_build_context_synchronously
       fetchIncome(context, month);
       AppRoutes.popNow();
       isListExpanded.value = false;

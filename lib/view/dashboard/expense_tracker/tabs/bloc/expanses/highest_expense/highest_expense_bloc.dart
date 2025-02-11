@@ -1,6 +1,6 @@
-import 'package:bloc/bloc.dart';
 import 'package:cash_indo/controller/db/expense_db/expense_db.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'highest_expense_event.dart';
 part 'highest_expense_state.dart';

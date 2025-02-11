@@ -1,6 +1,6 @@
 import 'package:cash_indo/controller/db/expense_db/expense_db.dart';
 import 'package:cash_indo/controller/db/income_db/income_db.dart';
-import 'package:cash_indo/controller/functions/date_and_time/date_and_time_formates.dart';
+import 'package:cash_indo/core/formats/formats_functions.dart';
 import 'package:cash_indo/view/dashboard/bottom_navigation/screen_navigation.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/screen_expense_tracker.dart';
 import 'package:cash_indo/view/dashboard/home/screen_home.dart';
@@ -22,11 +22,11 @@ class ScreenBottonNavigation extends StatelessWidget {
   Widget build(BuildContext context) {
     ExpenseDb.fetchExpense(
       context,
-      AppDateFormates.monthFormattedDate(DateTime.now()),
+      AppFormats.monthFormattedDate(DateTime.now()),
     );
     IncomeDb.fetchIncome(
       context,
-      AppDateFormates.monthFormattedDate(DateTime.now()),
+      AppFormats.monthFormattedDate(DateTime.now()),
     );
     return Scaffold(
       body: ValueListenableBuilder(

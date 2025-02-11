@@ -1,6 +1,8 @@
+import 'package:cash_indo/controller/db/credit_db/credit_db.dart';
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/model/contact_model.dart';
+import 'package:cash_indo/model/credit_model.dart';
 import 'package:cash_indo/view/dashboard/user_transaction/widgets/user_transaction_widgets.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/widget/bottom_sheets.dart';
@@ -46,13 +48,11 @@ class UserListTile extends StatelessWidget {
 ///
 
 class LiabilitiesAddingWidget extends StatelessWidget {
-  const LiabilitiesAddingWidget({
-    super.key,
-    required this.text,
-    required this.isDebt,
-  });
+  const LiabilitiesAddingWidget(
+      {super.key, required this.text, required this.isDebt, this.contactModel});
   final String text;
   final bool isDebt;
+  final ContactModel? contactModel;
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -89,10 +89,12 @@ class LiabilitiesAddingWidget extends StatelessWidget {
             onTap: () {
               Get.bottomSheet(
                 MoneyKeyboardBottomSheet(
-                  isExpanseSheet: true,
+                  thisIs: 'Credit',
+                  isExpanseSheet: false,
                   isTrnsactionScreen: true,
                   title: AppConstantStrings.expenses,
                   isAmountRemoving: isDebt ? false : true,
+                  contactModel: contactModel,
                 ),
                 isDismissible: true,
                 enableDrag: true,

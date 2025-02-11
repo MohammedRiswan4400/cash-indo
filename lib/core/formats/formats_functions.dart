@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-class AppDateFormates {
+class AppFormats {
   // 31/01/2025 Format
   static String slashFormattedDate(DateTime date) {
     return "${date.day.toString().padLeft(2, '0')}/"
@@ -28,5 +28,14 @@ class AppDateFormates {
 // "12:23 AM"
   static String normalFormatTime(DateTime dateTime) {
     return DateFormat('hh:mm a').format(dateTime);
+  }
+
+// 22,000
+
+  static String moneyFormat(String amount) {
+    final formatter = NumberFormat('#,##0', 'en_US');
+    double value = double.parse(amount);
+
+    return formatter.format(value.toInt());
   }
 }
