@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:cash_indo/controller/db/user_db/user_db.dart';
 import 'package:cash_indo/core/formats/formats_functions.dart';
 import 'package:cash_indo/core/routes/app_routes.dart';
@@ -174,12 +173,13 @@ class IncomeDb {
     int expenseId,
   ) async {
     try {
+      AppRoutes.popNow();
       final response =
           await dataBase.delete().eq('id', expenseId).select().single();
       log(response.toString());
       // ignore: use_build_context_synchronously
       fetchIncome(context, month);
-      AppRoutes.popNow();
+
       isListExpanded.value = false;
       SnackBarHelper.snackBarSuccess(
         'Delete succesfull',

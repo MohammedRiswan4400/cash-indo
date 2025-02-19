@@ -11,6 +11,8 @@ import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/date/b
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/income/monthly_total/income_monthly_total_bloc.dart';
 import 'package:cash_indo/view/dashboard/savings/cubit/expansion_cubit.dart';
 import 'package:cash_indo/view/dashboard/sheet/bloc/contact_bloc.dart';
+import 'package:cash_indo/view/dashboard/user_transaction/bloc/credit/credit_list_bloc.dart';
+import 'package:cash_indo/view/dashboard/user_transaction/bloc/debit/debit_list_bloc.dart';
 import 'package:cash_indo/view/splash/screen_splash.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
@@ -45,8 +47,11 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => IncomeMonthlyTotalBloc()),
+        BlocProvider<DebitListBloc>(create: (context) => DebitListBloc()),
+        BlocProvider<CreditListBloc>(create: (context) => CreditListBloc()),
         BlocProvider<IncomeByDateBloc>(create: (context) => IncomeByDateBloc()),
         BlocProvider<ExpansionCubit>(create: (context) => ExpansionCubit()),
+        BlocProvider(create: (context) => HighestExpenseBloc()),
         BlocProvider<ExpenseByDateBloc>(
             create: (context) => ExpenseByDateBloc()),
         BlocProvider<IncomeByCategoryBloc>(
@@ -58,7 +63,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => ContactBloc()..add(FetchContactsEvent()),
         ),
-        BlocProvider(create: (context) => HighestExpenseBloc()),
       ],
       child: Obx(() {
         return GetMaterialApp(

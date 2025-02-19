@@ -291,7 +291,8 @@ class TodayFinaceRowWidget extends StatelessWidget {
                 onTap: () {
                   Get.bottomSheet(
                     MoneyKeyboardBottomSheet(
-                      isExpanseSheet: true,
+                      thisIs: 'Expense',
+                      // isExpanseSheet: true,
                       title: AppConstantStrings.expenses,
                     ),
                     isDismissible: true,
@@ -308,8 +309,9 @@ class TodayFinaceRowWidget extends StatelessWidget {
                 onTap: () {
                   Get.bottomSheet(
                     MoneyKeyboardBottomSheet(
-                      isIncomeSheet: true,
-                      isExpanseSheet: false,
+                      thisIs: 'Income',
+                      // isIncomeSheet: true,
+                      // isExpanseSheet: false,
                       title: AppConstantStrings.income,
                     ),
                     // MoneyKeyboardBottomSheet(

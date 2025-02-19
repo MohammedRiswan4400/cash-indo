@@ -46,7 +46,9 @@ class ScreenUserTransaction extends StatelessWidget {
                       CreditTab(
                         contactModel: contactModel,
                       ),
-                      DebitTab(),
+                      DebitTab(
+                        contactModel: contactModel,
+                      ),
                     ],
                   ),
                 )

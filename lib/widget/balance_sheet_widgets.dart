@@ -1,8 +1,6 @@
-import 'package:cash_indo/controller/db/credit_db/credit_db.dart';
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/model/contact_model.dart';
-import 'package:cash_indo/model/credit_model.dart';
 import 'package:cash_indo/view/dashboard/user_transaction/widgets/user_transaction_widgets.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/widget/bottom_sheets.dart';
@@ -55,61 +53,54 @@ class LiabilitiesAddingWidget extends StatelessWidget {
   final ContactModel? contactModel;
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      bottom: 10,
-      right: 2,
-      left: 2,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          GestureDetector(
-            onTap: () {
-              Get.bottomSheet(
-                MoneyKeyboardBottomSheet(
-                  isExpanseSheet: true,
-                  isTrnsactionScreen: true,
-                  title: AppConstantStrings.expenses,
-                  isAmountRemoving: isDebt ? true : false,
-                ),
-                isDismissible: true,
-                enableDrag: true,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-              );
-            },
-            child: TransactionScreenButton(
-                isDebt: isDebt,
-                icon: AppConstantStrings.minaze,
-                isDecreasing: true),
-          ),
-          TransactionScreenDebtOrCreditCard(
-            text: text,
-          ),
-          GestureDetector(
-            onTap: () {
-              Get.bottomSheet(
-                MoneyKeyboardBottomSheet(
-                  thisIs: 'Credit',
-                  isExpanseSheet: false,
-                  isTrnsactionScreen: true,
-                  title: AppConstantStrings.expenses,
-                  isAmountRemoving: isDebt ? false : true,
-                  contactModel: contactModel,
-                ),
-                isDismissible: true,
-                enableDrag: true,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-              );
-            },
-            child: TransactionScreenButton(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        GestureDetector(
+          onTap: () {
+            Get.bottomSheet(
+              MoneyKeyboardBottomSheet(
+                thisIs: isDebt ? 'Debit' : 'Credit',
+                title: AppConstantStrings.expenses,
+                isAmountAdding: isDebt ? false : true,
+                contactModel: contactModel,
+              ),
+              isDismissible: true,
+              enableDrag: true,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+            );
+          },
+          child: TransactionScreenButton(
               isDebt: isDebt,
-              icon: AppConstantStrings.plus,
-              isDecreasing: false,
-            ),
+              icon: AppConstantStrings.minaze,
+              isDecreasing: true),
+        ),
+        TransactionScreenDebtOrCreditCard(
+          text: text,
+        ),
+        GestureDetector(
+          onTap: () {
+            Get.bottomSheet(
+              MoneyKeyboardBottomSheet(
+                thisIs: isDebt ? 'Debit' : 'Credit',
+                title: AppConstantStrings.expenses,
+                isAmountAdding: isDebt ? true : false,
+                contactModel: contactModel,
+              ),
+              isDismissible: true,
+              enableDrag: true,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+            );
+          },
+          child: TransactionScreenButton(
+            isDebt: isDebt,
+            icon: AppConstantStrings.plus,
+            isDecreasing: false,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

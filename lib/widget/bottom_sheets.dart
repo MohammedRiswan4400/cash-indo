@@ -1,4 +1,5 @@
 import 'package:cash_indo/controller/db/credit_db/credit_db.dart';
+import 'package:cash_indo/controller/db/debit_db/debit_db.dart';
 import 'package:cash_indo/controller/db/expense_db/expense_db.dart';
 import 'package:cash_indo/controller/db/income_db/income_db.dart';
 import 'package:cash_indo/core/color/app_color.dart';
@@ -7,6 +8,7 @@ import 'package:cash_indo/core/constant/spacing_extensions.dart';
 import 'package:cash_indo/core/routes/app_routes.dart';
 import 'package:cash_indo/model/contact_model.dart';
 import 'package:cash_indo/model/credit_model.dart';
+import 'package:cash_indo/model/debit_model.dart';
 import 'package:cash_indo/model/expense_model.dart';
 import 'package:cash_indo/model/income_model.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
@@ -20,24 +22,18 @@ import 'package:get/get.dart';
 class MoneyKeyboardBottomSheet extends StatelessWidget {
   MoneyKeyboardBottomSheet(
       {super.key,
-      required this.isExpanseSheet,
       required this.title,
-      this.isTrnsactionScreen,
-      this.isAmountRemoving,
-      this.isIncomeSheet,
-      this.thisIs,
+      this.isAmountAdding,
+      required this.thisIs,
       this.contactModel});
   final moneyFormKey = GlobalKey<FormState>();
-  final bool isExpanseSheet;
-  bool? isIncomeSheet;
   ContactModel? contactModel;
   final String title;
   final RxString selectedCurrency = RxString(AppConstantStrings.rupees);
-  bool? isTrnsactionScreen;
-  bool? isAmountRemoving;
+  bool? isAmountAdding;
   final TextEditingController moneyTextController = TextEditingController();
   final TextEditingController commentController = TextEditingController();
-  String? thisIs;
+  final String thisIs;
   void _onNumberTap(String number) {
     if (number == '.' && moneyTextController.text.contains('.')) {
       return;
@@ -85,12 +81,15 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
                 ),
               ),
               10.verticalSpace(context),
+//  if(thisIs != 'Expense' || thisIs != 'Income' ){}
+              // isTrnsactionScreen == true
+              //     ? SizedBox.shrink()
+              //     :
 
-              isTrnsactionScreen == true
-                  ? SizedBox.shrink()
-                  : Row(
+              thisIs == 'Expense' || thisIs == 'Income'
+                  ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: isExpanseSheet
+                      children: thisIs == 'Expense'
                           ? [
                               PaymentOptionsDropDownWidget(),
                               PaymentCategoryDropDownWidget(),
@@ -98,8 +97,8 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
                           : [
                               IncomeCategoryDropDownWidget(),
                             ],
-                    ),
-
+                    )
+                  : SizedBox(),
               10.verticalSpace(context),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -308,13 +307,10 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
                                   false) {
                                 final amount = moneyTextController.text.trim();
                                 final comment = commentController.text.trim();
-
-                                if (isIncomeSheet != null &&
-                                    isIncomeSheet == true) {
+                                if (thisIs == 'Income') {
                                   IncomeDb.addIncome(
                                     context: context,
                                     incomeModel: IncomeModel(
-                                      // today: '',
                                       comment: comment,
                                       currency: selectedCurrency.value,
                                       amount: double.parse(amount),
@@ -323,7 +319,7 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
                                       createdAt: DateTime.now(),
                                     ),
                                   );
-                                } else if (isExpanseSheet == true) {
+                                } else if (thisIs == 'Expense') {
                                   ExpenseDb.addExpense(
                                     context: context,
                                     expenseModel: ExpenseModel(
@@ -336,16 +332,56 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
                                       createdAt: DateTime.now(),
                                     ),
                                   );
-                                } else if (thisIs != null &&
-                                    thisIs == 'Credit') {
+                                } else if (thisIs == 'Credit' &&
+                                    isAmountAdding == true) {
                                   CreditDb.addCredit(
+                                    context: context,
                                     creditModel: CreditModel(
                                       contactName: contactModel!.name,
                                       contactPhone: contactModel!.phoneNumber,
                                       amount: double.parse(amount),
                                       comment: comment,
                                       currency: selectedCurrency.value,
-                                      // isSend: false,
+                                      isAdding: isAmountAdding,
+                                    ),
+                                  );
+                                } else if (thisIs == 'Credit' &&
+                                    isAmountAdding == false) {
+                                  CreditDb.addCredit(
+                                    context: context,
+                                    creditModel: CreditModel(
+                                      contactName: contactModel!.name,
+                                      contactPhone: contactModel!.phoneNumber,
+                                      amount: double.parse(amount),
+                                      comment: comment,
+                                      currency: selectedCurrency.value,
+                                      isAdding: isAmountAdding!,
+                                    ),
+                                  );
+                                } else if (thisIs == 'Debit' &&
+                                    isAmountAdding == true) {
+                                  DebitDb.addDebit(
+                                    context: context,
+                                    debitModel: DebitModel(
+                                      contactName: contactModel!.name,
+                                      contactPhone: contactModel!.phoneNumber,
+                                      amount: double.parse(amount),
+                                      comment: comment,
+                                      currency: selectedCurrency.value,
+                                      isAdding: isAmountAdding!,
+                                    ),
+                                  );
+                                } else if (thisIs == 'Debit' &&
+                                    isAmountAdding == false) {
+                                  DebitDb.addDebit(
+                                    context: context,
+                                    debitModel: DebitModel(
+                                      contactName: contactModel!.name,
+                                      contactPhone: contactModel!.phoneNumber,
+                                      amount: double.parse(amount),
+                                      comment: comment,
+                                      currency: selectedCurrency.value,
+                                      isAdding: isAmountAdding!,
                                     ),
                                   );
                                 }
@@ -354,8 +390,8 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
                             icon: Icons.check,
                             isNumber: false,
                             iconColor: AppColor.kTextColor,
-                            color: isTrnsactionScreen == true
-                                ? isAmountRemoving == true
+                            color: thisIs == 'Credit' || thisIs == 'Debit'
+                                ? isAmountAdding == true
                                     ? AppColor.kAddingButtonColor
                                     : AppColor.kRemovingButtonColor
                                 : AppColor.kBackgroundColor,
@@ -368,7 +404,6 @@ class MoneyKeyboardBottomSheet extends StatelessWidget {
                   ],
                 ),
               ),
-              // 5 .verticalSpace(context),
             ],
           ),
         ),

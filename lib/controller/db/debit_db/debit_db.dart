@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:cash_indo/controller/db/user_db/user_db.dart';
 import 'package:cash_indo/core/routes/app_routes.dart';
-import 'package:cash_indo/model/credit_model.dart';
-import 'package:cash_indo/view/dashboard/user_transaction/bloc/credit/credit_list_bloc.dart';
+import 'package:cash_indo/model/debit_model.dart';
+import 'package:cash_indo/view/dashboard/user_transaction/bloc/debit/debit_list_bloc.dart';
 import 'package:cash_indo/widget/expansion_tile.dart';
 import 'package:cash_indo/widget/helper/dialoge_helper_widget.dart';
 import 'package:cash_indo/widget/helper/snack_bar_helper_widget.dart';
@@ -12,15 +12,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class CreditDb {
-  static final dataBase = Supabase.instance.client.from('credit');
+class DebitDb {
+  static final dataBase = Supabase.instance.client.from('debit');
 
-  static Future<void> addCredit({
+  static Future<void> addDebit({
     required BuildContext context,
-    required CreditModel creditModel,
+    required DebitModel debitModel,
   }) async {
     try {
-      DailogHelper.showDailog('Saving Credit...');
+      DailogHelper.showDailog('Saving Debit...');
       final String uID = UserDb.supaUID;
 
       if (uID.isEmpty) {
@@ -30,27 +30,27 @@ class CreditDb {
       final response = await dataBase.insert(
         {
           'user_id': uID,
-          'is_adding': creditModel.isAdding,
-          'amount': creditModel.amount,
-          'contact_name': creditModel.contactName,
-          'contact_phone': creditModel.contactPhone,
-          'comment': creditModel.comment,
+          'is_adding': debitModel.isAdding,
+          'amount': debitModel.amount,
+          'contact_name': debitModel.contactName,
+          'contact_phone': debitModel.contactPhone,
+          'comment': debitModel.comment,
           'is_send': false,
-          'currency': creditModel.currency,
+          'currency': debitModel.currency,
         },
       ).select();
 
       DailogHelper.hideDailoge();
       AppRoutes.popNow();
       // ignore: use_build_context_synchronously
-      CreditDb.fetchCredit(context, creditModel.contactPhone);
+      DebitDb.fetchDebit(context, debitModel.contactPhone);
       if (response.isNotEmpty) {
         SnackBarHelper.snackBarSuccess(
           'Succesfull',
-          'Credit added succesfull',
+          'Debit added succesfull',
         );
       } else {
-        throw Exception("Failed to save Credit.");
+        throw Exception("Failed to save Debit.");
       }
     } on AuthException catch (e) {
       DailogHelper.hideDailoge();
@@ -66,7 +66,7 @@ class CreditDb {
     }
   }
 
-  static Future<List<CreditModel>> readCredit(
+  static Future<List<DebitModel>> readDebit(
       {required String contactPhone}) async {
     try {
       final String uID = UserDb.supaUID;
@@ -84,19 +84,19 @@ class CreditDb {
         return [];
       }
 
-      List<CreditModel> creditList =
-          response.map((data) => CreditModel.fromMap(data)).toList();
+      List<DebitModel> debitList =
+          response.map((data) => DebitModel.fromMap(data)).toList();
 
-      return creditList;
+      return debitList;
     } catch (e) {
-      log('Error fetching credits: $e');
+      log('Error fetching debits: $e');
       return [];
     }
   }
 
   static Future<void> sendMessageToWhatsApp({
     required BuildContext context,
-    required int creditId,
+    required int debitId,
     required String phoneNumber,
     required String message,
   }) async {
@@ -119,7 +119,7 @@ class CreditDb {
         updateIsSendMessage(
             // ignore: use_build_context_synchronously
             context: context,
-            creditId: creditId,
+            debitId: debitId,
             phoneNumber: phoneNumber,
             message: message);
       } else {
@@ -136,15 +136,15 @@ class CreditDb {
 
   static Future<void> updateIsSendMessage({
     required BuildContext context,
-    required int creditId,
+    required int debitId,
     required String phoneNumber,
     required String message,
   }) async {
     try {
       final response =
-          await dataBase.update({'is_send': true}).eq('id', creditId).select();
+          await dataBase.update({'is_send': true}).eq('id', debitId).select();
       // ignore: use_build_context_synchronously
-      CreditDb.fetchCredit(context, phoneNumber);
+      DebitDb.fetchDebit(context, phoneNumber);
 
       if (response.isEmpty) {
         throw Exception('Update failed: No records updated.');
@@ -155,29 +155,29 @@ class CreditDb {
     }
   }
 
-  static Future<bool> deleteCredit(
-      BuildContext context, int creditId, String phoneNumber) async {
+  static Future<bool> deleteDebit(
+      BuildContext context, int debitId, String phoneNumber) async {
     try {
       final response =
-          await dataBase.delete().eq('id', creditId).select().single();
+          await dataBase.delete().eq('id', debitId).select().single();
       log(response.toString());
       AppRoutes.popNow();
       // ignore: use_build_context_synchronously
-      CreditDb.fetchCredit(context, phoneNumber);
+      DebitDb.fetchDebit(context, phoneNumber);
       isListExpanded.value = false;
       SnackBarHelper.snackBarSuccess(
         'Delete succesfull',
-        'Credit delete succesfull',
+        'Debit delete succesfull',
       );
       return true;
     } catch (e) {
       SnackBarHelper.snackBarFaild('Oops!', e.toString());
-      log("Error deleting credit: $e");
+      log("Error deleting debit: $e");
       return false;
     }
   }
 
-  static void fetchCredit(BuildContext context, String phoneNumber) {
-    context.read<CreditListBloc>().add(FetchCreditList(phoneNumber));
+  static void fetchDebit(BuildContext context, String phoneNumber) {
+    context.read<DebitListBloc>().add(FetchDebitList(phoneNumber));
   }
 }

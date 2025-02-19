@@ -1,18 +1,11 @@
-import 'package:cash_indo/controller/db/expense_db/expense_db.dart';
-import 'package:cash_indo/core/formats/formats_functions.dart';
-import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
-import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/category/category_bloc.dart';
-import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/date/by_date_bloc.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/widget/bottom_sheets.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/widgets/expanse_tracker_widgets.dart';
 import 'package:cash_indo/widget/expansion_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class ExpanseTab extends StatelessWidget {
   const ExpanseTab({
@@ -60,8 +53,8 @@ class ExpanseTab extends StatelessWidget {
                         onPressed: () {
                           Get.bottomSheet(
                             MoneyKeyboardBottomSheet(
-                              isIncomeSheet: false,
-                              isExpanseSheet: true,
+                              isAmountAdding: false,
+                              thisIs: 'Expense',
                               title: AppConstantStrings.expenses,
                             ),
                             isDismissible: true,

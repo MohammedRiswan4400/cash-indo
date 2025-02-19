@@ -57,8 +57,9 @@ class IncomeTab extends StatelessWidget {
                         onPressed: () {
                           Get.bottomSheet(
                             MoneyKeyboardBottomSheet(
-                              isIncomeSheet: true,
-                              isExpanseSheet: false,
+                              thisIs: 'Income',
+                              // isIncomeSheet: true,
+                              // isExpanseSheet: false,
                               title: AppConstantStrings.income,
                             ),
                             isDismissible: true,

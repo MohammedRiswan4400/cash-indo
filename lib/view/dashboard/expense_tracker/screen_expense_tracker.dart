@@ -3,6 +3,7 @@ import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/expanse_tab.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/income_tab.dart';
 import 'package:cash_indo/widget/appbar_widget.dart';
+import 'package:cash_indo/widget/expansion_tile.dart';
 import 'package:cash_indo/widget/tab_bar_widgets.dart';
 import 'package:cash_indo/widget/drop_down_widgets.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class ScreenExpenseTracker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    isListExpanded.value = false;
     return DefaultTabController(
       length: 2,
       child: Scaffold(

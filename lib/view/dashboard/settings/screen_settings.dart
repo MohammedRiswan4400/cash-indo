@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cash_indo/controller/db/user_db/user_db.dart';
 import 'package:cash_indo/core/constant/app_const.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
@@ -153,6 +155,12 @@ class ScreenSettings extends StatelessWidget {
                             text: AppConstantStrings.logOut,
                             isIcon: false,
                             textColor: Colors.orange),
+                        ElevatedButton(
+                          onPressed: () {
+                            log(UserDb.supaUID.toString());
+                          },
+                          child: Text('data'),
+                        ),
                       ],
                     ),
                   ),

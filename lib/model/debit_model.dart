@@ -1,4 +1,4 @@
-class CreditModel {
+class DebitModel {
   final int? id;
   final double amount;
   final String comment;
@@ -9,7 +9,7 @@ class CreditModel {
   final bool? isSend;
   final bool? isAdding;
 
-  CreditModel({
+  DebitModel({
     this.id,
     this.isAdding,
     required this.contactName,
@@ -21,8 +21,8 @@ class CreditModel {
     this.createdAt,
   });
 
-  factory CreditModel.fromMap(Map<String, dynamic> data) {
-    return CreditModel(
+  factory DebitModel.fromMap(Map<String, dynamic> data) {
+    return DebitModel(
       id: data['id'] != null
           ? int.tryParse(data['id'].toString())
           : null, // ✅ Ensure id is int
