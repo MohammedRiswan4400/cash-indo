@@ -10,6 +10,7 @@ class ScreenSplash extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // InternetFunction.checkInternet();
     if (AppConst.storage.read(AppConst.isLogged) == null) {
       AppConst.storage.write(AppConst.isLogged, false);
     }
@@ -17,7 +18,46 @@ class ScreenSplash extends StatelessWidget {
     AppRoutes.goFromSplashScreen();
     return Scaffold(
       backgroundColor: AppColor.kBackgroundColor,
-      body: Padding(
+      body:
+
+          //   FutureBuilder<bool>(
+          //     future: InternetFunction.checkInternet(),
+          //     builder: (context, snapshot) {
+          //       if (snapshot.connectionState == ConnectionState.waiting) {
+          //         return const Center(child: CircularProgressIndicator());
+          //       } else if (snapshot.hasData && snapshot.data == true) {
+          //         // Internet available, navigate after delay
+          //         // Future.delayed(const Duration(seconds: 2), () {
+          //         //   Navigator.pushReplacementNamed(
+          //         //       context, '/home'); // Change to your home route
+          //         // });
+          //         AppRoutes.goFromSplashScreen();
+          //         return const Center(child: Text("Welcome! Redirecting..."));
+          //       } else {
+          //         // No Internet, show error
+          //         return Center(
+          //           child: Column(
+          //             mainAxisAlignment: MainAxisAlignment.center,
+          //             children: [
+          //               AppTextWidget(
+          //                 text: "No Internet Connection",
+          //                 color: Colors.amber,
+          //               ),
+          //               const SizedBox(height: 10),
+          //               ElevatedButton(
+          //                 onPressed: () => (context as Element)
+          //                     .markNeedsBuild(), // Retry by rebuilding
+          //                 child: const Text("Retry"),
+          //               ),
+          //             ],
+          //           ),
+          //         );
+          //       }
+          //     },
+          //   ),
+          // );
+
+          Padding(
         padding: const EdgeInsets.all(50.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

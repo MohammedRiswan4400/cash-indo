@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cash_indo/controller/db/contacts_db/contact_db.dart';
 import 'package:cash_indo/core/constant/app_const.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
@@ -8,11 +9,13 @@ import 'package:cash_indo/view/dashboard/sheet/bloc/contact_bloc.dart';
 import 'package:cash_indo/view/dashboard/sheet/widgets/sheet_widgets.dart';
 import 'package:cash_indo/widget/appbar_widget.dart';
 import 'package:cash_indo/widget/balance_sheet_widgets.dart';
+import 'package:cash_indo/widget/dialoge_boxes.dart';
 import 'package:cash_indo/widget/helper/snack_bar_helper_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart';
 import 'package:flutter_native_contact_picker/model/contact.dart';
+import 'package:get/get.dart';
 
 // final ContactBloc contactBloc = ContactBloc();
 
@@ -85,6 +88,26 @@ class ScreenBalanceSheet extends StatelessWidget {
                                   onTap: () {
                                     AppRoutes.gotoScreenUserTransaction(
                                         false, contact);
+                                  },
+                                  onLongPress: () {
+                                    Get.dialog(
+                                      Dialog(
+                                        backgroundColor: Colors.black,
+                                        shape: ContinuousRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                        ),
+                                        child: DeleteDialogeBox(
+                                          deleteWhat: 'Contact',
+                                          ontap: () {
+                                            ContactDb.deleteContact(
+                                                context, contact.id!);
+                                          },
+                                        ),
+                                      ),
+                                    );
+                                    // ContactDb.deleteContact(
+                                    //     context, contact.id!);
                                   },
                                   child: UserListTile(
                                     contactModel: contact,

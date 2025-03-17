@@ -312,6 +312,8 @@ class WhatsappContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 40,
+      width: 40,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(
           10,
@@ -326,11 +328,9 @@ class WhatsappContainer extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Icon(
-          Icons.wechat_sharp,
-          color: AppColor.kTextColor,
-          size: 30,
+        padding: const EdgeInsets.all(8.0),
+        child: Image.asset(
+          'assets/icon/whatsapp_icon.png',
         ),
       ),
     );

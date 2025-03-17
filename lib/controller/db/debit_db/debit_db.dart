@@ -102,6 +102,7 @@ class DebitDb {
   }) async {
     Future<bool> isWhatsAppInstalled() async {
       final Uri whatsappCheckUri = Uri.parse("whatsapp://send?phone=");
+      // ignore: deprecated_member_use
       return await canLaunch(whatsappCheckUri.toString());
     }
 
@@ -109,7 +110,9 @@ class DebitDb {
       final Uri whatsappUri = Uri.parse(
           "https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}");
 
+      // ignore: deprecated_member_use
       if (await canLaunch(whatsappUri.toString())) {
+        // ignore: deprecated_member_use
         await launch(whatsappUri.toString(),
             forceSafariVC: false, forceWebView: false);
         SnackBarHelper.snackBarSuccess(

@@ -5,7 +5,6 @@ import 'package:cash_indo/core/formats/formats_functions.dart';
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
-import 'package:cash_indo/view/auth/sign_up/screen_sign_up.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/category/category_bloc.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/date/by_date_bloc.dart';
 import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/highest_expense/highest_expense_bloc.dart';
@@ -13,7 +12,9 @@ import 'package:cash_indo/view/dashboard/expense_tracker/tabs/bloc/expanses/week
 import 'package:cash_indo/widget/app_text_widget.dart';
 import 'package:cash_indo/view/dashboard/home/widgets/home_screen_widgets.dart';
 import 'package:cash_indo/widget/dialoge_boxes.dart';
+import 'package:cash_indo/widget/drop_down_widgets.dart';
 import 'package:cash_indo/widget/expansion_tile.dart';
+import 'package:cash_indo/widget/helper/shimmer_widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,60 +30,27 @@ class ExpanseByDateRange extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: AppColor.kExpanseByDateRangeContainerColor,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ExpanceTitleAndAmount(
-              title: 'Day',
-              amount: AppFormats.moneyFormat('689000'),
-            ),
-            AppTextWidget(
-              text: '|',
-              size: 15,
-              weight: FontWeight.w500,
-              color: AppColor.kTextColor,
-            ),
-            ExpanceTitleAndAmount(
-              title: 'Week',
-              amount: AppFormats.moneyFormat('69000'),
-            ),
-            AppTextWidget(
-              text: '|',
-              size: 15,
-              weight: FontWeight.w500,
-              color: AppColor.kTextColor,
-            ),
-            FutureBuilder<double>(
-              future: ExpenseDb.getMonthlyExpenseTotal(
-                  "February"), // Pass current month
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                      child: CircularProgressIndicator()); // Loading state
-                } else if (snapshot.hasError) {
-                  return Center(
-                      child: Text("Error loading data")); // Error state
-                } else {
-                  double expense = snapshot.data ?? 0.0;
-                  return ExpanceTitleAndAmount(
-                    title: 'Month',
-                    amount:
-                        '${AppFormats.moneyFormat(expense.toStringAsFixed(0))}',
-                  );
-                }
-              },
-            ),
-          ],
-        ),
-      ),
+    return FutureBuilder<double>(
+      future: ExpenseDb.getMonthlyExpenseTotal(
+          selectedMonthNotifier.value), // Pass current month
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+              child: Container(
+                  height: 200,
+                  width: 200,
+                  child: ShimmerContainer())); // Loading state
+        } else if (snapshot.hasError) {
+          return Center(child: Text("Error loading data")); // Error state
+        } else {
+          double expense = snapshot.data ?? 0.0;
+          return Container(height: 200, width: 200, child: ShimmerContainer());
+          // ExpanceTitleAndAmount(
+          //   title: selectedMonthNotifier.value,
+          //   amount: AppFormats.moneyFormat(expense.toStringAsFixed(0)),
+          // );
+        }
+      },
     );
   }
 }
@@ -106,7 +74,13 @@ class ExpanseChartWidget extends StatelessWidget {
       },
       builder: (context, state) {
         if (state is WeeklyExpenseChartLoading) {
-          return Center(child: CircularProgressIndicator());
+          return Center(
+              child: ShimmerErrorWidget(
+            firstHeight: 20,
+            firstWidth: 20,
+            secondHeight: 20,
+            secondWidth: 20,
+          ));
         }
 
         List<BarChartGroupData> barChartData = [];
@@ -301,30 +275,32 @@ class ExpanceTitleAndAmount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.sizeOf(context).width / 4,
+      width: MediaQuery.sizeOf(context).width / 3,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 8,
         children: [
           AppTextWidget(
             text: title,
-            size: 15,
+            size: 25,
             weight: FontWeight.w800,
-            color: AppColor.kTextColor,
+            color: AppColor.kArrowColor,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             spacing: 2,
             children: [
               AppTextWidget(
                 text: AppConstantStrings.rupees,
-                size: 17,
-                color: AppColor.kTextColor,
+                size: 20,
+                color: AppColor.kArrowColor,
               ),
               AppTextAutoSize(
                 text: amount,
-                size: 17,
+                size: 20,
+                weight: FontWeight.bold,
                 maxLine: 1,
-                color: AppColor.kTextColor,
+                color: AppColor.kArrowColor,
               ),
             ],
           ),
@@ -364,7 +340,6 @@ class ExpenseBarGraphWidget extends StatelessWidget {
 
             // ignore: unused_local_variable
             double highestSpendingAmount = 0.0;
-// Default maxY
 
             if (state is HighestWeeklyExpensesLoaded) {
               highestSpendingAmount = state.highestAmount;
@@ -433,10 +408,6 @@ class ExpenseBarGraphWidget extends StatelessWidget {
                               sideTitles: SideTitles(showTitles: false),
                             ),
                             topTitles: AxisTitles(
-                              // axisNameWidget: Container(
-                              //   color: const Color.fromARGB(0, 255, 193, 7),
-                              //   height: 100,
-                              // ),
                               sideTitles: SideTitles(
                                 showTitles: false,
                               ),

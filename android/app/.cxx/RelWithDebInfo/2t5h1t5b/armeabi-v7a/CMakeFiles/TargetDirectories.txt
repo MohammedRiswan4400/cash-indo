@@ -1,0 +1,2 @@
+/Users/riswan/Flutter/Learn 2025/cash_indo/android/app/.cxx/RelWithDebInfo/2t5h1t5b/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/riswan/Flutter/Learn 2025/cash_indo/android/app/.cxx/RelWithDebInfo/2t5h1t5b/armeabi-v7a/CMakeFiles/rebuild_cache.dir

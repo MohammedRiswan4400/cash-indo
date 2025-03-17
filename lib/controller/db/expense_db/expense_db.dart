@@ -141,22 +141,32 @@ class ExpenseDb {
     }
   }
 
-  static Future<List<BarChartGroupData>> readWeaklyExpenseChartData(
+  static Future<List<BarChartGroupData>> readWeeklyExpenseChartData(
       String month) async {
-    final userID = UserDb.supaUID; // Assuming you have user authentication
+    final userID = UserDb.supaUID;
 
     try {
+      DateTime now = DateTime.now();
+      DateTime startOfWeek =
+          now.subtract(Duration(days: now.weekday % 7)); // Get Sunday
+      DateTime endOfWeek = startOfWeek.add(Duration(days: 6)); // Get Saturday
+
+      String startOfWeekStr = DateFormat("dd-MM-yyyy").format(startOfWeek);
+      String endOfWeekStr = DateFormat("dd-MM-yyyy").format(endOfWeek);
+
       final response = await dataBase
-          .select('today, amount') // Select today and amount fields
+          .select('today, amount')
           .eq('user_id', userID)
-          .eq('month', month)
-          .order('today', ascending: true); // Order by date
+          .eq('month', month) // Filter by month
+          .gte('today', startOfWeekStr) // Filter by current week
+          .lte('today', endOfWeekStr)
+          .order('today', ascending: true);
 
       if (response.isEmpty) {
         return [];
       }
 
-      // ✅ Map of total expenses per weekday (Sun - Sat)
+      // ✅ Map to store expenses only for the current week
       Map<String, double> weeklyTotals = {
         "Sun": 0.0,
         "Mon": 0.0,
@@ -179,20 +189,20 @@ class ExpenseDb {
         }
       }
 
-      // ✅ Convert into BarChartGroupData with correct X-Axis mapping
+      // ✅ Convert into BarChartGroupData
       List<String> weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
       return List.generate(weekDays.length, (index) {
-        String day = weekDays[index]; // Get weekday name
-        double totalAmount = weeklyTotals[day]!; // Get total for the day
+        String day = weekDays[index];
+        double totalAmount = weeklyTotals[day]!;
 
         return BarChartGroupData(
-          x: index, // X-Axis corresponds to week order (0=Sun, 1=Mon, ..., 6=Sat)
+          x: index,
           barRods: [
             BarChartRodData(
-              toY: totalAmount, // Y-Axis = Total spent on that day
-              color: Colors.blueAccent, // Customize bar color
-              width: 10, // Customize bar width
+              toY: totalAmount,
+              color: Colors.blueAccent,
+              width: 10,
               borderRadius: BorderRadius.circular(4),
             ),
           ],

@@ -1,6 +1,5 @@
 import 'package:cash_indo/core/color/app_color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:get/route_manager.dart';
 
 class SnackBarHelper {

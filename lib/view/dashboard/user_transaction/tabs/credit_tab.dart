@@ -4,7 +4,6 @@ import 'package:cash_indo/core/constant/app_texts.dart';
 import 'package:cash_indo/core/constant/spacing_extensions.dart';
 import 'package:cash_indo/core/formats/formats_functions.dart';
 import 'package:cash_indo/model/contact_model.dart';
-import 'package:cash_indo/model/credit_model.dart';
 import 'package:cash_indo/view/dashboard/user_transaction/bloc/credit/credit_list_bloc.dart';
 import 'package:cash_indo/view/dashboard/user_transaction/widgets/user_transaction_widgets.dart';
 import 'package:cash_indo/widget/app_text_widget.dart';

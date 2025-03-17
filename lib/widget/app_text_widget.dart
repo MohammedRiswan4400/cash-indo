@@ -53,12 +53,14 @@ class AppTextAutoSize extends StatelessWidget {
     this.color,
     this.size,
     this.maxLine,
+    this.weight,
   });
 
   final String text;
   Color? color;
   double? size;
   int? maxLine;
+  FontWeight? weight;
 
   @override
   Widget build(BuildContext context) {
@@ -70,9 +72,9 @@ class AppTextAutoSize extends StatelessWidget {
       text,
       maxLines: maxLine ?? 100,
       style: TextStyle(
-        color: color ?? themeTextColor,
-        fontSize: themeFontSize,
-      ),
+          color: color ?? themeTextColor,
+          fontSize: themeFontSize,
+          fontWeight: weight),
     );
   }
 }
